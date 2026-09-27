@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PolaReady — Made for the whiteout</title>
+<meta name="description" content="The story behind PolaReady: why an instant photobooth can honestly trace its name to a polar bear — not as a pun, but as history.">
+<meta name="theme-color" content="#f5efeb">
+<meta property="og:title" content="PolaReady — Made for the whiteout">
+<meta property="og:description" content="Why an instant photobooth can honestly trace its name to a polar bear — not as a pun, but as history.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://abolsaraseer.github.io/polaready/story/">
+<meta property="og:image" content="https://abolsaraseer.github.io/polaready/assets/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..900&family=Fugaz+One&family=IBM+Plex+Mono:wght@400;500&family=Nunito+Sans:opsz,wght@6..12,300..1000&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="../css/site.css?v=11">
+</head>
+<body data-page="story" data-intro data-title-ar="بولاريدي — صُنعنا من أجل الوهج الأبيض">
+
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+
+<header class="nav">
+  <div class="wrap in">
+    <a class="brand" href="../" aria-label="PolaReady — book your event"><span class="mark" style="--s:30px"></span><span>PolaReady</span></a>
+    <ul>
+      <li><a href="#science" data-i18n="nav_science">Science</a></li>
+      <li><a href="#myth" data-i18n="nav_myth">Myth</a></li>
+      <li><a href="#mark" data-i18n="nav_mark">Mark</a></li>
+      <li><a href="#booth" data-i18n="nav_booth">Booth</a></li>
+      <li><a href="#words" data-i18n="nav_words">Words</a></li>
+      <li><a href="../brand-kit/" data-i18n="nav_kit">Brand kit ↗</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="ar" lang="ar" aria-pressed="false">عربي</button>
+    </div>
+    <a class="btn ghost" style="padding:.7em 1.2em;font-size:.85rem" href="../">← Book your event</a>
+  </div>
+</header>
+
+<nav class="dots" aria-label="Chapters">
+  <a href="#top"><span data-i18n="d_top">Start</span></a>
+  <a href="#science"><span data-i18n="nav_science">Science</span></a>
+  <a href="#myth"><span data-i18n="nav_myth">Myth</span></a>
+  <a href="#mark"><span data-i18n="nav_mark">Mark</span></a>
+  <a href="#booth"><span data-i18n="nav_booth">Booth</span></a>
+  <a href="#make"><span data-i18n="d_make">Try it</span></a>
+  <a href="#words"><span data-i18n="nav_words">Words</span></a>
+  <a href="#name"><span data-i18n="d_name">Name</span></a>
+</nav>
+
+<!-- shared artwork: a flat landscape and two people, recoloured with CSS variables -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="sc" viewBox="0 0 400 300">
+      <rect width="400" height="300" style="fill:var(--sky,#d7e6ec)"/>
+      <circle cx="292" cy="82" r="34" style="fill:var(--sun,#fff)"/>
+      <path d="M0 200 L82 118 L138 168 L232 84 L316 176 L400 128 V300 H0Z" style="fill:var(--far,#b6cdd9)"/>
+      <path d="M0 236 L104 176 L184 220 L280 158 L400 226 V300 H0Z" style="fill:var(--near,#8db0c4)"/>
+      <rect y="248" width="400" height="52" style="fill:var(--ground,#f5efeb)"/>
+    </symbol>
+    <symbol id="pp" viewBox="0 0 400 300">
+      <circle cx="150" cy="138" r="30" style="fill:var(--fig,#2f4156)"/>
+      <path d="M88 300C88 238 116 208 150 208C184 208 212 238 212 300Z" style="fill:var(--fig,#2f4156)"/>
+      <circle cx="252" cy="150" r="25" style="fill:var(--fig,#2f4156)" opacity=".86"/>
+      <path d="M200 300C200 252 222 228 252 228C282 228 304 252 304 300Z" style="fill:var(--fig,#2f4156)" opacity=".86"/>
+    </symbol>
+    <symbol id="sci" viewBox="0 0 400 500">
+      <rect width="400" height="500" fill="#d7e6ec"/>
+      <circle cx="290" cy="118" r="58" fill="#fff"/>
+      <path d="M0 300 L70 196 L128 258 L214 150 L300 262 L360 206 L400 250 V500 H0Z" fill="#b6cdd9"/>
+      <path d="M0 356 L96 286 L176 336 L272 264 L400 350 V500 H0Z" fill="#8db0c4"/>
+      <path d="M0 400 H400 V500 H0Z" fill="#f5efeb"/>
+      <path d="M0 430 L120 404 L260 424 L400 400 V440 L260 462 L120 446 L0 470Z" fill="#c9dde7"/>
+      <path d="M40 470 L90 450 L120 480 L70 496Z M250 452 L322 438 L344 470 L280 486Z" fill="#dfeaf0"/>
+    </symbol>
+  </defs>
+</svg>
+
+<main id="main">
+
+<!-- ================================================= HERO -->
+<section class="hero" id="top" data-sec>
+  <div class="snow" aria-hidden="true"></div>
+  <div class="wrap grid">
+    <div>
+      <span class="eyebrow" data-i18n="hero_eyebrow">Brand story</span>
+      <h1 class="display h-xl" data-hw data-i18n="hero_h1">Made for the <em>whiteout.</em></h1>
+      <p class="lede" data-i18n="hero_lede">Why a photobooth can honestly trace its name to a polar bear — not as a pun, but as history.</p>
+      <div class="ctas">
+        <a class="btn" href="#timeline"><span data-i18n="hero_cta1">Read the story</span> <span class="arr" aria-hidden="true">↓</span></a>
+        <a class="btn ghost" href="../brand-kit/"><span data-i18n="hero_cta2">Brand kit</span> <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+    <div class="stagecard">
+      <div class="pcard" aria-hidden="true">
+        <span class="tape"></span>
+        <div class="photo">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/></svg>
+          <span class="mark peek"></span>
+          <div class="veil"></div>
+        </div>
+        <div class="lab">PolaReady</div>
+        <span class="chip-float a" data-i18n="chip_a">Flash first.</span>
+        <span class="chip-float b" data-i18n="chip_b">Focus after.</span>
+      </div>
+    </div>
+  </div>
+  <div class="cue" aria-hidden="true"><i></i><span data-i18n="cue">Scroll — flash in 3, 2, 1</span></div>
+</section>
+
+<!-- ================================================= TIMELINE -->
+<section class="section" id="timeline">
+  <div class="wrap">
+    <div class="tl-head">
+      <div>
+        <span class="eyebrow reveal" data-i18n="tl_eyebrow">The story in three frames</span>
+        <h2 class="display h-lg reveal" data-i18n="tl_h2">One glare. One century.</h2>
+      </div>
+    </div>
+    <div class="tl">
+      <article class="frame reveal" data-count-host style="--i:0">
+        <span class="pin"></span>
+        <span class="mono tag" data-i18n="tl_1_tag">The filter</span>
+        <span class="yr" data-count="1929">1929</span>
+        <p data-i18n="tl_1">A 19-year-old invents polarizing film to cut the glare off snow, ice &amp; water</p>
+      </article>
+      <article class="frame reveal" data-count-host style="--i:1">
+        <span class="pin"></span>
+        <span class="mono tag" data-i18n="tl_2_tag">The instant</span>
+        <span class="yr" data-count="1948">1948</span>
+        <p data-i18n="tl_2">The same company points that light science at instant photography</p>
+      </article>
+      <article class="frame reveal" style="--i:2">
+        <span class="pin"></span>
+        <span class="mono tag" data-i18n="tl_3_tag">The booth</span>
+        <span class="yr" data-i18n="tl_today">Today</span>
+        <p data-i18n="tl_3">A photobooth borrows the bear that reads that glare for a living</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= SCIENCE -->
+<section class="section" id="science" data-sec style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap sci">
+    <div class="sci-sticky reveal" data-r="scale">
+      <div class="sci-fig" role="img" data-i18n-attr="aria-label:fig_label" aria-label="An illustration of a snowy landscape: on one side washed out by glare, on the other clear through a polarizing filter.">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" class="base">
+          <use href="#sci"/>
+          <rect width="400" height="500" fill="#fff" opacity=".84"/>
+          <circle cx="290" cy="118" r="150" fill="#fff" opacity=".55"/>
+          <g stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".9">
+            <path d="M290 118 L60 24M290 118 L20 150M290 118 L40 300M290 118 L150 470M290 118 L300 490M290 118 L430 430M290 118 L420 250"/>
+          </g>
+          <g fill="#fff">
+            <path class="sparkle" d="M60 380l8-14 8 14-8 14z"/><path class="sparkle" d="M130 420l6-11 6 11-6 11z"/><path class="sparkle" d="M210 390l9-16 9 16-9 16z"/>
+            <path class="sparkle" d="M290 430l7-12 7 12-7 12z"/><path class="sparkle" d="M350 372l6-11 6 11-6 11z"/><path class="sparkle" d="M90 460l6-10 6 10-6 10z"/>
+            <path class="sparkle" d="M250 470l8-14 8 14-8 14z"/><path class="sparkle" d="M330 452l6-11 6 11-6 11z"/><path class="sparkle" d="M170 345l6-11 6 11-6 11z"/>
+          </g>
+        </svg>
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" class="top"><use href="#sci"/></svg>
+        <div class="lens" aria-hidden="true"><i></i></div>
+        <span class="lab l" data-i18n="fig_with">With a filter</span>
+        <span class="lab r" data-i18n="fig_without">Without</span>
+      </div>
+      <p class="sci-cap" data-i18n="fig_cap">An illustration. Glare is light thrown back by snow, ice and water; a polarizing filter blocks it.</p>
+    </div>
+    <div class="sci-text">
+      <span class="eyebrow reveal" data-i18n="sci_eyebrow">The science</span>
+      <h2 class="display h-lg reveal" data-i18n="sci_h2">This isn't wordplay.</h2>
+      <p class="reveal" data-i18n="sci_p1">In 1929, Edwin Land — a Harvard freshman who'd already dropped out once to chase this exact problem — built a synthetic sheet that could filter polarized light: the specific, blinding glare thrown back by snow, ice, water and wet asphalt.<sup><a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">1</a></sup> He named the material after the physics behind it. Polaroid.</p>
+      <p class="reveal" data-i18n="sci_p2">It went first into sunglasses and goggles<sup><a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">2</a></sup> — built for the people who had no choice but to look straight into that glare: pilots, skiers, and anyone standing where snow and ice turn daylight into a wall of white.</p>
+      <div class="callout reveal" data-r="scale" data-i18n="sci_callout">Nineteen years before "Polaroid" meant an instant photograph, it meant: a way to see clearly in a place too bright to look at.</div>
+      <p class="reveal" data-i18n="sci_p3">Only in 1948 did Land turn the same company toward something new — a camera that develops its own picture in your hands, in minutes.<sup><a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">3</a></sup> The instant photograph came second. The polar glare came first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= MYTH — the page whites out, then develops -->
+<section class="myth" id="myth" data-sec>
+  <div class="stage">
+    <span class="mark mk" aria-hidden="true"></span>
+
+    <div class="beat" data-win="0,0.2" data-first>
+      <div class="in">
+        <span class="eyebrow" data-i18n="myth_eyebrow">The myth</span>
+        <h3 data-i18n="b1_h">Up where the ice starts, glare stops behaving like glare.</h3>
+        <p data-i18n="b1_p">Light doesn't just bounce off snow — it scatters back from a billion crystal faces at once until the horizon dissolves and the sky and the ground become the same blank page. Explorers called it the whiteout. Pilots called it flying blind inside daylight.</p>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.3,0.5">
+      <div class="in">
+        <h3 data-i18n="b2_h">One animal reads it anyway.</h3>
+        <p data-i18n="b2_p">The polar bear works that glare every day of its life — narrow dark eyes, a lowered head, the patience to wait for something solid to resolve out of all that white. It doesn't fight the brightness. It works with it.</p>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.5,0.68">
+      <div class="in">
+        <h3 data-i18n="b3_h">And in 1929, someone built the filter.</h3>
+        <p data-i18n="b3_p">A nineteen-year-old chasing the same problem from the other direction made a sheet that could tame that exact light, and named it after the physics: Polaroid. Nearly two decades later the same company pointed it at a new kind of moment — a photograph that develops itself, right there in your hands.</p>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.68,0.85">
+      <div class="in">
+        <div class="big" data-words data-i18n="b4_big">Before it ever meant an instant photo, Polaroid meant: I can see clearly in a place too bright to look at.</div>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.85,1" data-last>
+      <div class="in">
+        <h3 data-i18n="b5_h">That's the animal at the front of our booth.</h3>
+        <p data-i18n="b5_p">Not because it's cold — because for one second, right when the flash goes off, everyone in front of the camera is inside their own tiny whiteout: blinded, exposed, waiting. And then, the way it's worked since 1929, something clear and lasting resolves out of all that white light and lands in your hands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= THE MARK -->
+<section class="section" id="mark" data-sec>
+  <div class="wrap">
+    <div class="mk-grid">
+      <div class="mk-text">
+        <span class="eyebrow reveal" data-i18n="mark_eyebrow">The mark</span>
+        <h2 class="display h-lg reveal" style="margin-bottom:1.6rem" data-i18n="mark_h2">The bear at the border</h2>
+        <p class="reveal" data-i18n="mark_p1">The mark is a bear's face held in negative space — ears, eyes and snout all cut from the same rounded silhouette, like a bear surfacing from behind a snowbank right as the image finishes developing. One mark, two references: the animal and the instant photo, no explanation needed.</p>
+        <p class="reveal" data-i18n="mark_p2">The two round ears double as a soft nod to an aperture ring. On the frame, the thick strip at the bottom of an instant photo is the natural resting line for the wordmark.</p>
+      </div>
+      <div class="lockup reveal" data-r="tilt" aria-hidden="true">
+        <div class="ph">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#d7e6ec"><use href="#sc"/></svg>
+          <span class="mark bear"></span>
+        </div>
+        <div class="wm">PolaReady</div>
+        <span class="arrow-note" data-i18n="lock_note">Full lockup</span>
+      </div>
+    </div>
+
+    <div class="variants">
+      <div class="vcard cream reveal" style="--i:0">
+        <div class="stage-v"><span class="mark" style="--s:120px;color:var(--navy)"></span></div>
+        <small data-i18n="v1">Icon — the bear, on Cream</small>
+      </div>
+      <div class="vcard navy reveal" style="--i:1">
+        <div class="stage-v"><span class="mark" style="--s:120px;color:var(--cream)"></span></div>
+        <small data-i18n="v2">Reversed — on Navy</small>
+      </div>
+      <div class="vcard stamp reveal" style="--i:2">
+        <div class="stage-v"><div class="avatar"><span class="mark" style="--s:98px"></span></div></div>
+        <small data-i18n="v3">Stamp — for avatars</small>
+      </div>
+      <div class="vcard cream reveal" style="--i:3">
+        <div class="stage-v"><div class="tinyframe"><span class="mark" style="--s:46px;color:var(--navy)"></span><b>PolaReady</b></div></div>
+        <small data-i18n="v4">Lockup — mark + wordmark</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= THE BOOTH — 3, 2, 1, flash -->
+<section class="booth" id="booth" data-sec data-dark="always">
+  <div class="stage">
+    <span class="mark bgmark" aria-hidden="true"></span>
+    <div class="wrap b-grid">
+      <div class="b-copy">
+        <span class="eyebrow" data-i18n="booth_eyebrow">The booth</span>
+        <h2 class="display h-lg" data-i18n="booth_h2">Step up. <em>Flash in 3, 2, 1.</em></h2>
+        <ol class="steps">
+          <li class="on"><span class="n">1</span><div><h4 data-i18n="s1_h">Step up</h4><p data-i18n="s1_p">The live view wakes up. Choose how many frames, then tap Start.</p></div></li>
+          <li><span class="n">2</span><div><h4 data-i18n="s2_h">Flash</h4><p data-i18n="s2_p">A big 3-2-1 counts you in, a voice says Smile, and the flash goes.</p></div></li>
+          <li><span class="n">3</span><div><h4 data-i18n="s3_h">Make it yours</h4><p data-i18n="s3_p">Retake any frame, then pick a layout, a filter and a paper colour. Add a message — or sign it.</p></div></li>
+          <li><span class="n">4</span><div><h4 data-i18n="s4_h">Take it home</h4><p data-i18n="s4_p">It prints on the spot and is cut into strips. Pair yours with an earlier guest's so no half sheet goes to waste.</p></div></li>
+        </ol>
+      </div>
+      <div class="rig" data-state="idle" aria-hidden="true">
+        <div class="dev">
+          <div class="screen">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg>
+            <div class="cd"><span class="c3">3</span></div>
+            <div class="smile" data-i18n="smile">Smile!</div>
+            <div class="start" data-i18n="start">Start</div>
+            <div class="result">
+              <div class="shots">
+                <div><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#d7e6ec"><use href="#sc"/><use href="#pp"/></svg></div>
+                <div><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#f3d9c4;--far:#e0b79a;--near:#c48f77"><use href="#sc"/><use href="#pp" style="transform:scaleX(-1);transform-origin:200px 0"/></svg></div>
+                <div><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#cfd9ea;--far:#a7b7d3;--near:#7f93b8"><use href="#sc"/><use href="#pp"/></svg></div>
+              </div>
+              <div class="chips"><span class="sel" data-i18n="chip_layout">Layout</span><span data-i18n="chip_filter">Filter</span><span data-i18n="chip_paper">Paper</span><span data-i18n="chip_msg">Message</span></div>
+            </div>
+            <div class="fl"></div>
+          </div>
+        </div>
+        <div class="slot"></div>
+        <div class="out">
+          <div class="paper">
+            <div class="fr"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></div>
+            <div class="fr"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#f3d9c4;--far:#e0b79a;--near:#c48f77"><use href="#sc"/><use href="#pp"/></svg></div>
+            <div class="fr"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#cfd9ea;--far:#a7b7d3;--near:#7f93b8"><use href="#sc"/><use href="#pp"/></svg></div>
+            <div class="wmk">PolaReady</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= TRY IT -->
+<section class="section" id="make" data-sec>
+  <div class="wrap">
+    <div class="play">
+      <div class="reveal" data-r="scale">
+        <div class="pv-wrap"><span class="mark bgm" aria-hidden="true"></span><div class="pv" id="pv" data-l="strip" role="img" data-i18n-attr="aria-label:pv_label" aria-label="A live preview of the strip you are designing"></div></div>
+      </div>
+      <div class="ctl">
+        <div class="reveal">
+          <span class="eyebrow" data-i18n="play_eyebrow">Try it</span>
+          <h2 class="display h-lg" style="margin-bottom:1rem" data-i18n="play_h2">Make one yourself.</h2>
+          <p class="hint" data-i18n="play_p">This is the real menu: five layouts, ten filters, nine papers. Filter previews are illustrative.</p>
+        </div>
+        <div class="reveal"><h4 data-i18n="g_layout">Layout</h4><div class="opts" id="g-layout"></div></div>
+        <div class="reveal"><h4 data-i18n="g_paper">Paper</h4><div class="opts" id="g-paper"></div></div>
+        <div class="reveal"><h4 data-i18n="g_filter">Filter</h4><div class="opts" id="g-filter"></div></div>
+        <div class="reveal"><h4 data-i18n="g_msg">Message</h4><div class="opts" id="g-msg"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= WORDS -->
+<section class="section" id="words" data-sec style="overflow:hidden">
+  <div class="wrap">
+    <span class="eyebrow reveal" data-i18n="words_eyebrow">In the wild</span>
+    <h2 class="display h-lg reveal" style="margin-bottom:clamp(30px,5vw,60px)" data-i18n="words_h2">Cuts for every surface</h2>
+  </div>
+  <div class="marq"><div class="track">
+    <span data-i18n="w1">Made for the whiteout.</span><span data-i18n="w2">Flash first. Focus after.</span><span data-i18n="w3">The moment, developed.</span><span data-i18n="w4">Step into the glare.</span><span data-i18n="w5">Instant. Always.</span>
+  </div></div>
+  <div class="marq rev out"><div class="track">
+    <span data-i18n="w5">Instant. Always.</span><span data-i18n="w4">Step into the glare.</span><span data-i18n="w3">The moment, developed.</span><span data-i18n="w2">Flash first. Focus after.</span><span data-i18n="w1">Made for the whiteout.</span>
+  </div></div>
+  <div class="wrap">
+    <div class="says">
+      <div class="say nv reveal" style="--i:0"><span class="t" data-i18n="t_sign">Booth signage</span><span class="x" data-i18n="x_sign">Step up — flash in 3, 2, 1</span></div>
+      <div class="say sf reveal" style="--i:1"><span class="t" data-i18n="t_bio">Social bio</span><span class="x" data-i18n="x_bio">Born from the physics of glare — built for the one second everyone looks their best.</span></div>
+      <div class="say gl reveal" style="--i:2"><span class="t" data-i18n="t_cap">Social caption</span><span class="x" data-i18n="x_cap1">Say cheese into the glare.</span></div>
+      <div class="say reveal" style="--i:0"><span class="t" data-i18n="t_cap">Social caption</span><span class="x" data-i18n="x_cap2">Everyone gets their own thirty seconds of whiteout.</span></div>
+      <div class="say nv reveal" style="--i:1"><span class="t" data-i18n="t_event">Event line</span><span class="x" data-i18n="x_event">Save the date — glare guaranteed.</span></div>
+      <div class="say sf reveal" style="--i:2"><span class="t" data-i18n="t_cap">Social caption</span><span class="x" data-i18n="x_cap3">Developed in the time it takes to blink.</span></div>
+      <div class="say wide reveal"><span class="t" data-i18n="t_pitch">Pitch deck — the one-liner</span><span class="x" data-i18n="x_pitch">PolaReady is an instant photobooth brand built on the real, century-old science of polarized light — the same physics that makes snow blinding is the physics that makes our photos instant, with a polar bear standing calm at the center of the flash.</span></div>
+    </div>
+    <p style="margin-top:28px" class="reveal"><a class="btn ghost" href="../brand-kit/#library"><span data-i18n="w_more">Every line lives in the brand kit</span> <span class="arr" aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<!-- ================================================= THE NAME -->
+<section class="section name" id="name" data-sec>
+  <div class="wrap">
+    <span class="eyebrow reveal" data-i18n="name_eyebrow">The name</span>
+    <div class="pr" aria-label="Pola plus Ready"><span class="pola">Pola</span><span class="plus">+</span><span class="ready">Ready</span></div>
+    <div class="meanings">
+      <div class="mean reveal" style="--i:0"><h4>Pola</h4><p data-i18n="mean1">Polaroid, polar. The physics and the place.</p></div>
+      <div class="mean r reveal" style="--i:1"><h4>Ready</h4><p data-i18n="mean2">Always on, camera-ready, instant.</p></div>
+    </div>
+    <p class="lede reveal" style="margin:2.4rem auto 0;max-width:40ch" data-i18n="name_p">It's easy to say, and the story above gives it a real reason to be named this — not just a pun.</p>
+  </div>
+</section>
+
+<!-- ================================================= THE SYSTEM -->
+<section class="section" id="system" data-sec style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow reveal" data-i18n="sys_eyebrow">The system</span>
+    <h2 class="display h-lg reveal" style="margin-bottom:clamp(30px,5vw,56px);max-width:16ch" data-i18n="sys_h2">Five colours. Two typefaces. One bear.</h2>
+    <div class="swatches reveal">
+      <button class="swatch" type="button" data-copy="#2F4156" style="background:#2f4156;color:#f5efeb"><span class="cp" data-i18n="copy">Copy</span><b>Navy</b><code>#2F4156</code><small data-i18n="sw1">Primary ink — text, wordmark, dark grounds.</small></button>
+      <button class="swatch" type="button" data-copy="#3F7A9C" style="background:#3f7a9c;color:#fff"><span class="cp" data-i18n="copy">Copy</span><b>Glacier</b><code>#3F7A9C</code><small data-i18n="sw2">The one accent — links, highlights.</small></button>
+      <button class="swatch" type="button" data-copy="#F5EFEB" style="background:#f5efeb;color:#2f4156"><span class="cp" data-i18n="copy">Copy</span><b>Cream</b><code>#F5EFEB</code><small data-i18n="sw3">Primary background.</small></button>
+      <button class="swatch" type="button" data-copy="#FFFFFF" style="background:#fff;color:#2f4156"><span class="cp" data-i18n="copy">Copy</span><b>Snowbank</b><code>#FFFFFF</code><small data-i18n="sw4">Cards and surfaces.</small></button>
+      <button class="swatch" type="button" data-copy="#D1D0D0" style="background:#d1d0d0;color:#2f4156"><span class="cp" data-i18n="copy">Copy</span><b>Ash Line</b><code>#D1D0D0</code><small data-i18n="sw5">Borders and hairlines.</small></button>
+    </div>
+    <div class="specimen">
+      <div class="spec reveal" style="--i:0"><span class="fam">Fugaz One</span><div class="display h-md">Made for the whiteout</div></div>
+      <div class="spec reveal" style="--i:1"><span class="fam">Nunito Sans</span><p style="margin:0;color:var(--ink-soft)" data-i18n="spec_p">Before it ever meant an instant photo, Polaroid meant: I can see clearly in a place too bright to look at.</p></div>
+    </div>
+    <p style="margin-top:34px" class="reveal"><a class="btn" href="../brand-kit/"><span data-i18n="sys_cta">Open the full brand kit</span> <span class="arr" aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" id="foot" data-dark="always">
+  <span class="mark bgm" aria-hidden="true"></span>
+  <div class="wrap">
+    <h2 class="display h-xl" data-words data-words-view data-i18n="foot_h2">Made for the whiteout.</h2>
+    <div class="cols">
+      <div>
+        <h5 data-i18n="foot_src">Sources</h5>
+        <ol>
+          <li><a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">Edwin H. Land — Wikipedia</a></li>
+          <li><a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">Polaroid Eyewear, “Polarised Lenses: Better Sight since 1929” — polaroideyewear.com</a></li>
+          <li><a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">“Polaroid Inventor Edwin Land Gave Us More Than Just Instant Photos” — Smithsonian Magazine</a></li>
+        </ol>
+      </div>
+      <div>
+        <h5 data-i18n="foot_go">Keep going</h5>
+        <p style="display:flex;flex-wrap:wrap;gap:10px;margin:0">
+          <a class="btn" href="../brand-kit/"><span data-i18n="nav_kit">Brand kit ↗</span></a>
+          <a class="btn ghost" href="#top"><span data-i18n="foot_top">Back to top</span> <span aria-hidden="true">↑</span></a>
+        </p>
+      </div>
+    </div>
+    <div class="end"><span class="brand" style="font-size:1.1rem"><span class="mark" style="--s:26px"></span><span>PolaReady</span></span><span data-i18n="foot_note">Origin story · brand kit</span></div>
+  </div>
+</footer>
+
+<script src="../js/i18n.js?v=11"></script>
+<script src="../js/site.js?v=11"></script>
+</body>
+</html>

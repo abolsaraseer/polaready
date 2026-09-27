@@ -46,7 +46,8 @@
     });
     root.setAttribute('lang', next);
     root.setAttribute('dir', next === 'ar' ? 'rtl' : 'ltr');
-    var title = next === 'ar' && ar && ar.page_title ? ar.page_title : (doc.body.dataset.title || doc.title);
+    var title = next === 'ar' ? (doc.body.dataset.titleAr || (ar && ar.page_title) || doc.title)
+                                : (doc.body.dataset.title || doc.title);
     doc.title = title;
     $$('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === next)); });
     if (persist) { try { localStorage.setItem('polaready-lang', next); } catch (e) {} }
