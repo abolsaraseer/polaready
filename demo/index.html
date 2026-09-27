@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Test the booth — PolaReady</title>
+<meta name="description" content="Try the real PolaReady booth in your browser: your own camera, the real layouts, filters and papers, and a keepsake you can download.">
+<meta name="theme-color" content="#f5efeb">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="192x192" href="../assets/icon-192.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=IBM+Plex+Mono:wght@400;500&family=Nunito+Sans:opsz,wght@6..12,300..1000&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/site.css?v=12">
+</head>
+<body data-page="demo">
+
+<header class="nav" style="position:sticky;transform:none">
+  <div class="wrap in">
+    <a class="brand" href="../" aria-label="PolaReady — home"><span class="mark" style="--s:30px"></span><span>PolaReady</span></a>
+    <span class="mono" style="opacity:.6;margin-inline-start:auto;margin-inline-end:18px" id="stepLabel">Live demo</span>
+    <a class="btn ghost" style="padding:.65em 1.2em;font-size:.85rem" href="../#contact">Book the real thing →</a>
+  </div>
+</header>
+
+<main class="demo-shell" id="app" data-state="intro">
+
+  <!-- ============================================ INTRO — camera gate
+       This replaces the app's own network/camera setup screen, which has no
+       meaning on a website: there is no printer or Sony camera to find, so a
+       visitor goes straight to what the app calls "live". -->
+  <section class="demo-panel" data-panel="intro">
+    <div class="demo-narrow">
+      <span class="mark" style="--s:52px;color:var(--navy)"></span>
+      <span class="eyebrow" style="justify-content:center">No setup screen — just the booth</span>
+      <h1 class="display" style="font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.05;margin-bottom:14px">Test the real booth.</h1>
+      <p class="lede" style="margin-inline:auto">This is the actual booth software — your own camera stands in for the studio camera. Nothing is uploaded; the photo never leaves this tab.</p>
+      <button class="lux-btn filled" id="startCam" style="margin-top:26px;font-size:1.05rem">Turn on camera <span aria-hidden="true">→</span></button>
+      <p class="privacy-note">Your browser will ask permission first. No camera, or would rather not? <button type="button" class="linklike" id="useSample">Use a sample photo instead</button>.</p>
+    </div>
+  </section>
+
+  <!-- ============================================ CAMERA DENIED -->
+  <section class="demo-panel" data-panel="denied">
+    <div class="demo-narrow">
+      <h2 class="display" style="font-size:1.9rem;margin-bottom:12px">Couldn't reach the camera</h2>
+      <p class="lede" style="margin-inline:auto" id="deniedReason">Camera access was blocked, or no camera is available on this device.</p>
+      <div class="opts" style="margin-top:22px">
+        <button class="lux-btn filled" id="retryCam" type="button">Try again</button>
+        <button class="lux-btn" id="useSample2" type="button">Use a sample photo instead</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ LIVE / SHOOTING -->
+  <section class="demo-panel" data-panel="live">
+    <div class="camwrap">
+      <video id="video" playsinline muted autoplay></video>
+      <canvas id="capCanvas" hidden></canvas>
+      <div class="cd" id="cdNum"></div>
+      <div class="smile" id="smileText">Smile!</div>
+      <div class="fl" id="flashEl"></div>
+      <div class="shotdots" id="shotDots"></div>
+      <button class="lux-start shoot-start" id="liveStart" type="button">Start</button>
+    </div>
+
+    <!-- Confirm card: "How many photos?" - overlays the live view exactly
+         like the app's own confirmCard, rather than being a separate page. -->
+    <div class="confirm-scrim" id="confirmScrim" hidden>
+      <div class="confirm-card">
+        <h3>How many photos?</h3>
+        <div class="count-circles" id="countCircles">
+          <button type="button" data-n="3" aria-pressed="true">3</button>
+          <button type="button" data-n="4">4</button>
+          <button type="button" data-n="5">5</button>
+        </div>
+        <p class="hintline">A 3-second countdown before each photo</p>
+        <div class="opts">
+          <button class="lux-btn" id="confirmCancel" type="button">Cancel</button>
+          <button class="lux-btn filled" id="confirmBegin" type="button">Begin</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================ EDIT — Retake → Filter →
+       Layout → Paper → Message → Review, the same order and the same
+       Back/Next bar as the real editing screen. -->
+  <section class="demo-panel" data-panel="edit">
+    <div class="edit-shell">
+      <div class="edit-steps" id="editSteps">
+        <span data-step="retake">Retake</span><span data-step="filter">Filter</span><span data-step="layout">Layout</span>
+        <span data-step="paper">Paper</span><span data-step="message">Message</span><span data-step="review">Review</span>
+      </div>
+      <div class="edit-body">
+        <div class="edit-preview"><img id="finalImg" alt="Your strip so far"></div>
+        <div class="edit-panel" id="editPanel"><!-- filled per step by demo.js --></div>
+      </div>
+      <div class="edit-bar">
+        <button class="lux-btn" id="backBtn" type="button">← Back</button>
+        <button class="lux-btn filled" id="nextBtn" type="button">Next →</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script src="demo.js?v=2"></script>
+</body>
+</html>
