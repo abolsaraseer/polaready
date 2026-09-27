@@ -1,0 +1,408 @@
+/* ==========================================================================
+   PolaReady — site behaviour
+   One small scroll engine drives every animation: each animated section gets a
+   0..1 progress number, and the CSS reads it. No animation library.
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var doc = document, root = doc.documentElement;
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function (s, r) { return (r || doc).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || doc).querySelectorAll(s)); };
+  var clamp = function (v, a, b) { return Math.min(b, Math.max(a, v)); };
+  var smooth = function (t) { t = clamp(t, 0, 1); return t * t * (3 - 2 * t); };
+  var lerp = function (a, b, t) { return a + (b - a) * t; };
+  var mixRGB = function (a, b, t) { return 'rgb(' + [0, 1, 2].map(function (i) { return Math.round(lerp(a[i], b[i], t)); }).join(',') + ')'; };
+
+  var CREAM = [245, 239, 235], NAVY = [47, 65, 86], WHITE = [255, 255, 255];
+  var lang = 'en';
+
+  /* ------------------------------------------------------------------ i18n
+     English lives in the HTML itself. Arabic is looked up by data-i18n key;
+     the English original is remembered on first swap so switching back is exact. */
+  function T(key) {
+    var d = window.I18N || {};
+    return (lang === 'ar' && d.ar && d.ar[key] != null) ? d.ar[key] : (d.en && d.en[key]) || key;
+  }
+  function applyLang(next, persist) {
+    lang = next;
+    var ar = window.I18N && window.I18N.ar;
+    $$('[data-i18n]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n');
+      if (el.dataset.en == null) el.dataset.en = el.innerHTML;
+      el.innerHTML = (next === 'ar' && ar && ar[k] != null) ? ar[k] : el.dataset.en;
+      /* the text was just replaced, so any earlier word-split source is stale */
+      if (el.hasAttribute('data-hw') || el.hasAttribute('data-words')) delete el.dataset.src;
+    });
+    $$('[data-i18n-attr]').forEach(function (el) {
+      var pairs = el.getAttribute('data-i18n-attr').split(',');
+      pairs.forEach(function (p) {
+        var a = p.split(':'), attr = a[0], k = a[1], keep = 'data-en-' + attr;
+        /* plain attributes, not dataset: 'aria-label' is not a legal dataset name */
+        if (!el.hasAttribute(keep)) el.setAttribute(keep, el.getAttribute(attr) || '');
+        el.setAttribute(attr, (next === 'ar' && ar && ar[k] != null) ? ar[k] : el.getAttribute(keep));
+      });
+    });
+    root.setAttribute('lang', next);
+    root.setAttribute('dir', next === 'ar' ? 'rtl' : 'ltr');
+    var title = next === 'ar' && ar && ar.page_title ? ar.page_title : (doc.body.dataset.title || doc.title);
+    doc.title = title;
+    $$('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === next)); });
+    if (persist) { try { localStorage.setItem('polaready-lang', next); } catch (e) {} }
+    splitWords();
+    buildPlay();
+    measure();
+    update();
+  }
+
+  /* ------------------------------------------------------- word splitting */
+  function wrapWords(node, cls, counter) {
+    Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+      if (n.nodeType === 3) {
+        var parts = n.nodeValue.split(/(\s+)/);
+        var frag = doc.createDocumentFragment();
+        parts.forEach(function (p) {
+          if (!p) return;
+          if (/^\s+$/.test(p)) { frag.appendChild(doc.createTextNode(p)); return; }
+          var w = doc.createElement('span');
+          w.className = cls;
+          if (cls === 'hw') { var i = doc.createElement('i'); i.textContent = p; w.appendChild(i); w.style.setProperty('--i', counter.n++); }
+          else { w.textContent = p; counter.n++; }
+          frag.appendChild(w);
+        });
+        n.parentNode.replaceChild(frag, n);
+      } else if (n.nodeType === 1 && n.tagName !== 'BR') wrapWords(n, cls, counter);
+    });
+  }
+  function splitWords() {
+    $$('[data-hw]').forEach(function (el) {
+      if (el.dataset.src == null) el.dataset.src = el.innerHTML; else el.innerHTML = el.dataset.src;
+      wrapWords(el, 'hw', { n: 0 });
+    });
+    $$('[data-words]').forEach(function (el) {
+      if (el.dataset.src == null) el.dataset.src = el.innerHTML; else el.innerHTML = el.dataset.src;
+      wrapWords(el, 'w', { n: 0 });
+    });
+  }
+
+  /* ------------------------------------------------------------- reveals */
+  var io = null;
+  function setupReveal() {
+    var items = $$('.reveal');
+    if (reduced || !('IntersectionObserver' in window)) { items.forEach(function (e) { e.classList.add('in'); }); return; }
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); if (en.target.hasAttribute('data-count-host')) countUp(en.target); }
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+    items.forEach(function (e) { io.observe(e); });
+    $$('.pr').forEach(function (e) { io.observe(e); });
+  }
+  function countUp(host) {
+    $$('[data-count]', host).forEach(function (el) {
+      var to = parseInt(el.getAttribute('data-count'), 10), from = to - 46, t0 = null;
+      if (reduced) { el.textContent = to; return; }
+      function step(ts) {
+        if (t0 == null) t0 = ts;
+        var p = clamp((ts - t0) / 1500, 0, 1), e = 1 - Math.pow(1 - p, 4);
+        el.textContent = Math.round(lerp(from, to, e));
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  /* --------------------------------------------------------- scroll engine */
+  var vh = window.innerHeight, docH = 1;
+  var secs = [];          // sections that need per-scroll work
+  function measure() {
+    vh = window.innerHeight;
+    docH = Math.max(1, doc.documentElement.scrollHeight - vh);
+  }
+  function rectOf(el) { return el.getBoundingClientRect(); }
+  function pinProgress(el) { var r = rectOf(el); return clamp(-r.top / Math.max(1, r.height - vh), 0, 1); }
+  function viewProgress(el) { var r = rectOf(el); return clamp((vh - r.top) / (vh + r.height), 0, 1); }
+
+  var myth = null, booth = null, lastBoothState = '', navEl = null, lastY = 0;
+
+  function update() {
+    var y = window.scrollY || window.pageYOffset;
+    root.style.setProperty('--sp', clamp(y / docH, 0, 1).toFixed(4));
+
+    /* nav: hide when scrolling down past the hero, show when scrolling up */
+    if (navEl) {
+      navEl.classList.toggle('hide', y > 420 && y > lastY + 4 && !navEl.matches(':focus-within'));
+      if (y < lastY - 4 || y < 200) navEl.classList.remove('hide');
+    }
+    lastY = y;
+
+    var darkNow = false;
+    $$('[data-dark="always"]').forEach(function (s) { var r = rectOf(s); if (r.top <= 34 && r.bottom >= 34) darkNow = true; });
+
+    if (myth) {
+      var p = pinProgress(myth.el);
+      /* the page whites out (cream -> white), then develops (white -> navy) */
+      var bg, e;
+      if (p < 0.1) bg = mixRGB(CREAM, WHITE, smooth(p / 0.1));
+      else if (p < 0.2) bg = 'rgb(255,255,255)';
+      else { e = smooth((p - 0.2) / 0.12); bg = mixRGB(WHITE, NAVY, e); }
+      myth.el.style.setProperty('--mbg', bg);
+      myth.el.style.setProperty('--mfg', p < 0.26 ? 'rgb(47,65,86)' : 'rgb(245,239,235)');
+      myth.el.style.setProperty('--dev', smooth((p - 0.24) / 0.1).toFixed(3));
+      myth.beats.forEach(function (b) {
+        var v = (b.first ? 1 : smooth((p - b.a) / 0.035)) * (b.last ? 1 : 1 - smooth((p - (b.z - 0.035)) / 0.035));
+        b.el.style.setProperty('--b', v.toFixed(3));
+        b.el.style.pointerEvents = v > 0.5 ? 'auto' : 'none';
+        var words = b.el.querySelectorAll('.big .w');
+        if (words.length) {
+          var lp = clamp((p - b.a) / (b.z - b.a), 0, 1), n = words.length;
+          for (var wi = 0; wi < n; wi++) words[wi].style.setProperty('--wv', clamp((lp - 0.12) / 0.55 * n - wi, 0, 1).toFixed(2));
+        }
+      });
+      if (p > 0.3 && p < 1 && rectOf(myth.el).top <= 34) darkNow = true;
+    }
+
+    if (booth) {
+      var bp = pinProgress(booth.el), st;
+      st = bp < 0.13 ? 'idle' : bp < 0.25 ? 'c3' : bp < 0.37 ? 'c2' : bp < 0.49 ? 'c1' : bp < 0.60 ? 'smile' : bp < 0.80 ? 'result' : 'print';
+      if (st !== lastBoothState) { booth.rig.setAttribute('data-state', st); lastBoothState = st; }
+      var fl = bp > 0.585 && bp < 0.7 ? (bp < 0.6 ? (bp - 0.585) / 0.015 : 1 - (bp - 0.6) / 0.1) : 0;
+      booth.flash.style.opacity = clamp(fl, 0, 1).toFixed(3);
+      booth.rig.style.setProperty('--print', smooth((bp - 0.74) / 0.22).toFixed(3));
+      var step = bp < 0.13 ? 0 : bp < 0.66 ? 1 : bp < 0.8 ? 2 : 3;
+      booth.steps.forEach(function (li, i) { li.classList.toggle('on', i === step); });
+    }
+
+    secs.forEach(function (s) {
+      var r = rectOf(s.el);
+      if (r.bottom < -200 || r.top > vh + 200) return;
+      s.fn(s.el, r);
+    });
+
+    /* which chapter are we in */
+    var mid = vh * 0.4, cur = null;
+    $$('[data-sec]').forEach(function (s) { var r = rectOf(s); if (r.top <= mid && r.bottom > mid) cur = s.id; });
+    $$('.dots a,.nav ul a').forEach(function (a) { a.classList.toggle('on', a.getAttribute('href') === '#' + cur); });
+
+    if (navEl) navEl.classList.toggle('dark', darkNow);
+    doc.body.classList.toggle('on-dark', darkNow);
+  }
+
+  var ticking = false;
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; update(); }); } }
+
+  function setupSections() {
+    var tl = $('.tl');
+    if (tl) secs.push({ el: tl, fn: function (el, r) {
+      var p = clamp((vh * 0.82 - r.top) / (r.height * 0.9 + vh * 0.1), 0, 1);
+      el.style.setProperty('--p', p.toFixed(3));
+    } });
+    var sci = $('.sci');
+    if (sci) secs.push({ el: sci, fn: function (el, r) {
+      var fig = $('.sci-fig', el);
+      /* starts as the figure settles, finishes as the last paragraph passes */
+      var p = clamp((vh * 0.3 - r.top) / Math.max(1, r.height - vh * 0.55), 0, 1);
+      fig.style.setProperty('--x', (smooth(p) * 100).toFixed(1) + '%');
+      fig.style.setProperty('--p', p.toFixed(3));
+    } });
+    var lock = $('.lockup');
+    if (lock) secs.push({ el: lock, fn: function (el, r) {
+      el.style.setProperty('--rise', smooth((vh * 0.9 - r.top) / (vh * 0.55)).toFixed(3));
+    } });
+    var foot = $('.foot');
+    if (foot) secs.push({ el: foot, fn: function (el) { el.style.setProperty('--p', viewProgress(el).toFixed(3)); } });
+    $$('[data-words-view]').forEach(function (el) {
+      secs.push({ el: el, fn: function (e, r) {
+        var words = $$('.w', e), p = clamp((vh * 0.85 - r.top) / (vh * 0.5), 0, 1);
+        words.forEach(function (w, i) { w.style.setProperty('--wv', clamp(p * words.length * 1.15 - i, 0, 1).toFixed(2)); });
+      } });
+    });
+
+    var m = $('.myth');
+    if (m) myth = { el: m, beats: $$('.beat', m).map(function (b) {
+      var win = b.getAttribute('data-win').split(',');
+      return { el: b, a: parseFloat(win[0]), z: parseFloat(win[1]), first: b.hasAttribute('data-first'), last: b.hasAttribute('data-last') };
+    }) };
+    var bo = $('.booth');
+    if (bo) booth = { el: bo, rig: $('.rig', bo), flash: $('.fl', bo), steps: $$('.steps li', bo) };
+  }
+
+  /* ---------------------------------------------------------------- hero */
+  function setupHero() {
+    var snow = $('.snow');
+    if (snow && !reduced) {
+      for (var i = 0; i < 30; i++) {
+        var b = doc.createElement('b'), z = 3 + Math.random() * 7;
+        b.style.cssText = '--x:' + (Math.random() * 100).toFixed(1) + '%;--z:' + z.toFixed(1) + 'px;--o:' + (0.1 + Math.random() * 0.22).toFixed(2) +
+          ';--t:' + (16 + Math.random() * 22).toFixed(1) + 's;--dl:-' + (Math.random() * 30).toFixed(1) + 's;--sw:' + (Math.random() * 70 - 35).toFixed(0);
+        snow.appendChild(b);
+      }
+    }
+    var host = $('.stagecard'), card = $('.pcard');
+    if (host && card && !reduced && window.matchMedia('(hover:hover)').matches) {
+      host.addEventListener('pointermove', function (e) {
+        var r = host.getBoundingClientRect();
+        var x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        card.style.setProperty('--ry', (x * 16).toFixed(2) + 'deg');
+        card.style.setProperty('--rx', (-y * 14).toFixed(2) + 'deg');
+      });
+      host.addEventListener('pointerleave', function () { card.style.setProperty('--ry', '0deg'); card.style.setProperty('--rx', '0deg'); });
+    }
+  }
+
+  /* --------------------------------------------------------------- intro */
+  function runIntro() {
+    var skip = reduced || !doc.body.hasAttribute('data-intro');
+    try { if (sessionStorage.getItem('polaready-intro')) skip = true; } catch (e) {}
+    if (new URLSearchParams(location.search).has('nointro')) skip = true;
+    if (skip) { root.classList.add('go'); return; }
+    try { sessionStorage.setItem('polaready-intro', '1'); } catch (e) {}
+    var el = doc.createElement('div');
+    el.className = 'intro';
+    el.setAttribute('aria-hidden', 'true');
+    el.innerHTML = '<div class="num"></div><div class="cap">' + T('intro_cap') + '</div><button class="skipbtn" type="button">' + T('intro_skip') + '</button><div class="white"></div>';
+    doc.body.appendChild(el);
+    doc.body.style.overflow = 'hidden';
+    var num = $('.num', el), timers = [], finished = false;
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function show(n) { num.textContent = n; num.classList.remove('pop'); void num.offsetWidth; num.classList.add('pop'); }
+    function finish() {
+      if (finished) return; finished = true;
+      timers.forEach(clearTimeout);
+      root.classList.add('go');
+      el.classList.add('done');
+      doc.body.style.overflow = '';
+      setTimeout(function () { el.remove(); }, 60);
+    }
+    show(3); later(function () { show(2); }, 520); later(function () { show(1); }, 1040);
+    later(function () { el.classList.add('flash'); num.style.display = 'none'; }, 1560);
+    later(function () { root.classList.add('go'); }, 1700);
+    later(finish, 2650);
+    el.addEventListener('click', finish);
+    doc.addEventListener('keydown', function k(e) { if (!finished) finish(); doc.removeEventListener('keydown', k); });
+  }
+
+  /* --------------------------------------------------------- clipboard */
+  var toastEl = null, toastT = null;
+  function toast(msg) {
+    if (!toastEl) { toastEl = doc.createElement('div'); toastEl.className = 'toast'; toastEl.setAttribute('role', 'status'); doc.body.appendChild(toastEl); }
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove('show'); }, 1700);
+  }
+  function copy(text) {
+    var done = function () { toast((T('copied') || 'Copied') + ' · ' + text); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, done);
+    else { var t = doc.createElement('textarea'); t.value = text; doc.body.appendChild(t); t.select(); try { doc.execCommand('copy'); } catch (e) {} t.remove(); done(); }
+  }
+  function setupCopy() {
+    doc.addEventListener('click', function (e) {
+      var t = e.target.closest('[data-copy]');
+      if (t) copy(t.getAttribute('data-copy') || t.textContent.trim());
+    });
+  }
+
+  /* ----------------------------------------------------- booth playground */
+  var PAPERS = [
+    { k: 'white', bg: '#ffffff', ink: '#2f4156' }, { k: 'noir', bg: '#1a1a1f', ink: '#ffffff' },
+    { k: 'cream', bg: '#f2e6c7', ink: '#73542e' }, { k: 'pink', bg: '#ffcce0', ink: '#bf3373' },
+    { k: 'blue', bg: '#c7e6fa', ink: '#1a5999' }, { k: 'mint', bg: '#ccf5db', ink: '#1a734d' },
+    { k: 'lavender', bg: '#e0d4fa', ink: '#6640a6' },
+    { k: 'sunset', bg: 'linear-gradient(160deg,#ffbf8c,#ff8cb3)', ink: '#8c2640' },
+    { k: 'sky', bg: 'linear-gradient(160deg,#a6d9ff,#d9f2ff)', ink: '#1a5999' }
+  ];
+  var FILTERS = [
+    { k: 'original', f: 'none' }, { k: 'bw', f: 'grayscale(1) contrast(1.1)' }, { k: 'sepia', f: 'sepia(.9)' },
+    { k: 'vintage', f: 'sepia(.4) contrast(.92) saturate(.8)' }, { k: 'fade', f: 'contrast(.86) brightness(1.1) saturate(.75)' },
+    { k: 'cool', f: 'hue-rotate(-14deg) saturate(1.1) brightness(1.03)' }, { k: 'crisp', f: 'contrast(1.22) saturate(1.12)' },
+    { k: 'instant', f: 'saturate(1.3) contrast(1.05) brightness(1.06) sepia(.12)' }, { k: 'mono', f: 'grayscale(1) contrast(1.45)' },
+    { k: 'pop', f: 'saturate(1.9) contrast(1.15)' }
+  ];
+  var LAYOUTS = ['strip', 'grid', 'polaroid', 'player', 'ticket'];
+  var MSGS = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
+  var SCENES = [
+    'sky:#d7e6ec;far:#b6cdd9;near:#8db0c4;ground:#f5efeb', 'sky:#f3d9c4;far:#e0b79a;near:#c48f77;ground:#f7ece4',
+    'sky:#cfd9ea;far:#a7b7d3;near:#7f93b8;ground:#f0f2f8', 'sky:#d2e7dc;far:#a8ccb8;near:#7fae95;ground:#eef6f0'
+  ];
+  var play = { layout: 'strip', paper: 'white', filter: 'original', msg: 'm1' };
+
+  function frameSVG(i) {
+    return '<div class="f"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="' + SCENES[i % SCENES.length].split(';').map(function (s) { return '--' + s; }).join(';') +
+      '"><use href="#sc"/><use href="#pp" ' + (i % 2 ? 'style="transform:scaleX(-1);transform-origin:200px 0"' : '') + '/></svg></div>';
+  }
+  function renderPreview() {
+    var pv = $('#pv'); if (!pv) return;
+    var paper = PAPERS.filter(function (p) { return p.k === play.paper; })[0];
+    var flt = FILTERS.filter(function (p) { return p.k === play.filter; })[0];
+    pv.setAttribute('data-l', play.layout);
+    pv.style.setProperty('--paper', paper.bg.indexOf('gradient') > -1 ? 'transparent' : paper.bg);
+    pv.style.background = paper.bg;
+    pv.style.setProperty('--pink', paper.ink);
+    pv.style.setProperty('--flt', flt.f);
+    var msg = T(play.msg), n = { strip: 3, grid: 4, polaroid: 1, player: 1, ticket: 3 }[play.layout], h = '', i;
+    var wm = '<div class="sm">PolaReady</div>';
+    if (play.layout === 'ticket') {
+      for (i = 0; i < n; i++) h += frameSVG(i);
+      h = '<div class="frs">' + h + '</div><div class="stub"><div class="sm">' + T('admit') + '</div><div class="cap">' + msg + '</div><div class="sm">PolaReady</div></div>';
+    } else {
+      for (i = 0; i < n; i++) h += frameSVG(i);
+      if (play.layout === 'player') h += '<div class="bar"><span class="play-ic"></span><i></i><span>0:03</span></div>';
+      h += '<div class="cap">' + msg + '</div>' + wm;
+    }
+    pv.innerHTML = h;
+  }
+  function group(id, items, cur, key, render) {
+    var host = $('#' + id); if (!host) return;
+    host.innerHTML = '';
+    items.forEach(function (it) {
+      var b = doc.createElement('button');
+      b.type = 'button'; b.setAttribute('aria-pressed', String(it.k === cur || it === cur));
+      render(b, it);
+      b.addEventListener('click', function () {
+        play[key] = it.k || it; renderPreview(); buildPlay(true);
+      });
+      host.appendChild(b);
+    });
+  }
+  function buildPlay(keepScroll) {
+    if (!$('#pv')) return;
+    group('g-layout', LAYOUTS.map(function (k) { return { k: k }; }), play.layout, 'layout', function (b, it) { b.className = 'opt'; b.textContent = T('l_' + it.k); });
+    group('g-paper', PAPERS, play.paper, 'paper', function (b, it) { b.className = 'sw'; b.style.background = it.bg; b.setAttribute('aria-label', T('p_' + it.k)); b.title = T('p_' + it.k); });
+    group('g-filter', FILTERS, play.filter, 'filter', function (b, it) { b.className = 'opt'; b.textContent = T('f_' + it.k); });
+    group('g-msg', MSGS.map(function (k) { return { k: k }; }), play.msg, 'msg', function (b, it) { b.className = 'opt'; b.textContent = T(it.k); });
+    renderPreview();
+  }
+
+  /* -------------------------------------------------------------- boot */
+  function init() {
+    navEl = $('.nav');
+    var saved = null, q = new URLSearchParams(location.search).get('lang');
+    try { saved = localStorage.getItem('polaready-lang'); } catch (e) {}
+    var want = q === 'ar' || q === 'en' ? q : saved;
+    doc.body.dataset.title = doc.title;
+    $$('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), true); }); });
+
+    setupSections(); setupReveal(); setupHero(); setupCopy();
+    lang = want === 'ar' && window.I18N ? 'ar' : 'en';
+    applyLang(lang, false);   /* also splits the words, once, in the right language */
+    $$('.marq .track').forEach(function (t) { t.innerHTML += t.innerHTML; });
+    measure(); update();
+    runIntro();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function () { measure(); update(); });
+    window.addEventListener('load', function () { measure(); update(); });
+    /* smooth in-page links that account for the pinned sections */
+    doc.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]'); if (!a) return;
+      var t = $(a.getAttribute('href')); if (!t) return;
+      e.preventDefault();
+      window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 4, behavior: reduced ? 'auto' : 'smooth' });
+    });
+  }
+  /* a small hook so the page can be driven and checked without a real scroll */
+  window.PolaReady = {
+    update: function () { measure(); update(); },
+    revealAll: function () { $$('.reveal,.pr').forEach(function (e) { e.classList.add('in'); }); $$('[data-count]').forEach(function (e) { e.textContent = e.getAttribute('data-count'); }); }
+  };
+  if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init); else init();
+})();

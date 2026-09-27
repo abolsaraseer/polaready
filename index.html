@@ -1,608 +1,427 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Bear in the Whiteout</title>
-<meta name="description" content="Brand story and naming exploration for Polaready, an instant photobooth brand">
-<meta property="og:title" content="The Bear in the Whiteout">
-<meta property="og:description" content="Brand story and naming exploration for Polaready, an instant photobooth brand">
-<meta property="og:type" content="article">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PolaReady — Made for the whiteout</title>
+<meta name="description" content="The story behind PolaReady: why an instant photobooth can honestly trace its name to a polar bear — not as a pun, but as history.">
+<meta name="theme-color" content="#f5efeb">
+<meta property="og:title" content="PolaReady — Made for the whiteout">
+<meta property="og:description" content="Why an instant photobooth can honestly trace its name to a polar bear — not as a pun, but as history.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://abolsaraseer.github.io/polaready/">
+<meta property="og:image" content="https://abolsaraseer.github.io/polaready/assets/og.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Mono:wght@400;500&family=Cairo:wght@300;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  :root{color-scheme:light dark}
-  html,body{margin:0;padding:0}
-  img{max-width:100%}
-  [hidden]:not([hidden=until-found]){display:none!important}
-</style>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..900&family=Fugaz+One&family=IBM+Plex+Mono:wght@400;500&family=Nunito+Sans:opsz,wght@6..12,300..1000&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="css/site.css?v=9">
 </head>
-<body>
-<style>
-  :root{
-    --bg: #eef4f7;
-    --surface: #ffffff;
-    --surface-2: #e2edf1;
-    --ink: #0f2027;
-    --ink-soft: #47626c;
-    --ink-faint: #7d939b;
-    --line: #cdd9de;
-    --accent: #e85b34;
-    --accent-ink: #ffffff;
-    --ice: #3f7a9c;
-    --ice-soft: #d7e6ec;
-    --shadow: 0 1px 2px rgba(15,32,39,0.06), 0 10px 30px -12px rgba(15,32,39,0.18);
-    --font-display: "Big Shoulders Display", "Arial Narrow", sans-serif;
-    --font-body: "Lora", "Iowan Old Style", "Georgia", serif;
-    --font-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
-  }
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg: #0c1519; --surface: #121e23; --surface-2: #182930;
-      --ink: #eaf2f4; --ink-soft: #a9c0c7; --ink-faint: #6f8891;
-      --line: #24363d; --accent: #ff7a4d; --accent-ink: #12181a;
-      --ice: #7fc4e8; --ice-soft: #17323d;
-      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 20px 45px -20px rgba(0,0,0,0.6);
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg: #0c1519; --surface: #121e23; --surface-2: #182930;
-    --ink: #eaf2f4; --ink-soft: #a9c0c7; --ink-faint: #6f8891;
-    --line: #24363d; --accent: #ff7a4d; --accent-ink: #12181a;
-    --ice: #7fc4e8; --ice-soft: #17323d;
-    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 20px 45px -20px rgba(0,0,0,0.6);
-  }
-  /* Arabic type system */
-  :root:lang(ar){
-    --font-display: "Cairo", "Tahoma", sans-serif;
-    --font-body: "Amiri", "Traditional Arabic", serif;
-    --font-mono: "Cairo", "Tahoma", sans-serif;
-  }
+<body data-page="story" data-intro>
 
-  *{box-sizing:border-box;}
-  html{-webkit-text-size-adjust:100%; font-size:16px;}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:var(--font-body); line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  :lang(ar) body{ line-height:1.9; }
-  a{color:var(--ice);}
-  a:focus-visible, button:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
-  ::selection{background:var(--accent); color:var(--accent-ink);}
+<a class="skip" href="#main" data-i18n="skip">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
 
-  .wrap{max-width:1180px; margin:0 auto; padding-inline:clamp(20px,5vw,64px);}
-
-  h1,h2,h3{font-family:var(--font-display); text-transform:uppercase; text-wrap:balance; margin:0; letter-spacing:0.01em;}
-  :lang(ar) h1, :lang(ar) h2, :lang(ar) h3{ text-transform:none; letter-spacing:0; }
-
-  .eyebrow{
-    font-family:var(--font-mono); font-size:0.75rem; letter-spacing:0.18em;
-    text-transform:uppercase; color:var(--ice);
-    display:flex; align-items:center; gap:0.6em; margin-bottom:0.9em;
-  }
-  .eyebrow::before{content:""; width:22px; height:1px; background:var(--ice); display:inline-block; flex:none;}
-  :lang(ar) .eyebrow{ letter-spacing:0; text-transform:none; }
-
-  /* ---------- Language toggle ---------- */
-  #langToggle{
-    position:fixed; top:14px; right:14px; z-index:50;
-    display:flex; gap:2px; background:var(--surface); border:1px solid var(--line);
-    border-radius:999px; padding:4px; box-shadow:var(--shadow);
-  }
-  #langToggle button{
-    border:none; background:transparent; color:var(--ink-soft);
-    padding:7px 14px; border-radius:999px; cursor:pointer;
-    font-family:"IBM Plex Mono","Cairo",sans-serif; font-size:0.72rem; letter-spacing:0.03em;
-  }
-  #langToggle button.active{ background:var(--accent); color:var(--accent-ink); }
-
-  /* ---------- Flash overlay (once, on load) ---------- */
-  #flash{
-    position:fixed; inset:0; background:#fff; z-index:999;
-    pointer-events:none; opacity:1; animation: flashfade 1.05s ease-out forwards;
-  }
-  @keyframes flashfade{ to{opacity:0;} }
-  @media (prefers-reduced-motion: reduce){ #flash{display:none;} }
-
-  /* ---------- Hero ---------- */
-  header.hero{padding:clamp(72px,10vw,120px) 0 clamp(40px,6vw,64px);}
-  .hero .eyebrow{color:var(--accent);}
-  .hero .eyebrow::before{background:var(--accent);}
-  .hero h1{ font-size:clamp(2.6rem, 7vw, 5.6rem); font-weight:800; line-height:0.94; max-width:16ch; }
-  :lang(ar) .hero h1{ max-width:14ch; line-height:1.25; }
-  .hero h1 em{ font-style:normal; color:var(--accent); }
-  .hero .sub{
-    font-size:clamp(1.05rem, 1.6vw, 1.3rem); color:var(--ink-soft); max-width:46ch;
-    margin-top:1.3em; font-style:italic;
-  }
-  :lang(ar) .hero .sub{ font-style:normal; max-width:48ch; }
-  .hero .meta{
-    margin-top:2.4em; font-family:var(--font-mono); font-size:0.75rem; color:var(--ink-faint);
-    letter-spacing:0.06em; display:flex; flex-wrap:wrap; gap:0.5em 1.6em;
-  }
-  :lang(ar) .hero .meta{ letter-spacing:0; }
-
-  /* ---------- Timeline strip ---------- */
-  .timeline{ border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:22px 0; }
-  .timeline ol{ list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:20px; }
-  .timeline li{display:flex; flex-direction:column; gap:2px;}
-  .timeline .yr{font-family:var(--font-display); font-weight:700; font-size:1.6rem; color:var(--ice);}
-  .timeline li:last-child .yr{color:var(--accent);}
-  .timeline .desc{font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-soft); letter-spacing:0.02em;}
-  :lang(ar) .timeline .desc{ letter-spacing:0; font-size:0.85rem; }
-
-  /* ---------- Sections generic ---------- */
-  section{padding:clamp(56px,9vw,104px) 0;}
-  section + section{border-top:1px solid var(--line);}
-  .section-head{margin-bottom:clamp(28px,4vw,44px);}
-  .section-head h2{font-size:clamp(1.7rem, 3.4vw, 2.5rem); font-weight:700;}
-
-  .reveal{opacity:0; transform:translateY(16px); transition:opacity .7s ease, transform .7s ease;}
-  .reveal.in{opacity:1; transform:none;}
-  @media (prefers-reduced-motion: reduce){ .reveal{opacity:1; transform:none; transition:none;} }
-
-  /* ---------- Science section ---------- */
-  .science-grid{display:grid; grid-template-columns:1.1fr 1.5fr; gap:clamp(28px,5vw,64px); align-items:start;}
-  @media (max-width:820px){ .science-grid{grid-template-columns:1fr;} }
-  .plate{
-    background:var(--surface); border:1px solid var(--line); border-radius:4px;
-    padding:26px 24px; box-shadow:var(--shadow);
-    font-family:var(--font-mono); font-size:0.85rem; color:var(--ink-soft);
-  }
-  .plate dt{color:var(--ink-faint); font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; margin-top:1.1em;}
-  .plate dt:first-child{margin-top:0;}
-  .plate dd{margin:0.15em 0 0; color:var(--ink); font-size:1rem;}
-  :lang(ar) .plate dt{ letter-spacing:0; text-transform:none; }
-  .science-copy p{max-width:62ch; font-size:1.05rem;}
-  :lang(ar) .science-copy p{ font-size:1.15em; line-height:1.9; }
-  .science-copy sup a{color:var(--ice); text-decoration:none; font-size:0.7em;}
-  .callout{
-    font-family:var(--font-body); font-style:italic; font-size:1.15rem; color:var(--ink);
-    border-inline-start:2px solid var(--accent); padding-inline-start:1.1em; margin:1.6em 0; max-width:56ch;
-  }
-  :lang(ar) .callout{ font-style:normal; font-size:1.2em; }
-
-  /* ---------- Myth section ---------- */
-  .myth{max-width:64ch;}
-  .myth h2{font-size:clamp(1.9rem,3.6vw,2.8rem);}
-  .myth p{font-size:1.09rem; margin:1.2em 0;}
-  :lang(ar) .myth p{ font-size:1.18em; line-height:1.95; }
-  .pull{
-    font-family:var(--font-body); font-style:italic; font-weight:500;
-    font-size:clamp(1.3rem,2.4vw,1.75rem); line-height:1.4; color:var(--ice); max-width:34ch;
-    margin:2em 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:1.1em 0;
-  }
-  :lang(ar) .pull{ font-style:normal; font-weight:700; max-width:26em; }
-
-  /* ---------- Mark section ---------- */
-  .mark-grid{display:grid; grid-template-columns:280px 1fr; gap:clamp(28px,5vw,60px); align-items:center;}
-  @media (max-width:760px){ .mark-grid{grid-template-columns:1fr;} }
-  .mark-card{ background:var(--surface-2); border-radius:6px; padding:28px; display:flex; justify-content:center; }
-  .mark-card svg{width:100%; max-width:220px; height:auto;}
-  .mark-copy p{max-width:56ch;}
-  :lang(ar) .mark-copy p{ font-size:1.12em; line-height:1.9; }
-  .mark-variants{ display:flex; gap:14px; margin-top:1.2em; flex-wrap:wrap; }
-  .mark-variants span{
-    font-family:var(--font-mono); font-size:0.75rem; color:var(--ink-soft);
-    border:1px solid var(--line); border-radius:3px; padding:5px 10px; background:var(--surface);
-  }
-  :lang(ar) .mark-variants span{ letter-spacing:0; font-size:0.85rem; }
-
-  /* ---------- In the wild (photo cards) ---------- */
-  .wild-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:28px 22px; margin-top:8px; }
-  .snap{
-    background:var(--surface); border:1px solid var(--line); border-radius:2px;
-    box-shadow:var(--shadow); padding:16px 16px 34px; transform:rotate(var(--r,0deg)); transition:transform .25s ease;
-  }
-  .snap:nth-child(odd){--r:-1.4deg;}
-  .snap:nth-child(even){--r:1.1deg;}
-  .snap:hover{transform:rotate(0deg) translateY(-3px);}
-  .snap .tag{
-    font-family:var(--font-mono); font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase;
-    color:var(--ink-faint); display:block; margin-bottom:0.8em;
-  }
-  :lang(ar) .snap .tag{ letter-spacing:0; text-transform:none; font-size:0.75rem; }
-  .snap p{font-family:var(--font-body); font-size:1rem; color:var(--ink); margin:0; line-height:1.45;}
-  :lang(ar) .snap p{ font-size:1.15em; line-height:1.8; }
-  .snap.pitch{grid-column:1 / -1;}
-  .snap.pitch p{font-size:1.05rem;}
-
-  /* ---------- Name section ---------- */
-  .name-lead{
-    background:var(--surface); border:1px solid var(--line); border-radius:4px;
-    padding:26px 28px; box-shadow:var(--shadow); margin-bottom:34px;
-  }
-  .name-lead .word{font-family:var(--font-display); font-size:2rem; font-weight:800; color:var(--accent); display:block;}
-  .name-lead .word small{display:block; font-family:var(--font-body); font-weight:400; font-size:0.42em; opacity:0.65; margin-top:0.3em; letter-spacing:0;}
-  .name-lead p{margin:0.5em 0 0; max-width:60ch; color:var(--ink-soft);}
-  :lang(ar) .name-lead p{ font-size:1.12em; line-height:1.9; }
-  .name-table{width:100%; border-collapse:collapse; font-size:0.98rem;}
-  .name-table th{
-    text-align:start; font-family:var(--font-mono); font-size:0.7rem; letter-spacing:0.1em;
-    text-transform:uppercase; color:var(--ink-faint); font-weight:500; padding:0 0 10px; border-bottom:1px solid var(--line);
-  }
-  :lang(ar) .name-table th{ letter-spacing:0; text-transform:none; font-size:0.85rem; }
-  .name-table td{
-    padding-block:16px; padding-inline:0 14px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink-soft);
-  }
-  :lang(ar) .name-table td{ font-size:1.05em; line-height:1.8; }
-  .name-table tr:last-child td{border-bottom:none;}
-  .name-table .n{font-family:var(--font-display); font-weight:700; font-size:1.15rem; color:var(--ink); white-space:nowrap;}
-  .rec-tag{
-    display:block; font-family:var(--font-mono); text-transform:uppercase; font-size:0.6rem;
-    letter-spacing:0.08em; color:var(--ice); margin-top:3px;
-  }
-  :lang(ar) .rec-tag{ letter-spacing:0; text-transform:none; font-size:0.72rem; }
-  .name-table-wrap{overflow-x:auto;}
-
-  /* ---------- Footer ---------- */
-  footer{padding:44px 0 80px;}
-  footer .note{max-width:60ch; color:var(--ink-soft); font-size:0.98rem;}
-  :lang(ar) footer .note{ font-size:1.12em; line-height:1.9; }
-  .sources{ margin-top:2.2em; padding-top:1.6em; border-top:1px solid var(--line); font-family:var(--font-mono); font-size:0.75rem; color:var(--ink-faint); }
-  :lang(ar) .sources{ letter-spacing:0; }
-  .sources ol{margin:0.6em 0 0; padding-inline-start:1.2em;}
-  .sources li{margin:0.35em 0;}
-  .sources a{color:var(--ink-faint);}
-</style>
-
-<div id="flash" aria-hidden="true"></div>
-
-<div id="langToggle">
-  <button id="btnEN" onclick="applyLang('en')">EN</button>
-  <button id="btnAR" onclick="applyLang('ar')">عربي</button>
-</div>
-
-<header class="hero">
-  <div class="wrap">
-    <p class="eyebrow" id="hero_eyebrow">Brand story — working draft</p>
-    <h1 id="hero_title">Made for<br>the <em>whiteout.</em></h1>
-    <p class="sub" id="hero_sub">Why a photobooth brand can honestly trace its name to a polar bear — not as a pun, but as history. Polaready, reconsidered.</p>
-    <p class="meta" id="hero_meta">
-      <span>PREPARED FOR — POLAREADY</span>
-      <span>SUBJECT — ORIGIN STORY &amp; NAMING</span>
-      <span>STATUS — DRAFT V1</span>
-    </p>
+<header class="nav">
+  <div class="wrap in">
+    <a class="brand" href="#top" aria-label="PolaReady"><span class="mark" style="--s:30px"></span><span>PolaReady</span></a>
+    <ul>
+      <li><a href="#science" data-i18n="nav_science">Science</a></li>
+      <li><a href="#myth" data-i18n="nav_myth">Myth</a></li>
+      <li><a href="#mark" data-i18n="nav_mark">Mark</a></li>
+      <li><a href="#booth" data-i18n="nav_booth">Booth</a></li>
+      <li><a href="#words" data-i18n="nav_words">Words</a></li>
+      <li><a href="brand-kit/" data-i18n="nav_kit">Brand kit ↗</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="ar" lang="ar" aria-pressed="false">عربي</button>
+    </div>
   </div>
 </header>
 
-<div class="timeline wrap">
-  <ol>
-    <li><span class="yr">1929</span><span class="desc" id="timeline_1929">A 19-year-old invents polarizing film to cut the glare off snow, ice &amp; water</span></li>
-    <li><span class="yr">1948</span><span class="desc" id="timeline_1948">The same company points that light science at instant photography</span></li>
-    <li><span class="yr" id="timeline_today_yr">Today</span><span class="desc" id="timeline_today">A photobooth borrows the bear that reads that glare for a living</span></li>
-  </ol>
-</div>
+<nav class="dots" aria-label="Chapters">
+  <a href="#top"><span data-i18n="d_top">Start</span></a>
+  <a href="#science"><span data-i18n="nav_science">Science</span></a>
+  <a href="#myth"><span data-i18n="nav_myth">Myth</span></a>
+  <a href="#mark"><span data-i18n="nav_mark">Mark</span></a>
+  <a href="#booth"><span data-i18n="nav_booth">Booth</span></a>
+  <a href="#make"><span data-i18n="d_make">Try it</span></a>
+  <a href="#words"><span data-i18n="nav_words">Words</span></a>
+  <a href="#name"><span data-i18n="d_name">Name</span></a>
+</nav>
 
-<section id="science">
-  <div class="wrap science-grid">
-    <div class="reveal">
-      <p class="eyebrow" id="science_eyebrow">The science</p>
-      <h2 id="science_h2">This isn't wordplay.</h2>
-    </div>
-    <div class="science-copy reveal">
-      <p id="science_p1">In 1929, Edwin Land — a Harvard freshman who'd already dropped out once to chase this exact problem — built a synthetic sheet that could filter polarized light: the specific, blinding glare thrown back by snow, ice, water and wet asphalt.<sup><a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">1</a></sup> He named the material after the physics behind it. Polaroid.</p>
-      <p id="science_p2">It went first into sunglasses and goggles<sup><a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">2</a></sup> — built for the people who had no choice but to look straight into that glare: pilots, skiers, and anyone standing where snow and ice turn daylight into a wall of white.</p>
-      <p class="callout" id="science_callout">Nineteen years before "Polaroid" meant an instant photograph, it meant: a way to see clearly in a place too bright to look at.</p>
-      <p id="science_p3">Only in 1948 did Land turn the same company toward something new — a camera that develops its own picture in your hands, in minutes.<sup><a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">3</a></sup> The instant photograph came second. The polar glare came first.</p>
-    </div>
-  </div>
-</section>
+<!-- shared artwork: a flat landscape and two people, recoloured with CSS variables -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="sc" viewBox="0 0 400 300">
+      <rect width="400" height="300" style="fill:var(--sky,#d7e6ec)"/>
+      <circle cx="292" cy="82" r="34" style="fill:var(--sun,#fff)"/>
+      <path d="M0 200 L82 118 L138 168 L232 84 L316 176 L400 128 V300 H0Z" style="fill:var(--far,#b6cdd9)"/>
+      <path d="M0 236 L104 176 L184 220 L280 158 L400 226 V300 H0Z" style="fill:var(--near,#8db0c4)"/>
+      <rect y="248" width="400" height="52" style="fill:var(--ground,#f5efeb)"/>
+    </symbol>
+    <symbol id="pp" viewBox="0 0 400 300">
+      <circle cx="150" cy="138" r="30" style="fill:var(--fig,#2f4156)"/>
+      <path d="M88 300C88 238 116 208 150 208C184 208 212 238 212 300Z" style="fill:var(--fig,#2f4156)"/>
+      <circle cx="252" cy="150" r="25" style="fill:var(--fig,#2f4156)" opacity=".86"/>
+      <path d="M200 300C200 252 222 228 252 228C282 228 304 252 304 300Z" style="fill:var(--fig,#2f4156)" opacity=".86"/>
+    </symbol>
+    <symbol id="sci" viewBox="0 0 400 500">
+      <rect width="400" height="500" fill="#d7e6ec"/>
+      <circle cx="290" cy="118" r="58" fill="#fff"/>
+      <path d="M0 300 L70 196 L128 258 L214 150 L300 262 L360 206 L400 250 V500 H0Z" fill="#b6cdd9"/>
+      <path d="M0 356 L96 286 L176 336 L272 264 L400 350 V500 H0Z" fill="#8db0c4"/>
+      <path d="M0 400 H400 V500 H0Z" fill="#f5efeb"/>
+      <path d="M0 430 L120 404 L260 424 L400 400 V440 L260 462 L120 446 L0 470Z" fill="#c9dde7"/>
+      <path d="M40 470 L90 450 L120 480 L70 496Z M250 452 L322 438 L344 470 L280 486Z" fill="#dfeaf0"/>
+    </symbol>
+  </defs>
+</svg>
 
-<section id="myth">
-  <div class="wrap">
-    <div class="myth reveal">
-      <p class="eyebrow" id="myth_eyebrow">The myth</p>
-      <h2 id="myth_h2">The bear in the whiteout</h2>
-      <p id="myth_p1">Up where the ice starts, there's a glare that doesn't behave like glare anywhere else. Light doesn't just bounce off snow — it scatters back from a billion crystal faces at once until the horizon dissolves and the sky and the ground become the same blank page. Explorers called it the whiteout. Pilots called it flying blind inside daylight.</p>
-      <p id="myth_p2">One animal reads it anyway. The polar bear works that glare every day of its life — narrow dark eyes, a lowered head, the patience to wait for something solid to resolve out of all that white. It doesn't fight the brightness. It works with it.</p>
-      <p id="myth_p3">In 1929, a nineteen-year-old chasing the same problem from the other direction built a filter that could tame that exact light, and named it after the physics: Polaroid. Nearly two decades later, the same company pointed it at a new kind of moment — a photograph that develops itself, right there in your hands, in the time it takes for a moment to become a memory.</p>
-      <p class="pull" id="myth_pull">Before it ever meant an instant photo, Polaroid meant: I can see clearly in a place too bright to look at.</p>
-      <p id="myth_p4">That's the animal standing at the front of our booth. Not because it's cold — because for one second, right when the flash goes off, everyone in front of the camera is inside their own tiny whiteout: blinded, exposed, waiting. And then, the way it's worked since 1929, something clear and lasting resolves out of all that white light and lands in your hands.</p>
-    </div>
-  </div>
-</section>
+<main id="main">
 
-<section id="mark">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow" id="mark_eyebrow">The mark</p>
-      <h2 id="mark_h2">The bear at the border</h2>
-    </div>
-    <div class="mark-grid reveal">
-      <div class="mark-card">
-        <svg id="mark_svg" viewBox="0 0 240 260" role="img" aria-label="Concept mark: a polar bear face peeking over the white border of an instant photograph">
-          <rect x="20" y="20" width="200" height="220" rx="8" fill="var(--ice-soft)"></rect>
-          <g fill="var(--ink)">
-            <circle cx="82" cy="118" r="20"></circle>
-            <circle cx="158" cy="118" r="20"></circle>
-            <path d="M70 148 Q120 96 170 148 L170 214 Q120 234 70 214 Z"></path>
-          </g>
-          <circle cx="98" cy="168" r="7" fill="var(--surface-2)"></circle>
-          <circle cx="142" cy="168" r="7" fill="var(--surface-2)"></circle>
-          <circle cx="100" cy="166" r="2.6" fill="var(--ink)"></circle>
-          <circle cx="144" cy="166" r="2.6" fill="var(--ink)"></circle>
-          <ellipse cx="120" cy="190" rx="9" ry="6" fill="var(--surface-2)"></ellipse>
-          <rect x="20" y="196" width="200" height="44" fill="var(--surface)"></rect>
-          <line x1="20" y1="196" x2="220" y2="196" stroke="var(--line)"></line>
-          <rect x="20" y="20" width="200" height="220" rx="8" fill="none" stroke="var(--ink)" stroke-width="2"></rect>
-        </svg>
+<!-- ================================================= HERO -->
+<section class="hero" id="top" data-sec>
+  <div class="snow" aria-hidden="true"></div>
+  <div class="wrap grid">
+    <div>
+      <span class="eyebrow" data-i18n="hero_eyebrow">Brand story</span>
+      <h1 class="display h-xl" data-hw data-i18n="hero_h1">Made for the <em>whiteout.</em></h1>
+      <p class="lede" data-i18n="hero_lede">Why a photobooth can honestly trace its name to a polar bear — not as a pun, but as history.</p>
+      <div class="ctas">
+        <a class="btn" href="#timeline"><span data-i18n="hero_cta1">Read the story</span> <span class="arr" aria-hidden="true">↓</span></a>
+        <a class="btn ghost" href="brand-kit/"><span data-i18n="hero_cta2">Brand kit</span> <span class="arr" aria-hidden="true">→</span></a>
       </div>
-      <div class="mark-copy">
-        <p id="mark_p1">The lockup is literal, on purpose: the bear's face surfaces over the thick white strip at the bottom of a classic instant photo — like it's popping up from behind a snowbank right as the image finishes developing. One mark, two references, no explanation needed.</p>
-        <p id="mark_p2">The two round ears double as a soft nod to an aperture ring; the white strip line doubles as the frame's own natural resting line for a wordmark ("polaready") when it's used at full size.</p>
-        <div class="mark-variants">
-          <span id="mark_v1">Full mark — bear + frame</span>
-          <span id="mark_v2">Icon only — bear face</span>
-          <span id="mark_v3">Stamp — bear face, no frame, for social avatars</span>
+    </div>
+    <div class="stagecard">
+      <div class="pcard" aria-hidden="true">
+        <span class="tape"></span>
+        <div class="photo">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/></svg>
+          <span class="mark peek"></span>
+          <div class="veil"></div>
+        </div>
+        <div class="lab">PolaReady</div>
+        <span class="chip-float a" data-i18n="chip_a">Flash first.</span>
+        <span class="chip-float b" data-i18n="chip_b">Focus after.</span>
+      </div>
+    </div>
+  </div>
+  <div class="cue" aria-hidden="true"><i></i><span data-i18n="cue">Scroll — flash in 3, 2, 1</span></div>
+</section>
+
+<!-- ================================================= TIMELINE -->
+<section class="section" id="timeline">
+  <div class="wrap">
+    <div class="tl-head">
+      <div>
+        <span class="eyebrow reveal" data-i18n="tl_eyebrow">The story in three frames</span>
+        <h2 class="display h-lg reveal" data-i18n="tl_h2">One glare. One century.</h2>
+      </div>
+    </div>
+    <div class="tl">
+      <article class="frame reveal" data-count-host style="--i:0">
+        <span class="pin"></span>
+        <span class="mono tag" data-i18n="tl_1_tag">The filter</span>
+        <span class="yr" data-count="1929">1929</span>
+        <p data-i18n="tl_1">A 19-year-old invents polarizing film to cut the glare off snow, ice &amp; water</p>
+      </article>
+      <article class="frame reveal" data-count-host style="--i:1">
+        <span class="pin"></span>
+        <span class="mono tag" data-i18n="tl_2_tag">The instant</span>
+        <span class="yr" data-count="1948">1948</span>
+        <p data-i18n="tl_2">The same company points that light science at instant photography</p>
+      </article>
+      <article class="frame reveal" style="--i:2">
+        <span class="pin"></span>
+        <span class="mono tag" data-i18n="tl_3_tag">The booth</span>
+        <span class="yr" data-i18n="tl_today">Today</span>
+        <p data-i18n="tl_3">A photobooth borrows the bear that reads that glare for a living</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= SCIENCE -->
+<section class="section" id="science" data-sec style="padding-top:clamp(40px,6vw,80px)">
+  <div class="wrap sci">
+    <div class="sci-sticky reveal" data-r="scale">
+      <div class="sci-fig" role="img" data-i18n-attr="aria-label:fig_label" aria-label="An illustration of a snowy landscape: on one side washed out by glare, on the other clear through a polarizing filter.">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" class="base">
+          <use href="#sci"/>
+          <rect width="400" height="500" fill="#fff" opacity=".84"/>
+          <circle cx="290" cy="118" r="150" fill="#fff" opacity=".55"/>
+          <g stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".9">
+            <path d="M290 118 L60 24M290 118 L20 150M290 118 L40 300M290 118 L150 470M290 118 L300 490M290 118 L430 430M290 118 L420 250"/>
+          </g>
+          <g fill="#fff">
+            <path class="sparkle" d="M60 380l8-14 8 14-8 14z"/><path class="sparkle" d="M130 420l6-11 6 11-6 11z"/><path class="sparkle" d="M210 390l9-16 9 16-9 16z"/>
+            <path class="sparkle" d="M290 430l7-12 7 12-7 12z"/><path class="sparkle" d="M350 372l6-11 6 11-6 11z"/><path class="sparkle" d="M90 460l6-10 6 10-6 10z"/>
+            <path class="sparkle" d="M250 470l8-14 8 14-8 14z"/><path class="sparkle" d="M330 452l6-11 6 11-6 11z"/><path class="sparkle" d="M170 345l6-11 6 11-6 11z"/>
+          </g>
+        </svg>
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" class="top"><use href="#sci"/></svg>
+        <div class="lens" aria-hidden="true"><i></i></div>
+        <span class="lab l" data-i18n="fig_with">With a filter</span>
+        <span class="lab r" data-i18n="fig_without">Without</span>
+      </div>
+      <p class="sci-cap" data-i18n="fig_cap">An illustration. Glare is light thrown back by snow, ice and water; a polarizing filter blocks it.</p>
+    </div>
+    <div class="sci-text">
+      <span class="eyebrow reveal" data-i18n="sci_eyebrow">The science</span>
+      <h2 class="display h-lg reveal" data-i18n="sci_h2">This isn't wordplay.</h2>
+      <p class="reveal" data-i18n="sci_p1">In 1929, Edwin Land — a Harvard freshman who'd already dropped out once to chase this exact problem — built a synthetic sheet that could filter polarized light: the specific, blinding glare thrown back by snow, ice, water and wet asphalt.<sup><a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">1</a></sup> He named the material after the physics behind it. Polaroid.</p>
+      <p class="reveal" data-i18n="sci_p2">It went first into sunglasses and goggles<sup><a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">2</a></sup> — built for the people who had no choice but to look straight into that glare: pilots, skiers, and anyone standing where snow and ice turn daylight into a wall of white.</p>
+      <div class="callout reveal" data-r="scale" data-i18n="sci_callout">Nineteen years before "Polaroid" meant an instant photograph, it meant: a way to see clearly in a place too bright to look at.</div>
+      <p class="reveal" data-i18n="sci_p3">Only in 1948 did Land turn the same company toward something new — a camera that develops its own picture in your hands, in minutes.<sup><a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">3</a></sup> The instant photograph came second. The polar glare came first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= MYTH — the page whites out, then develops -->
+<section class="myth" id="myth" data-sec>
+  <div class="stage">
+    <span class="mark mk" aria-hidden="true"></span>
+
+    <div class="beat" data-win="0,0.2" data-first>
+      <div class="in">
+        <span class="eyebrow" data-i18n="myth_eyebrow">The myth</span>
+        <h3 data-i18n="b1_h">Up where the ice starts, glare stops behaving like glare.</h3>
+        <p data-i18n="b1_p">Light doesn't just bounce off snow — it scatters back from a billion crystal faces at once until the horizon dissolves and the sky and the ground become the same blank page. Explorers called it the whiteout. Pilots called it flying blind inside daylight.</p>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.3,0.5">
+      <div class="in">
+        <h3 data-i18n="b2_h">One animal reads it anyway.</h3>
+        <p data-i18n="b2_p">The polar bear works that glare every day of its life — narrow dark eyes, a lowered head, the patience to wait for something solid to resolve out of all that white. It doesn't fight the brightness. It works with it.</p>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.5,0.68">
+      <div class="in">
+        <h3 data-i18n="b3_h">And in 1929, someone built the filter.</h3>
+        <p data-i18n="b3_p">A nineteen-year-old chasing the same problem from the other direction made a sheet that could tame that exact light, and named it after the physics: Polaroid. Nearly two decades later the same company pointed it at a new kind of moment — a photograph that develops itself, right there in your hands.</p>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.68,0.85">
+      <div class="in">
+        <div class="big" data-words data-i18n="b4_big">Before it ever meant an instant photo, Polaroid meant: I can see clearly in a place too bright to look at.</div>
+      </div>
+    </div>
+
+    <div class="beat" data-win="0.85,1" data-last>
+      <div class="in">
+        <h3 data-i18n="b5_h">That's the animal at the front of our booth.</h3>
+        <p data-i18n="b5_p">Not because it's cold — because for one second, right when the flash goes off, everyone in front of the camera is inside their own tiny whiteout: blinded, exposed, waiting. And then, the way it's worked since 1929, something clear and lasting resolves out of all that white light and lands in your hands.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= THE MARK -->
+<section class="section" id="mark" data-sec>
+  <div class="wrap">
+    <div class="mk-grid">
+      <div class="mk-text">
+        <span class="eyebrow reveal" data-i18n="mark_eyebrow">The mark</span>
+        <h2 class="display h-lg reveal" style="margin-bottom:1.6rem" data-i18n="mark_h2">The bear at the border</h2>
+        <p class="reveal" data-i18n="mark_p1">The mark is a bear's face held in negative space — ears, eyes and snout all cut from the same rounded silhouette, like a bear surfacing from behind a snowbank right as the image finishes developing. One mark, two references: the animal and the instant photo, no explanation needed.</p>
+        <p class="reveal" data-i18n="mark_p2">The two round ears double as a soft nod to an aperture ring. On the frame, the thick strip at the bottom of an instant photo is the natural resting line for the wordmark.</p>
+      </div>
+      <div class="lockup reveal" data-r="tilt" aria-hidden="true">
+        <div class="ph">
+          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#d7e6ec"><use href="#sc"/></svg>
+          <span class="mark bear"></span>
+        </div>
+        <div class="wm">PolaReady</div>
+        <span class="arrow-note" data-i18n="lock_note">Full lockup</span>
+      </div>
+    </div>
+
+    <div class="variants">
+      <div class="vcard cream reveal" style="--i:0">
+        <div class="stage-v"><span class="mark" style="--s:120px;color:var(--navy)"></span></div>
+        <small data-i18n="v1">Icon — the bear, on Cream</small>
+      </div>
+      <div class="vcard navy reveal" style="--i:1">
+        <div class="stage-v"><span class="mark" style="--s:120px;color:var(--cream)"></span></div>
+        <small data-i18n="v2">Reversed — on Navy</small>
+      </div>
+      <div class="vcard stamp reveal" style="--i:2">
+        <div class="stage-v"><div class="avatar"><span class="mark" style="--s:98px"></span></div></div>
+        <small data-i18n="v3">Stamp — for avatars</small>
+      </div>
+      <div class="vcard cream reveal" style="--i:3">
+        <div class="stage-v"><div class="tinyframe"><span class="mark" style="--s:46px;color:var(--navy)"></span><b>PolaReady</b></div></div>
+        <small data-i18n="v4">Lockup — mark + wordmark</small>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= THE BOOTH — 3, 2, 1, flash -->
+<section class="booth" id="booth" data-sec data-dark="always">
+  <div class="stage">
+    <span class="mark bgmark" aria-hidden="true"></span>
+    <div class="wrap b-grid">
+      <div class="b-copy">
+        <span class="eyebrow" data-i18n="booth_eyebrow">The booth</span>
+        <h2 class="display h-lg" data-i18n="booth_h2">Step up. <em>Flash in 3, 2, 1.</em></h2>
+        <ol class="steps">
+          <li class="on"><span class="n">1</span><div><h4 data-i18n="s1_h">Step up</h4><p data-i18n="s1_p">The live view wakes up. Choose how many frames, then tap Start.</p></div></li>
+          <li><span class="n">2</span><div><h4 data-i18n="s2_h">Flash</h4><p data-i18n="s2_p">A big 3-2-1 counts you in, a voice says Smile, and the flash goes.</p></div></li>
+          <li><span class="n">3</span><div><h4 data-i18n="s3_h">Make it yours</h4><p data-i18n="s3_p">Retake any frame, then pick a layout, a filter and a paper colour. Add a message — or sign it.</p></div></li>
+          <li><span class="n">4</span><div><h4 data-i18n="s4_h">Take it home</h4><p data-i18n="s4_p">It prints on the spot and is cut into strips. Pair yours with an earlier guest's so no half sheet goes to waste.</p></div></li>
+        </ol>
+      </div>
+      <div class="rig" data-state="idle" aria-hidden="true">
+        <div class="dev">
+          <div class="screen">
+            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg>
+            <div class="cd"><span class="c3">3</span></div>
+            <div class="smile" data-i18n="smile">Smile!</div>
+            <div class="start" data-i18n="start">Start</div>
+            <div class="result">
+              <div class="shots">
+                <div><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#d7e6ec"><use href="#sc"/><use href="#pp"/></svg></div>
+                <div><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#f3d9c4;--far:#e0b79a;--near:#c48f77"><use href="#sc"/><use href="#pp" style="transform:scaleX(-1);transform-origin:200px 0"/></svg></div>
+                <div><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#cfd9ea;--far:#a7b7d3;--near:#7f93b8"><use href="#sc"/><use href="#pp"/></svg></div>
+              </div>
+              <div class="chips"><span class="sel" data-i18n="chip_layout">Layout</span><span data-i18n="chip_filter">Filter</span><span data-i18n="chip_paper">Paper</span><span data-i18n="chip_msg">Message</span></div>
+            </div>
+            <div class="fl"></div>
+          </div>
+        </div>
+        <div class="slot"></div>
+        <div class="out">
+          <div class="paper">
+            <div class="fr"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></div>
+            <div class="fr"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#f3d9c4;--far:#e0b79a;--near:#c48f77"><use href="#sc"/><use href="#pp"/></svg></div>
+            <div class="fr"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#cfd9ea;--far:#a7b7d3;--near:#7f93b8"><use href="#sc"/><use href="#pp"/></svg></div>
+            <div class="wmk">PolaReady</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section id="wild">
+<!-- ================================================= TRY IT -->
+<section class="section" id="make" data-sec>
   <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow" id="wild_eyebrow">In the wild</p>
-      <h2 id="wild_h2">Cuts for every surface</h2>
-    </div>
-    <div class="wild-grid reveal">
-      <div class="snap"><span class="tag" id="sign1_tag">Booth signage</span><p id="sign1_text">Made for the whiteout.</p></div>
-      <div class="snap"><span class="tag" id="sign2_tag">Booth signage</span><p id="sign2_text">Flash first. Focus after.</p></div>
-      <div class="snap"><span class="tag" id="sign3_tag">Booth signage</span><p id="sign3_text">The moment, developed.</p></div>
-      <div class="snap"><span class="tag" id="bio_tag">Social bio</span><p id="bio_text">Born from the physics of glare — built for the one second everyone looks their best.</p></div>
-      <div class="snap"><span class="tag" id="cap1_tag">Social caption</span><p id="cap1_text">Say cheese into the glare.</p></div>
-      <div class="snap"><span class="tag" id="cap2_tag">Social caption</span><p id="cap2_text">Everyone gets their own thirty seconds of whiteout.</p></div>
-      <div class="snap pitch"><span class="tag" id="pitch_tag">Pitch deck — elevator line</span><p id="pitch_text">Polaready is an instant photobooth brand built on the real, century-old science of polarized light — the same physics that makes snow blinding is the physics that makes our photos instant, with a polar bear standing calm at the center of the flash.</p></div>
-    </div>
-  </div>
-</section>
-
-<section id="name">
-  <div class="wrap">
-    <div class="section-head reveal">
-      <p class="eyebrow" id="name_eyebrow">The name</p>
-      <h2 id="name_h2">Polaready, and its cousins</h2>
-    </div>
-    <div class="reveal">
-      <div class="name-lead">
-        <span class="word" id="name_lead_word">Polaready</span>
-        <p id="name_lead_p">Pola (Polaroid / polar) + Ready (always on, camera-ready, instant). The strongest option by default — it already exists, it's easy to say, and the story above gives it a real reason to be named this instead of just a pun.</p>
+    <div class="play">
+      <div class="reveal" data-r="scale">
+        <div class="pv-wrap"><span class="mark bgm" aria-hidden="true"></span><div class="pv" id="pv" data-l="strip" role="img" data-i18n-attr="aria-label:pv_label" aria-label="A live preview of the strip you are designing"></div></div>
       </div>
-      <div class="name-table-wrap">
-        <table class="name-table">
-          <thead>
-            <tr><th id="th_alt">Alternative</th><th id="th_idea">The idea</th><th id="th_tradeoff">Trade-off</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="n"><span id="r1_name">PolarFlash</span><span class="rec-tag" id="rec_label">recommended</span></td>
-              <td id="r1_idea">The most direct 1:1 bridge — polar (bear, ice, Land's original filters) + flash (what the booth actually does). Says the whole concept out loud.</td>
-              <td id="r1_tradeoff">Less warmth than "Polaready," more product-name than character-name.</td>
-            </tr>
-            <tr>
-              <td class="n"><span id="r2_name">Polarize Co.</span></td>
-              <td id="r2_idea">Leans all the way into the real science. Bold, technical, very ownable.</td>
-              <td id="r2_tradeoff">Reads colder and more industrial — less obviously a "party" brand.</td>
-            </tr>
-            <tr>
-              <td class="n"><span id="r3_name">Whiteout</span></td>
-              <td id="r3_idea">Skips "polar" and goes straight for the sensory moment of the flash. Extremely social-media punchy.</td>
-              <td id="r3_tradeoff">Loses the direct Polaroid echo; mascot-agnostic — works with any animal, not just the bear.</td>
-            </tr>
-            <tr>
-              <td class="n"><span id="r4_name">Frostframe</span></td>
-              <td id="r4_idea">Softer and warmer — leans "keepsake" over "science." Good fit for weddings.</td>
-              <td id="r4_tradeoff">Weakest tie back to the actual Polaroid history.</td>
-            </tr>
-            <tr>
-              <td class="n"><span id="r5_name">Ready Bear Co.</span></td>
-              <td id="r5_idea">Full mascot-first pivot. Simplest name to say out loud, leads with the character.</td>
-              <td id="r5_tradeoff">Drops the Polaroid echo entirely — the science story becomes background lore, not the name itself.</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="ctl">
+        <div class="reveal">
+          <span class="eyebrow" data-i18n="play_eyebrow">Try it</span>
+          <h2 class="display h-lg" style="margin-bottom:1rem" data-i18n="play_h2">Make one yourself.</h2>
+          <p class="hint" data-i18n="play_p">This is the real menu: five layouts, ten filters, nine papers. Filter previews are illustrative.</p>
+        </div>
+        <div class="reveal"><h4 data-i18n="g_layout">Layout</h4><div class="opts" id="g-layout"></div></div>
+        <div class="reveal"><h4 data-i18n="g_paper">Paper</h4><div class="opts" id="g-paper"></div></div>
+        <div class="reveal"><h4 data-i18n="g_filter">Filter</h4><div class="opts" id="g-filter"></div></div>
+        <div class="reveal"><h4 data-i18n="g_msg">Message</h4><div class="opts" id="g-msg"></div></div>
       </div>
     </div>
   </div>
 </section>
 
-<footer>
+<!-- ================================================= WORDS -->
+<section class="section" id="words" data-sec style="overflow:hidden">
   <div class="wrap">
-    <p class="note" id="footer_note">This is a first creative pass — treat the copy, the mark, and the name comparison as a starting point to react to, cut up, and rebuild, not a finished kit. Run the front-runner names through a trademark check before committing to any of them.</p>
-    <div class="sources">
-      <span id="sources_heading">SOURCES</span>
-      <ol>
-        <li>Edwin H. Land — <a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">Wikipedia</a></li>
-        <li>Polaroid Eyewear, "Polarised Lenses: Better Sight since 1929" — <a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">polaroideyewear.com</a></li>
-        <li>"Polaroid Inventor Edwin Land Gave Us More Than Just Instant Photos" — <a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">Smithsonian Magazine</a></li>
-      </ol>
+    <span class="eyebrow reveal" data-i18n="words_eyebrow">In the wild</span>
+    <h2 class="display h-lg reveal" style="margin-bottom:clamp(30px,5vw,60px)" data-i18n="words_h2">Cuts for every surface</h2>
+  </div>
+  <div class="marq"><div class="track">
+    <span data-i18n="w1">Made for the whiteout.</span><span data-i18n="w2">Flash first. Focus after.</span><span data-i18n="w3">The moment, developed.</span><span data-i18n="w4">Step into the glare.</span><span data-i18n="w5">Instant. Always.</span>
+  </div></div>
+  <div class="marq rev out"><div class="track">
+    <span data-i18n="w5">Instant. Always.</span><span data-i18n="w4">Step into the glare.</span><span data-i18n="w3">The moment, developed.</span><span data-i18n="w2">Flash first. Focus after.</span><span data-i18n="w1">Made for the whiteout.</span>
+  </div></div>
+  <div class="wrap">
+    <div class="says">
+      <div class="say nv reveal" style="--i:0"><span class="t" data-i18n="t_sign">Booth signage</span><span class="x" data-i18n="x_sign">Step up — flash in 3, 2, 1</span></div>
+      <div class="say sf reveal" style="--i:1"><span class="t" data-i18n="t_bio">Social bio</span><span class="x" data-i18n="x_bio">Born from the physics of glare — built for the one second everyone looks their best.</span></div>
+      <div class="say gl reveal" style="--i:2"><span class="t" data-i18n="t_cap">Social caption</span><span class="x" data-i18n="x_cap1">Say cheese into the glare.</span></div>
+      <div class="say reveal" style="--i:0"><span class="t" data-i18n="t_cap">Social caption</span><span class="x" data-i18n="x_cap2">Everyone gets their own thirty seconds of whiteout.</span></div>
+      <div class="say nv reveal" style="--i:1"><span class="t" data-i18n="t_event">Event line</span><span class="x" data-i18n="x_event">Save the date — glare guaranteed.</span></div>
+      <div class="say sf reveal" style="--i:2"><span class="t" data-i18n="t_cap">Social caption</span><span class="x" data-i18n="x_cap3">Developed in the time it takes to blink.</span></div>
+      <div class="say wide reveal"><span class="t" data-i18n="t_pitch">Pitch deck — the one-liner</span><span class="x" data-i18n="x_pitch">PolaReady is an instant photobooth brand built on the real, century-old science of polarized light — the same physics that makes snow blinding is the physics that makes our photos instant, with a polar bear standing calm at the center of the flash.</span></div>
     </div>
+    <p style="margin-top:28px" class="reveal"><a class="btn ghost" href="brand-kit/#library"><span data-i18n="w_more">Every line lives in the brand kit</span> <span class="arr" aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+<!-- ================================================= THE NAME -->
+<section class="section name" id="name" data-sec>
+  <div class="wrap">
+    <span class="eyebrow reveal" data-i18n="name_eyebrow">The name</span>
+    <div class="pr" aria-label="Pola plus Ready"><span class="pola">Pola</span><span class="plus">+</span><span class="ready">Ready</span></div>
+    <div class="meanings">
+      <div class="mean reveal" style="--i:0"><h4>Pola</h4><p data-i18n="mean1">Polaroid, polar. The physics and the place.</p></div>
+      <div class="mean r reveal" style="--i:1"><h4>Ready</h4><p data-i18n="mean2">Always on, camera-ready, instant.</p></div>
+    </div>
+    <p class="lede reveal" style="margin:2.4rem auto 0;max-width:40ch" data-i18n="name_p">It's easy to say, and the story above gives it a real reason to be named this — not just a pun.</p>
+  </div>
+</section>
+
+<!-- ================================================= THE SYSTEM -->
+<section class="section" id="system" data-sec style="padding-top:0">
+  <div class="wrap">
+    <span class="eyebrow reveal" data-i18n="sys_eyebrow">The system</span>
+    <h2 class="display h-lg reveal" style="margin-bottom:clamp(30px,5vw,56px);max-width:16ch" data-i18n="sys_h2">Five colours. Two typefaces. One bear.</h2>
+    <div class="swatches reveal">
+      <button class="swatch" type="button" data-copy="#2F4156" style="background:#2f4156;color:#f5efeb"><span class="cp" data-i18n="copy">Copy</span><b>Navy</b><code>#2F4156</code><small data-i18n="sw1">Primary ink — text, wordmark, dark grounds.</small></button>
+      <button class="swatch" type="button" data-copy="#3F7A9C" style="background:#3f7a9c;color:#fff"><span class="cp" data-i18n="copy">Copy</span><b>Glacier</b><code>#3F7A9C</code><small data-i18n="sw2">The one accent — links, highlights.</small></button>
+      <button class="swatch" type="button" data-copy="#F5EFEB" style="background:#f5efeb;color:#2f4156"><span class="cp" data-i18n="copy">Copy</span><b>Cream</b><code>#F5EFEB</code><small data-i18n="sw3">Primary background.</small></button>
+      <button class="swatch" type="button" data-copy="#FFFFFF" style="background:#fff;color:#2f4156"><span class="cp" data-i18n="copy">Copy</span><b>Snowbank</b><code>#FFFFFF</code><small data-i18n="sw4">Cards and surfaces.</small></button>
+      <button class="swatch" type="button" data-copy="#D1D0D0" style="background:#d1d0d0;color:#2f4156"><span class="cp" data-i18n="copy">Copy</span><b>Ash Line</b><code>#D1D0D0</code><small data-i18n="sw5">Borders and hairlines.</small></button>
+    </div>
+    <div class="specimen">
+      <div class="spec reveal" style="--i:0"><span class="fam">Fugaz One</span><div class="display h-md">Made for the whiteout</div></div>
+      <div class="spec reveal" style="--i:1"><span class="fam">Nunito Sans</span><p style="margin:0;color:var(--ink-soft)" data-i18n="spec_p">Before it ever meant an instant photo, Polaroid meant: I can see clearly in a place too bright to look at.</p></div>
+    </div>
+    <p style="margin-top:34px" class="reveal"><a class="btn" href="brand-kit/"><span data-i18n="sys_cta">Open the full brand kit</span> <span class="arr" aria-hidden="true">→</span></a></p>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" id="foot" data-dark="always">
+  <span class="mark bgm" aria-hidden="true"></span>
+  <div class="wrap">
+    <h2 class="display h-xl" data-words data-words-view data-i18n="foot_h2">Made for the whiteout.</h2>
+    <div class="cols">
+      <div>
+        <h5 data-i18n="foot_src">Sources</h5>
+        <ol>
+          <li><a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">Edwin H. Land — Wikipedia</a></li>
+          <li><a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">Polaroid Eyewear, “Polarised Lenses: Better Sight since 1929” — polaroideyewear.com</a></li>
+          <li><a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">“Polaroid Inventor Edwin Land Gave Us More Than Just Instant Photos” — Smithsonian Magazine</a></li>
+        </ol>
+      </div>
+      <div>
+        <h5 data-i18n="foot_go">Keep going</h5>
+        <p style="display:flex;flex-wrap:wrap;gap:10px;margin:0">
+          <a class="btn" href="brand-kit/"><span data-i18n="nav_kit">Brand kit ↗</span></a>
+          <a class="btn ghost" href="#top"><span data-i18n="foot_top">Back to top</span> <span aria-hidden="true">↑</span></a>
+        </p>
+      </div>
+    </div>
+    <div class="end"><span class="brand" style="font-size:1.1rem"><span class="mark" style="--s:26px"></span><span>PolaReady</span></span><span data-i18n="foot_note">Origin story · brand kit</span></div>
   </div>
 </footer>
 
-<script>
-  (function(){
-    var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var items = document.querySelectorAll('.reveal');
-    if(reduced || !('IntersectionObserver' in window)){
-      items.forEach(function(el){ el.classList.add('in'); });
-    } else {
-      var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          if(entry.isIntersecting){ entry.target.classList.add('in'); io.unobserve(entry.target); }
-        });
-      }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
-      items.forEach(function(el){ io.observe(el); });
-    }
-  })();
-
-  var i18n = {
-    en: {
-      page_title: "The Bear in the Whiteout",
-      mark_svg_label: "Concept mark: a polar bear face peeking over the white border of an instant photograph",
-      hero_eyebrow: "Brand story — working draft",
-      hero_title: "Made for<br>the <em>whiteout.</em>",
-      hero_sub: "Why a photobooth brand can honestly trace its name to a polar bear — not as a pun, but as history. Polaready, reconsidered.",
-      hero_meta: "<span>PREPARED FOR — POLAREADY</span><span>SUBJECT — ORIGIN STORY &amp; NAMING</span><span>STATUS — DRAFT V1</span>",
-      timeline_1929: "A 19-year-old invents polarizing film to cut the glare off snow, ice &amp; water",
-      timeline_1948: "The same company points that light science at instant photography",
-      timeline_today_yr: "Today",
-      timeline_today: "A photobooth borrows the bear that reads that glare for a living",
-      science_eyebrow: "The science",
-      science_h2: "This isn't wordplay.",
-      science_p1: `In 1929, Edwin Land — a Harvard freshman who'd already dropped out once to chase this exact problem — built a synthetic sheet that could filter polarized light: the specific, blinding glare thrown back by snow, ice, water and wet asphalt.<sup><a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">1</a></sup> He named the material after the physics behind it. Polaroid.`,
-      science_p2: `It went first into sunglasses and goggles<sup><a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">2</a></sup> — built for the people who had no choice but to look straight into that glare: pilots, skiers, and anyone standing where snow and ice turn daylight into a wall of white.`,
-      science_callout: `Nineteen years before "Polaroid" meant an instant photograph, it meant: a way to see clearly in a place too bright to look at.`,
-      science_p3: `Only in 1948 did Land turn the same company toward something new — a camera that develops its own picture in your hands, in minutes.<sup><a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">3</a></sup> The instant photograph came second. The polar glare came first.`,
-      myth_eyebrow: "The myth",
-      myth_h2: "The bear in the whiteout",
-      myth_p1: "Up where the ice starts, there's a glare that doesn't behave like glare anywhere else. Light doesn't just bounce off snow — it scatters back from a billion crystal faces at once until the horizon dissolves and the sky and the ground become the same blank page. Explorers called it the whiteout. Pilots called it flying blind inside daylight.",
-      myth_p2: "One animal reads it anyway. The polar bear works that glare every day of its life — narrow dark eyes, a lowered head, the patience to wait for something solid to resolve out of all that white. It doesn't fight the brightness. It works with it.",
-      myth_p3: "In 1929, a nineteen-year-old chasing the same problem from the other direction built a filter that could tame that exact light, and named it after the physics: Polaroid. Nearly two decades later, the same company pointed it at a new kind of moment — a photograph that develops itself, right there in your hands, in the time it takes for a moment to become a memory.",
-      myth_pull: "Before it ever meant an instant photo, Polaroid meant: I can see clearly in a place too bright to look at.",
-      myth_p4: "That's the animal standing at the front of our booth. Not because it's cold — because for one second, right when the flash goes off, everyone in front of the camera is inside their own tiny whiteout: blinded, exposed, waiting. And then, the way it's worked since 1929, something clear and lasting resolves out of all that white light and lands in your hands.",
-      mark_eyebrow: "The mark",
-      mark_h2: "The bear at the border",
-      mark_p1: `The lockup is literal, on purpose: the bear's face surfaces over the thick white strip at the bottom of a classic instant photo — like it's popping up from behind a snowbank right as the image finishes developing. One mark, two references, no explanation needed.`,
-      mark_p2: `The two round ears double as a soft nod to an aperture ring; the white strip line doubles as the frame's own natural resting line for a wordmark ("polaready") when it's used at full size.`,
-      mark_v1: "Full mark — bear + frame",
-      mark_v2: "Icon only — bear face",
-      mark_v3: "Stamp — bear face, no frame, for social avatars",
-      wild_eyebrow: "In the wild",
-      wild_h2: "Cuts for every surface",
-      sign1_tag: "Booth signage", sign1_text: "Made for the whiteout.",
-      sign2_tag: "Booth signage", sign2_text: "Flash first. Focus after.",
-      sign3_tag: "Booth signage", sign3_text: "The moment, developed.",
-      bio_tag: "Social bio", bio_text: "Born from the physics of glare — built for the one second everyone looks their best.",
-      cap1_tag: "Social caption", cap1_text: "Say cheese into the glare.",
-      cap2_tag: "Social caption", cap2_text: "Everyone gets their own thirty seconds of whiteout.",
-      pitch_tag: "Pitch deck — elevator line",
-      pitch_text: "Polaready is an instant photobooth brand built on the real, century-old science of polarized light — the same physics that makes snow blinding is the physics that makes our photos instant, with a polar bear standing calm at the center of the flash.",
-      name_eyebrow: "The name",
-      name_h2: "Polaready, and its cousins",
-      name_lead_word: "Polaready",
-      name_lead_p: `Pola (Polaroid / polar) + Ready (always on, camera-ready, instant). The strongest option by default — it already exists, it's easy to say, and the story above gives it a real reason to be named this instead of just a pun.`,
-      th_alt: "Alternative", th_idea: "The idea", th_tradeoff: "Trade-off",
-      rec_label: "recommended",
-      r1_name: "PolarFlash",
-      r1_idea: "The most direct 1:1 bridge — polar (bear, ice, Land's original filters) + flash (what the booth actually does). Says the whole concept out loud.",
-      r1_tradeoff: `Less warmth than "Polaready," more product-name than character-name.`,
-      r2_name: "Polarize Co.",
-      r2_idea: "Leans all the way into the real science. Bold, technical, very ownable.",
-      r2_tradeoff: `Reads colder and more industrial — less obviously a "party" brand.`,
-      r3_name: "Whiteout",
-      r3_idea: "Skips \"polar\" and goes straight for the sensory moment of the flash. Extremely social-media punchy.",
-      r3_tradeoff: "Loses the direct Polaroid echo; mascot-agnostic — works with any animal, not just the bear.",
-      r4_name: "Frostframe",
-      r4_idea: `Softer and warmer — leans "keepsake" over "science." Good fit for weddings.`,
-      r4_tradeoff: "Weakest tie back to the actual Polaroid history.",
-      r5_name: "Ready Bear Co.",
-      r5_idea: "Full mascot-first pivot. Simplest name to say out loud, leads with the character.",
-      r5_tradeoff: "Drops the Polaroid echo entirely — the science story becomes background lore, not the name itself.",
-      footer_note: "This is a first creative pass — treat the copy, the mark, and the name comparison as a starting point to react to, cut up, and rebuild, not a finished kit. Run the front-runner names through a trademark check before committing to any of them.",
-      sources_heading: "SOURCES"
-    },
-    ar: {
-      page_title: "الدبّ في قلب الوهج الأبيض",
-      mark_svg_label: "تصوّر للشعار: وجه دبّ قطبي يطلّ من فوق الإطار الأبيض لصورة فورية",
-      hero_eyebrow: "قصة العلامة التجارية — مسودة أولى",
-      hero_title: "صُنعنا من أجل<br><em>الوهج الأبيض.</em>",
-      hero_sub: "كيف يمكن لعلامة كشك تصوير أن تُرجِع اسمها بصدق إلى دبٍّ قطبي — لا كتورية لغوية، بل كتاريخ حقيقي. بولاريدي، بنظرة جديدة.",
-      hero_meta: "<span>أُعِدّ لـ — بولاريدي</span><span>الموضوع — قصة الأصل والتسمية</span><span>الحالة — المسودة الأولى</span>",
-      timeline_1929: "شابٌّ في التاسعة عشرة يخترع غشاءً يُستقطب الضوء لتخفيف وهج الثلج والجليد والماء",
-      timeline_1948: "الشركة نفسها توجّه علم الضوء هذا نحو التصوير الفوري",
-      timeline_today_yr: "اليوم",
-      timeline_today: "كشك تصوير يستعير الدبّ الذي يقرأ هذا الوهج كل يوم",
-      science_eyebrow: "العِلم",
-      science_h2: "هذه ليست مجرد تورية لفظية.",
-      science_p1: `في عام 1929، ابتكر إدوين لاند — طالبٌ في هارفارد كان قد ترك دراسته مرة ليطارد هذه المشكلة بالذات — صفيحةً اصطناعية قادرة على تصفية الضوء المستقطب: ذلك الوهج الحاد الذي يرتدّه الثلج والجليد والماء والإسفلت المبلل.<sup><a href="https://en.wikipedia.org/wiki/Edwin_H._Land" target="_blank" rel="noopener">1</a></sup> وسمّى هذه المادة تيمّنًا بالظاهرة الفيزيائية نفسها: الاستقطاب. <bdi>Polaroid</bdi>.`,
-      science_p2: `استُخدمت أولًا في النظارات الشمسية ونظارات الوقاية<sup><a href="https://www.polaroideyewear.com/pages/polarization" target="_blank" rel="noopener">2</a></sup> — صُنعت لمن لم يكن أمامهم خيار سوى مواجهة ذلك الوهج مباشرة: الطيارون، والمتزلجون، وكل من يقف حيث يتحوّل ضوء النهار، بفعل الثلج والجليد، إلى جدارٍ من البياض.`,
-      science_callout: `قبل تسعة عشر عامًا من أن تعني كلمة «بولارويد» صورةً فورية، كانت تعني: طريقةً لنرى بوضوح في مكانٍ شديد السطوع حتى يتعذّر النظر إليه.`,
-      science_p3: `لم يُوجّه لاند شركته نحو شيءٍ جديد إلا في عام 1948 — كاميرا تُظهر صورتها بنفسها بين يديك، خلال دقائق.<sup><a href="https://www.smithsonianmag.com/innovation/polaroid-inventor-edwin-land-gave-us-more-than-just-instant-photos-180969119/" target="_blank" rel="noopener">3</a></sup> الصورة الفورية جاءت لاحقًا. أما الوهج القطبي، فجاء أولًا.`,
-      myth_eyebrow: "الأسطورة",
-      myth_h2: "الدبّ في قلب الوهج الأبيض",
-      myth_p1: "هناك، حيث يبدأ الجليد، وهجٌ لا يشبه أي وهج آخر. فالضوء لا يرتدّ عن الثلج فحسب، بل يتشتّت من مليارات الأوجه البلورية دفعةً واحدة، حتى يذوب الأفق وتصبح السماء والأرض صفحةً بيضاء واحدة. سمّاه المستكشفون «العماء الأبيض»، وسمّاه الطيارون «الطيران أعمى في وضح النهار».",
-      myth_p2: "لكن هناك مخلوقًا واحدًا يقرأ هذا المشهد جيدًا. الدبّ القطبي يتعامل مع هذا الوهج كل يوم في حياته — عينان داكنتان ضيقتان، رأسٌ منخفض، وصبرٌ يكفي لانتظار شيءٍ واضح يتشكّل وسط كل هذا البياض. إنه لا يقاوم السطوع، بل يتعايش معه.",
-      myth_p3: "في عام 1929، طارد شابٌّ في التاسعة عشرة المشكلة نفسها من زاويةٍ مختلفة، فابتكر مرشّحًا يُروّض هذا الضوء بالذات، وسمّاه تيمّنًا بالفيزياء وراءه: بولارويد. وبعد نحو عقدين من الزمن، وجّهت الشركة نفسها هذا الابتكار نحو لحظةٍ من نوعٍ آخر — صورةٌ تُظهر نفسها بنفسها، بين يديك مباشرة، في الوقت الذي تحتاجه اللحظة لتتحوّل إلى ذكرى.",
-      myth_pull: "قبل أن تعني «بولارويد» صورةً فورية، كانت تعني: أستطيع أن أرى بوضوح في مكانٍ شديد السطوع حتى يتعذّر النظر إليه.",
-      myth_p4: "وهذا هو الحيوان الذي يقف في واجهة كشكنا. ليس بسبب البرد، بل لأنه في تلك اللحظة، حين ينطلق الفلاش، يجد كل من أمام الكاميرا نفسه داخل «عماءٍ أبيض» صغير خاص به: مبهورًا، مكشوفًا، منتظرًا. وبعدها، كما يحدث منذ عام 1929، يتشكّل من كل ذلك الضوء الأبيض شيءٌ واضحٌ وباقٍ، ليستقر بين يديك.",
-      mark_eyebrow: "الشعار",
-      mark_h2: "الدبّ عند الحافة",
-      mark_p1: `التصميم هنا حرفيّ عن قصد: وجه الدبّ يطلّ من فوق الشريط الأبيض السميك أسفل الصورة الفورية الكلاسيكية — وكأنه يظهر من خلف كومة ثلج في اللحظة التي تكتمل فيها الصورة. شعارٌ واحد، وإشارتان، دون حاجة لأي شرح.`,
-      mark_p2: `الأذنان المستديرتان تحملان إشارة خفيفة إلى حلقة عدسة الكاميرا؛ وخط الشريط الأبيض يصلح كخطٍّ طبيعي لوضع اسم العلامة («بولاريدي») عند استخدام الشعار بحجمه الكامل.`,
-      mark_v1: "الشعار الكامل — الدبّ والإطار",
-      mark_v2: "أيقونة فقط — وجه الدبّ",
-      mark_v3: "ختم — وجه الدبّ بلا إطار، لصور حسابات التواصل",
-      wild_eyebrow: "على أرض الواقع",
-      wild_h2: "صياغات لكل واجهة",
-      sign1_tag: "لافتة الكشك", sign1_text: "صُنعنا للوهج الأبيض.",
-      sign2_tag: "لافتة الكشك", sign2_text: "الفلاش أولًا، والتركيز لاحقًا.",
-      sign3_tag: "لافتة الكشك", sign3_text: "اللحظة... تظهر.",
-      bio_tag: "السيرة على وسائل التواصل", bio_text: "وُلدنا من فيزياء الوهج — لنصنع تلك الثانية الوحيدة التي يبدو فيها الجميع في أفضل حال.",
-      cap1_tag: "تعليق على وسائل التواصل", cap1_text: "قل تشيز... في وجه الوهج.",
-      cap2_tag: "تعليق على وسائل التواصل", cap2_text: "لكل شخص ثلاثون ثانية من الوهج الأبيض الخاصة به.",
-      pitch_tag: "عرض تقديمي — الجملة المختصرة",
-      pitch_text: `بولاريدي علامة كشك تصوير فوري، مبنية على علمٍ حقيقي عمره أكثر من قرن: فيزياء الضوء المستقطب — الفيزياء نفسها التي تجعل الثلج مبهرًا للعين هي التي تجعل صورنا فورية، ودبٌّ قطبي هادئ يقف في قلب الفلاش.`,
-      name_eyebrow: "الاسم",
-      name_h2: "بولاريدي، وأسماء قريبة منه",
-      name_lead_word: `Polaready<small>بولاريدي</small>`,
-      name_lead_p: `بولا (من <bdi>Polaroid</bdi> / القطب) + ريدي (جاهز دائمًا، جاهز للكاميرا، فوري). الخيار الأقوى افتراضيًا — فهو موجود بالفعل، وسهل النطق، والقصة أعلاه تمنحه سببًا حقيقيًا ليكون بهذا الاسم، لا مجرّد تورية لفظية.`,
-      th_alt: "الاسم البديل", th_idea: "الفكرة", th_tradeoff: "الجانب الأضعف",
-      rec_label: "موصى به",
-      r1_name: `<bdi>PolarFlash</bdi> <small style="font-weight:400;opacity:.65">(بولار-فلاش)</small>`,
-      r1_idea: "الجسر الأكثر مباشرة بين الفكرتين — القطب (الدبّ، الجليد، مرشّحات لاند الأصلية) والفلاش (وظيفة الكشك الفعلية). يقول الفكرة كاملة بوضوح.",
-      r1_tradeoff: "دفءٌ أقل من «بولاريدي»، واسمٌ أقرب إلى المنتج منه إلى الشخصية.",
-      r2_name: `<bdi>Polarize Co.</bdi> <small style="font-weight:400;opacity:.65">(بولارايز)</small>`,
-      r2_idea: "ينحاز كليًا إلى العلم الحقيقي وراء الفكرة. جريء، تقني، ويمكن امتلاكه بسهولة كعلامة.",
-      r2_tradeoff: "يبدو أكثر برودةً وصناعية — وأقل وضوحًا كعلامة «حفلات».",
-      r3_name: `<bdi>Whiteout</bdi> <small style="font-weight:400;opacity:.65">(وايت-آوت)</small>`,
-      r3_idea: "يتخطّى فكرة «القطب» ويذهب مباشرة إلى إحساس لحظة الفلاش. قويّ جدًا على منصات التواصل الاجتماعي.",
-      r3_tradeoff: "يفقد الصدى المباشر مع «بولارويد»؛ ولا يرتبط بالدبّ تحديدًا، إذ يصلح لأي حيوان آخر.",
-      r4_name: `<bdi>Frostframe</bdi> <small style="font-weight:400;opacity:.65">(فروست-فريم)</small>`,
-      r4_idea: "أكثر دفئًا ولطفًا — ينحاز إلى فكرة «التذكار» أكثر من «العلم». مناسب جدًا لحفلات الزفاف.",
-      r4_tradeoff: "أضعف رابطٍ بتاريخ «بولارويد» الحقيقي.",
-      r5_name: `<bdi>Ready Bear Co.</bdi> <small style="font-weight:400;opacity:.65">(ريدي بير)</small>`,
-      r5_idea: "تحوّل كامل نحو الشخصية أولًا. الاسم الأسهل نطقًا، ويقدّم الشخصية مباشرة.",
-      r5_tradeoff: "يتخلّى تمامًا عن الصدى مع «بولارويد» — فتتحوّل قصة العلم إلى خلفية فقط، لا إلى جزء من الاسم.",
-      footer_note: "هذه محاولة إبداعية أولى — تعامل مع النصوص والشعار ومقارنة الأسماء كنقطة انطلاق للتفاعل والتعديل وإعادة البناء، لا كحزمة نهائية جاهزة. تأكد من إجراء فحص العلامة التجارية للأسماء المرشّحة قبل اعتماد أيٍّ منها.",
-      sources_heading: "المصادر"
-    }
-  };
-
-  function applyLang(lang){
-    var dict = i18n[lang];
-    if(!dict) return;
-    Object.keys(dict).forEach(function(key){
-      if(key === 'page_title') return;
-      if(key === 'mark_svg_label'){
-        var svg = document.getElementById('mark_svg');
-        if(svg) svg.setAttribute('aria-label', dict.mark_svg_label);
-        return;
-      }
-      var el = document.getElementById(key);
-      if(el) el.innerHTML = dict[key];
-    });
-    document.title = dict.page_title;
-    document.documentElement.setAttribute('lang', lang);
-    document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-    var btnEN = document.getElementById('btnEN'), btnAR = document.getElementById('btnAR');
-    if(btnEN && btnAR){
-      btnEN.classList.toggle('active', lang === 'en');
-      btnAR.classList.toggle('active', lang === 'ar');
-    }
-    try{ localStorage.setItem('polaready-lang', lang); }catch(e){}
-  }
-
-  (function(){
-    var saved = null;
-    try{ saved = localStorage.getItem('polaready-lang'); }catch(e){}
-    applyLang(saved === 'ar' ? 'ar' : 'en');
-  })();
-</script>
-
+<script src="js/i18n.js?v=9"></script>
+<script src="js/site.js?v=9"></script>
 </body>
 </html>
