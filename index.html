@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..900&family=Fugaz+One&family=IBM+Plex+Mono:wght@400;500&family=Nunito+Sans:opsz,wght@6..12,300..1000&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/site.css?v=12">
+<link rel="stylesheet" href="css/site.css?v=13">
 </head>
 <body data-page="marketing" data-intro data-title-ar="بولاريدي — كشك تصوير يُصمَّم لفعاليتك">
 
@@ -31,26 +31,23 @@
     <a class="brand" href="#top" aria-label="PolaReady"><span class="mark" style="--s:30px"></span><span>PolaReady</span></a>
     <ul>
       <li><a href="#why" data-i18n="m_nav_why">Why us</a></li>
-      <li><a href="#themes" data-i18n="m_nav_themes">Themes</a></li>
+      <li><a href="#on-paper" data-i18n="m_nav_paper">See it on paper</a></li>
+      <li><a href="how/" data-i18n="m_nav_how">How it works</a></li>
       <li><a href="demo/" data-i18n="m_nav_try">Test it live ↗</a></li>
-      <li><a href="#how" data-i18n="m_nav_how">How it works</a></li>
       <li><a href="story/" data-i18n="m_nav_story">Our story ↗</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
       <button type="button" data-lang="en" lang="en" aria-pressed="true">EN</button>
       <button type="button" data-lang="ar" lang="ar" aria-pressed="false">عربي</button>
     </div>
-    <a class="btn" style="padding:.7em 1.3em;font-size:.85rem" href="#contact" data-i18n="m_nav_book">Book your event</a>
+    <a class="btn" style="padding:.7em 1.3em;font-size:.85rem" href="contact/" data-i18n="m_nav_book">Book your event</a>
   </div>
 </header>
 
 <nav class="dots" aria-label="Sections">
   <a href="#top"><span data-i18n="m_d_top">Start</span></a>
   <a href="#why"><span data-i18n="m_nav_why">Why us</span></a>
-  <a href="#themes"><span data-i18n="m_nav_themes">Themes</span></a>
-  <a href="demo/"><span data-i18n="m_nav_try">Test it live</span></a>
-  <a href="#how"><span data-i18n="m_nav_how">Process</span></a>
-  <a href="#contact"><span data-i18n="m_nav_book">Book</span></a>
+  <a href="#on-paper"><span data-i18n="m_nav_paper">On paper</span></a>
 </nav>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
@@ -82,8 +79,8 @@
       <h1 class="display h-xl" data-hw data-i18n="m_hero_h1">One booth. <em>Every event's own look.</em></h1>
       <p class="lede" data-i18n="m_hero_lede">We re-theme PolaReady for every event we run — your colours, your layouts, your vibe — while what's underneath stays exactly as reliable: instant prints, and not one guest photo ever lost.</p>
       <div class="ctas">
-        <a class="btn" href="#contact"><span data-i18n="m_hero_cta1">Book your event</span> <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn ghost" href="#themes"><span data-i18n="m_hero_cta2">See it reskinned</span> <span class="arr" aria-hidden="true">↓</span></a>
+        <a class="btn" href="contact/"><span data-i18n="m_hero_cta1">Book your event</span> <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn ghost" href="#on-paper"><span data-i18n="m_hero_cta2">See it on paper</span> <span class="arr" aria-hidden="true">↓</span></a>
       </div>
     </div>
     <div class="stagecard">
@@ -106,6 +103,18 @@
 <div class="marq" style="padding-block:22px;background:var(--surface-2)"><div class="track">
   <span data-i18n="m_mq1">Any palette.</span><span data-i18n="m_mq2">Any layout.</span><span data-i18n="m_mq3">Any logo.</span><span data-i18n="m_mq4">Any venue.</span><span data-i18n="m_mq5">One reliable booth.</span>
 </div></div>
+
+<!-- ================================================= STORY, BRIEFLY -->
+<section class="section" id="story-brief" data-sec style="padding-block:clamp(56px,8vw,96px)">
+  <div class="wrap">
+    <div class="brief reveal" data-r="left">
+      <span class="eyebrow" data-i18n="m_sb_eyebrow">Brand story, briefly</span>
+      <h2 class="display h-lg" style="max-width:16ch;margin-bottom:1rem" data-i18n="m_sb_h2">Why a polar bear?</h2>
+      <p class="lede" style="max-width:56ch" data-i18n="m_sb_p">Not a pun — the name traces straight back to an animal built entirely for readiness, for showing up prepared no matter the whiteout. That's the one-line version.</p>
+      <a class="btn ghost" href="story/" style="margin-top:20px"><span data-i18n="m_sb_cta">Read the full story</span> <span class="arr" aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
 
 <!-- ================================================= WHY US -->
 <section class="section" id="why" data-sec>
@@ -149,53 +158,6 @@
   </div>
 </section>
 
-<!-- ================================================= THEME GALLERY -->
-<section class="section" id="themes" data-sec style="background:var(--surface-2)">
-  <div class="wrap">
-    <span class="eyebrow reveal" data-i18n="m_th_eyebrow">One booth, reskinned</span>
-    <h2 class="display h-lg reveal" style="max-width:16ch;margin-bottom:1.2rem" data-i18n="m_th_h2">Same engine. A different look for every brief.</h2>
-    <p class="lede reveal" style="max-width:60ch;margin-bottom:clamp(30px,5vw,56px)" data-i18n="m_th_lede">These are illustrative — your actual palette, frame art and wordmark are built from your brand or your event's own colours.</p>
-    <div class="themes-grid">
-      <div class="theme-card reveal" style="--i:0">
-        <div class="tc-stage" style="--tc-bg:#2f4156">
-          <div class="tc-card" style="--tc-paper:#fff">
-            <div class="tc-photo"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#cfd9ea;--far:#a7b7d3;--near:#7f93b8;--fig:#2f4156"><use href="#sc"/><use href="#pp"/></svg></div>
-            <div class="tc-wm" style="--tc-ink:#2f4156">PolaReady</div>
-          </div>
-        </div>
-        <div class="tc-meta"><b data-i18n="m_th1_b">Corporate launch</b><span data-i18n="m_th1_s">Navy · Glacier</span></div>
-      </div>
-      <div class="theme-card reveal" style="--i:1">
-        <div class="tc-stage" style="--tc-bg:#f4dcc4">
-          <div class="tc-card" style="--tc-paper:#fff">
-            <div class="tc-photo"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#f7e3d8;--far:#eec9ae;--near:#dba17e;--fig:#8a5a34"><use href="#sc"/><use href="#pp"/></svg></div>
-            <div class="tc-wm" style="--tc-ink:#8a5a34">PolaReady</div>
-          </div>
-        </div>
-        <div class="tc-meta"><b data-i18n="m_th2_b">Wedding</b><span data-i18n="m_th2_s">Blush · Gold</span></div>
-      </div>
-      <div class="theme-card reveal" style="--i:2">
-        <div class="tc-stage" style="--tc-bg:#1b1330">
-          <div class="tc-card" style="--tc-paper:#161022">
-            <div class="tc-photo"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#2b1f4a;--far:#6a3fa0;--near:#c23fae;--sun:#ffd166;--ground:#161022;--fig:#ff6fd8"><use href="#sc"/><use href="#pp"/></svg></div>
-            <div class="tc-wm" style="--tc-ink:#ff6fd8">PolaReady</div>
-          </div>
-        </div>
-        <div class="tc-meta"><b data-i18n="m_th3_b">Birthday / party</b><span data-i18n="m_th3_s">Magenta · Violet</span></div>
-      </div>
-      <div class="theme-card reveal" style="--i:0">
-        <div class="tc-stage" style="--tc-bg:#0b3d24">
-          <div class="tc-card" style="--tc-paper:#eafbef">
-            <div class="tc-photo"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#e8f3ea;--far:#bcdcc4;--near:#7fbf8f;--ground:#f2f8f1;--fig:#1f6b3a"><use href="#sc"/><use href="#pp"/></svg></div>
-            <div class="tc-wm" style="--tc-ink:#1f6b3a">PolaReady</div>
-          </div>
-        </div>
-        <div class="tc-meta"><b data-i18n="m_th4_b">National Day</b><span data-i18n="m_th4_s">Deep green</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ================================================= ON PAPER -->
 <section class="section" id="on-paper" data-sec style="background:var(--surface-2)">
   <div class="wrap">
@@ -208,68 +170,38 @@
         <div class="op-tilt" id="opTilt">
           <div class="op-card" id="opCard">
             <img id="opImg" src="assets/templates/wedding-1.png?v=2" alt="Wedding — Lace &amp; navy">
+            <div class="op-wash" id="opWash" aria-hidden="true"></div>
           </div>
         </div>
       </div>
-      <div class="op-picker reveal">
-        <button type="button" class="op-btn on" data-src="assets/templates/wedding-1.png?v=2" aria-pressed="true"><b data-i18n="m_op_w1_b">Wedding</b><span data-i18n="m_op_w1_s">Lace &amp; navy</span></button>
-        <button type="button" class="op-btn" data-src="assets/templates/wedding-2.png?v=2" aria-pressed="false"><b data-i18n="m_op_w2_b">Wedding</b><span data-i18n="m_op_w2_s">Royal red frame</span></button>
-        <button type="button" class="op-btn" data-src="assets/templates/wedding-3.png?v=3" aria-pressed="false"><b data-i18n="m_op_w3_b">Wedding</b><span data-i18n="m_op_w3_s">Monogram</span></button>
-        <button type="button" class="op-btn" data-src="assets/templates/business-1.png?v=1" aria-pressed="false"><b data-i18n="m_op_b1_b">Corporate event</b><span data-i18n="m_op_b1_s">Brand colours</span></button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================================================= TRY IT -->
-<section class="section" id="design" data-sec>
-  <div class="wrap">
-    <div class="play">
-      <div class="reveal" data-r="scale">
-        <div class="pv-wrap"><span class="mark bgm" aria-hidden="true"></span><div class="pv" id="pv" data-l="strip" role="img" aria-label="A live preview of the strip being designed"></div></div>
-      </div>
-      <div class="ctl">
-        <div class="reveal">
-          <span class="eyebrow" data-i18n="m_try_eyebrow">See it live</span>
-          <h2 class="display h-lg" style="margin-bottom:1rem" data-i18n="m_try_h2">This is the real menu.</h2>
-          <p class="hint" data-i18n="m_try_p">Every layout, filter and paper colour below runs on the actual booth. Your event gets its own palette and frame art on top of this — designed before you arrive, not chosen from a list on the day.</p>
-          <p style="margin-top:16px"><a class="btn" href="demo/"><span data-i18n="m_try_full">Test it with your own camera</span> <span class="arr" aria-hidden="true">↗</span></a></p>
+      <div class="op-controls">
+        <div class="op-picker reveal">
+          <h5 data-i18n="m_op_g_template">Template</h5>
+          <div class="op-btns">
+            <button type="button" class="op-btn on" data-src="assets/templates/wedding-1.png?v=2" aria-pressed="true"><b data-i18n="m_op_w1_b">Wedding</b><span data-i18n="m_op_w1_s">Lace &amp; navy</span></button>
+            <button type="button" class="op-btn" data-src="assets/templates/wedding-2.png?v=2" aria-pressed="false"><b data-i18n="m_op_w2_b">Wedding</b><span data-i18n="m_op_w2_s">Royal red frame</span></button>
+            <button type="button" class="op-btn" data-src="assets/templates/wedding-3.png?v=3" aria-pressed="false"><b data-i18n="m_op_w3_b">Wedding</b><span data-i18n="m_op_w3_s">Monogram</span></button>
+            <button type="button" class="op-btn" data-src="assets/templates/business-1.png?v=1" aria-pressed="false"><b data-i18n="m_op_b1_b">Corporate event</b><span data-i18n="m_op_b1_s">Brand colours</span></button>
+          </div>
         </div>
-        <div class="reveal"><h4 data-i18n="m_g_layout">Layout</h4><div class="opts" id="g-layout"></div></div>
-        <div class="reveal"><h4 data-i18n="m_g_paper">Paper</h4><div class="opts" id="g-paper"></div></div>
-        <div class="reveal"><h4 data-i18n="m_g_filter">Filter</h4><div class="opts" id="g-filter"></div></div>
-        <div class="reveal"><h4 data-i18n="m_g_msg">Message</h4><div class="opts" id="g-msg"></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ================================================= HOW IT WORKS -->
-<section class="section" id="how" data-sec style="background:var(--surface-2)">
-  <div class="wrap" style="max-width:920px">
-    <span class="eyebrow reveal" data-i18n="m_how_eyebrow">How it works</span>
-    <h2 class="display h-lg reveal" style="max-width:14ch;margin-bottom:clamp(30px,5vw,56px)" data-i18n="m_how_h2">From brief to keepsake</h2>
-    <div class="steps2">
-      <div class="step2 reveal" style="--i:0"><span class="num2">1</span><div><h4 data-i18n="m_s1_h">Tell us about your event</h4><p data-i18n="m_s1_p">Your brand colours or your event's theme, the vibe you're going for, and roughly how many guests we're printing for.</p></div></div>
-      <div class="step2 reveal" style="--i:1"><span class="num2">2</span><div><h4 data-i18n="m_s2_h">We design your booth</h4><p data-i18n="m_s2_p">Palette, frame art and layout, built to match — not a generic template with your logo dropped on top.</p></div></div>
-      <div class="step2 reveal" style="--i:2"><span class="num2">3</span><div><h4 data-i18n="m_s3_h">We run it on the day</h4><p data-i18n="m_s3_p">Live view, a 3-2-1 flash, and a print in guests' hands moments later — set up, staffed, and working the whole time.</p></div></div>
-      <div class="step2 reveal" style="--i:0"><span class="num2">4</span><div><h4 data-i18n="m_s4_h">You get everything, after</h4><p data-i18n="m_s4_p">Every photo from the event, organised, plus a report — sessions, prints, and how the day actually went.</p></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ================================================= CONTACT -->
-<section class="section" id="contact" data-sec>
-  <div class="wrap">
-    <div class="cta-block reveal" data-r="scale">
-      <span class="mark bgm" aria-hidden="true"></span>
-      <span class="eyebrow" style="color:#8fc2df" data-i18n="m_cta_eyebrow">Let's talk about your event</span>
-      <h2 class="display h-lg" data-i18n="m_cta_h2">Tell us the date. We'll build the booth.</h2>
-      <p data-i18n="m_cta_p">Share your event date, guest count and the vibe you're after — we'll come back with a themed mock-up before you commit to anything.</p>
-      <div class="ctas">
-        <a class="btn" href="https://wa.me/962779413439?text=Hi%20PolaReady%2C%20I%27d%20like%20to%20book%20a%20photobooth%20for%20my%20event." target="_blank" rel="noopener"><span data-i18n="m_cta_btn0">WhatsApp us</span> <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn ghost" href="mailto:mohammednasser7432@gmail.com?subject=PolaReady%20—%20event%20booking"><span data-i18n="m_cta_btn1">Email us</span></a>
-        <a class="btn ghost" href="story/"><span data-i18n="m_cta_btn2">Read our story</span> <span class="arr" aria-hidden="true">→</span></a>
+        <div class="op-picker reveal op-picker-row">
+          <div>
+            <h5 data-i18n="m_op_g_filter">Filter</h5>
+            <div class="op-btns op-btns-sm">
+              <button type="button" class="op-filter-btn on" data-filter="original" aria-pressed="true" data-i18n="m_op_f1">Original</button>
+              <button type="button" class="op-filter-btn" data-filter="bw" aria-pressed="false" data-i18n="m_op_f2">B&amp;W</button>
+              <button type="button" class="op-filter-btn" data-filter="warm" aria-pressed="false" data-i18n="m_op_f3">Warm</button>
+            </div>
+          </div>
+          <div>
+            <h5 data-i18n="m_op_g_color">Colour</h5>
+            <div class="op-btns op-btns-sm">
+              <button type="button" class="op-color-btn on" data-color="original" aria-pressed="true" data-i18n="m_op_c1">Classic</button>
+              <button type="button" class="op-color-btn" data-color="blush" aria-pressed="false" data-i18n="m_op_c2">Blush</button>
+              <button type="button" class="op-color-btn" data-color="sage" aria-pressed="false" data-i18n="m_op_c3">Sage</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -286,6 +218,7 @@
         <h5 data-i18n="m_foot_learn">Learn more</h5>
         <ol>
           <li><a href="story/" data-i18n="m_foot_l1">The origin story — why a polar bear</a></li>
+          <li><a href="how/" data-i18n="m_foot_l4">How it works, step by step</a></li>
           <li><a href="brand-kit/" data-i18n="m_foot_l2">The brand kit — palette, type &amp; mark</a></li>
           <li><a href="demo/" data-i18n="m_foot_l3">Test the real booth, camera and all ↗</a></li>
         </ol>
@@ -293,7 +226,7 @@
       <div>
         <h5 data-i18n="m_foot_go">Book your event</h5>
         <p style="display:flex;flex-wrap:wrap;gap:10px;margin:0">
-          <a class="btn" href="#contact"><span data-i18n="m_nav_book">Book your event</span></a>
+          <a class="btn" href="contact/"><span data-i18n="m_nav_book">Book your event</span></a>
           <a class="btn ghost" href="#top"><span data-i18n="m_foot_top">Back to top</span> <span aria-hidden="true">↑</span></a>
         </p>
       </div>
@@ -302,7 +235,7 @@
   </div>
 </footer>
 
-<script src="js/i18n.js?v=11"></script>
-<script src="js/site.js?v=12"></script>
+<script src="js/i18n.js?v=12"></script>
+<script src="js/site.js?v=13"></script>
 </body>
 </html>

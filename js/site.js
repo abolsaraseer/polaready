@@ -52,7 +52,6 @@
     $$('.lang button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === next)); });
     if (persist) { try { localStorage.setItem('polaready-lang', next); } catch (e) {} }
     splitWords();
-    buildPlay();
     measure();
     update();
   }
@@ -322,9 +321,18 @@
      card vanishing rather than spinning. Stopping well short of that keeps
      the face visible (just steeply tilted) for the whole motion, and the
      image swaps at the peak of the swing rather than at an invisible instant. */
+  /* Filter is a real CSS filter on the photo itself - instant, no extra
+     assets. Colour is a translucent wash layered over it (mix-blend-mode)
+     rather than a second re-exported design: a live mood preview, not a
+     literal recolour of the template. Both persist across a template swap
+     for free, since they live on elements the swap never touches - the
+     <img>'s own inline style, and a sibling overlay div. */
+  var OP_FILTERS = { original: 'none', bw: 'grayscale(1) contrast(1.1)', warm: 'sepia(.4) saturate(1.3) contrast(1.05)' };
+  var OP_WASHES = { original: 'transparent', blush: 'rgba(201,90,110,.3)', sage: 'rgba(88,120,84,.28)' };
+
   function setupOnPaper() {
-    var scene = $('.op-scene'), tilt = $('#opTilt'), img = $('#opImg');
-    var btns = $$('.op-btn');
+    var scene = $('.op-scene'), tilt = $('#opTilt'), img = $('#opImg'), wash = $('#opWash');
+    var btns = $$('.op-btn'), filterBtns = $$('.op-filter-btn'), colorBtns = $$('.op-color-btn');
     if (!scene || !tilt || !btns.length) return;
     var REST_X = 6, REST_Y = -11, SPIN_Y = 46;
 
@@ -333,6 +341,18 @@
       return (h ? h.textContent : '') + (s ? ' — ' + s.textContent : '');
     }
     img.alt = labelFor(btns[0]);
+
+    function group(all, cls, apply) {
+      all.forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (b.classList.contains('on')) return;
+          all.forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+          apply(b);
+        });
+      });
+    }
+    group(filterBtns, 'op-filter-btn', function (b) { img.style.filter = OP_FILTERS[b.getAttribute('data-filter')] || 'none'; });
+    group(colorBtns, 'op-color-btn', function (b) { if (wash) wash.style.background = OP_WASHES[b.getAttribute('data-color')] || 'transparent'; });
 
     if (reduced) {
       tilt.style.transform = 'rotateX(' + REST_X + 'deg) rotateY(' + REST_Y + 'deg)';
@@ -388,77 +408,6 @@
         }, 320);
       });
     });
-  }
-
-  /* ----------------------------------------------------- booth playground */
-  var PAPERS = [
-    { k: 'white', bg: '#ffffff', ink: '#2f4156' }, { k: 'noir', bg: '#1a1a1f', ink: '#ffffff' },
-    { k: 'cream', bg: '#f2e6c7', ink: '#73542e' }, { k: 'pink', bg: '#ffcce0', ink: '#bf3373' },
-    { k: 'blue', bg: '#c7e6fa', ink: '#1a5999' }, { k: 'mint', bg: '#ccf5db', ink: '#1a734d' },
-    { k: 'lavender', bg: '#e0d4fa', ink: '#6640a6' },
-    { k: 'sunset', bg: 'linear-gradient(160deg,#ffbf8c,#ff8cb3)', ink: '#8c2640' },
-    { k: 'sky', bg: 'linear-gradient(160deg,#a6d9ff,#d9f2ff)', ink: '#1a5999' }
-  ];
-  var FILTERS = [
-    { k: 'original', f: 'none' }, { k: 'bw', f: 'grayscale(1) contrast(1.1)' }, { k: 'sepia', f: 'sepia(.9)' },
-    { k: 'vintage', f: 'sepia(.4) contrast(.92) saturate(.8)' }, { k: 'fade', f: 'contrast(.86) brightness(1.1) saturate(.75)' },
-    { k: 'cool', f: 'hue-rotate(-14deg) saturate(1.1) brightness(1.03)' }, { k: 'crisp', f: 'contrast(1.22) saturate(1.12)' },
-    { k: 'instant', f: 'saturate(1.3) contrast(1.05) brightness(1.06) sepia(.12)' }, { k: 'mono', f: 'grayscale(1) contrast(1.45)' },
-    { k: 'pop', f: 'saturate(1.9) contrast(1.15)' }
-  ];
-  var LAYOUTS = ['strip', 'grid', 'polaroid', 'player', 'ticket'];
-  var MSGS = ['m1', 'm2', 'm3', 'm4', 'm5', 'm6'];
-  var SCENES = [
-    'sky:#d7e6ec;far:#b6cdd9;near:#8db0c4;ground:#f5efeb', 'sky:#f3d9c4;far:#e0b79a;near:#c48f77;ground:#f7ece4',
-    'sky:#cfd9ea;far:#a7b7d3;near:#7f93b8;ground:#f0f2f8', 'sky:#d2e7dc;far:#a8ccb8;near:#7fae95;ground:#eef6f0'
-  ];
-  var play = { layout: 'strip', paper: 'white', filter: 'original', msg: 'm1' };
-
-  function frameSVG(i) {
-    return '<div class="f"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="' + SCENES[i % SCENES.length].split(';').map(function (s) { return '--' + s; }).join(';') +
-      '"><use href="#sc"/><use href="#pp" ' + (i % 2 ? 'style="transform:scaleX(-1);transform-origin:200px 0"' : '') + '/></svg></div>';
-  }
-  function renderPreview() {
-    var pv = $('#pv'); if (!pv) return;
-    var paper = PAPERS.filter(function (p) { return p.k === play.paper; })[0];
-    var flt = FILTERS.filter(function (p) { return p.k === play.filter; })[0];
-    pv.setAttribute('data-l', play.layout);
-    pv.style.setProperty('--paper', paper.bg.indexOf('gradient') > -1 ? 'transparent' : paper.bg);
-    pv.style.background = paper.bg;
-    pv.style.setProperty('--pink', paper.ink);
-    pv.style.setProperty('--flt', flt.f);
-    var msg = T(play.msg), n = { strip: 3, grid: 4, polaroid: 1, player: 1, ticket: 3 }[play.layout], h = '', i;
-    var wm = '<div class="sm">PolaReady</div>';
-    if (play.layout === 'ticket') {
-      for (i = 0; i < n; i++) h += frameSVG(i);
-      h = '<div class="frs">' + h + '</div><div class="stub"><div class="sm">' + T('admit') + '</div><div class="cap">' + msg + '</div><div class="sm">PolaReady</div></div>';
-    } else {
-      for (i = 0; i < n; i++) h += frameSVG(i);
-      if (play.layout === 'player') h += '<div class="bar"><span class="play-ic"></span><i></i><span>0:03</span></div>';
-      h += '<div class="cap">' + msg + '</div>' + wm;
-    }
-    pv.innerHTML = h;
-  }
-  function group(id, items, cur, key, render) {
-    var host = $('#' + id); if (!host) return;
-    host.innerHTML = '';
-    items.forEach(function (it) {
-      var b = doc.createElement('button');
-      b.type = 'button'; b.setAttribute('aria-pressed', String(it.k === cur || it === cur));
-      render(b, it);
-      b.addEventListener('click', function () {
-        play[key] = it.k || it; renderPreview(); buildPlay(true);
-      });
-      host.appendChild(b);
-    });
-  }
-  function buildPlay(keepScroll) {
-    if (!$('#pv')) return;
-    group('g-layout', LAYOUTS.map(function (k) { return { k: k }; }), play.layout, 'layout', function (b, it) { b.className = 'opt'; b.textContent = T('l_' + it.k); });
-    group('g-paper', PAPERS, play.paper, 'paper', function (b, it) { b.className = 'sw'; b.style.background = it.bg; b.setAttribute('aria-label', T('p_' + it.k)); b.title = T('p_' + it.k); });
-    group('g-filter', FILTERS, play.filter, 'filter', function (b, it) { b.className = 'opt'; b.textContent = T('f_' + it.k); });
-    group('g-msg', MSGS.map(function (k) { return { k: k }; }), play.msg, 'msg', function (b, it) { b.className = 'opt'; b.textContent = T(it.k); });
-    renderPreview();
   }
 
   /* -------------------------------------------------------------- boot */
