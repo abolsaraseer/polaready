@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..900&family=Fugaz+One&family=IBM+Plex+Mono:wght@400;500&family=Nunito+Sans:opsz,wght@6..12,300..1000&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/site.css?v=13">
+<link rel="stylesheet" href="css/site.css?v=14">
 </head>
 <body data-page="marketing" data-intro data-title-ar="بولاريدي — كشك تصوير يُصمَّم لفعاليتك">
 
@@ -109,11 +109,14 @@
 <!-- ================================================= STORY, BRIEFLY -->
 <section class="section" id="story-brief" data-sec style="padding-block:clamp(56px,8vw,96px)">
   <div class="wrap">
-    <div class="brief reveal" data-r="left">
-      <span class="eyebrow" data-i18n="m_sb_eyebrow">Brand story, briefly</span>
-      <h2 class="display h-lg" style="max-width:16ch;margin-bottom:1rem" data-i18n="m_sb_h2">Why a polar bear?</h2>
-      <p class="lede" style="max-width:56ch" data-i18n="m_sb_p">Not a pun — the name traces straight back to an animal built entirely for readiness, for showing up prepared no matter the whiteout. That's the one-line version.</p>
-      <a class="btn ghost" href="story/" style="margin-top:20px"><span data-i18n="m_sb_cta">Read the full story</span> <span class="arr" aria-hidden="true">→</span></a>
+    <div class="brief-grid">
+      <div class="reveal" data-r="left">
+        <span class="eyebrow" data-i18n="m_sb_eyebrow">Brand story, briefly</span>
+        <h2 class="display h-lg" style="max-width:16ch;margin-bottom:1rem" data-i18n="m_sb_h2">Why a polar bear?</h2>
+        <p class="lede" style="max-width:56ch" data-i18n="m_sb_p">Not a pun — the name traces straight back to an animal built entirely for readiness, for showing up prepared no matter the whiteout. That's the one-line version.</p>
+        <a class="btn ghost" href="story/" style="margin-top:20px"><span data-i18n="m_sb_cta">Read the full story</span> <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <div class="brief-mark reveal" data-r="scale" aria-hidden="true"><span class="mark"></span></div>
     </div>
   </div>
 </section>
@@ -211,14 +214,34 @@
 
 <!-- ================================================= HOW IT WORKS -->
 <section class="section" id="how" data-sec style="background:var(--surface-2)">
-  <div class="wrap" style="max-width:920px">
+  <div class="wrap">
     <span class="eyebrow reveal" data-i18n="m_how_eyebrow">How it works</span>
     <h2 class="display h-lg reveal" style="max-width:14ch;margin-bottom:clamp(30px,5vw,56px)" data-i18n="m_how_h2">From brief to keepsake</h2>
-    <div class="steps2">
-      <div class="step2 reveal hover-lift" style="--i:0"><span class="num2">1</span><div><h4 data-i18n="m_s1_h">Tell us about your event</h4><p data-i18n="m_s1_p">Your brand colours or your event's theme, the vibe you're going for, and roughly how many guests we're printing for.</p></div></div>
-      <div class="step2 reveal hover-lift" style="--i:1"><span class="num2">2</span><div><h4 data-i18n="m_s2_h">We design your booth</h4><p data-i18n="m_s2_p">Palette, frame art and layout, built to match — not a generic template with your logo dropped on top.</p></div></div>
-      <div class="step2 reveal hover-lift" style="--i:2"><span class="num2">3</span><div><h4 data-i18n="m_s3_h">We run it on the day</h4><p data-i18n="m_s3_p">Live view, a 3-2-1 flash, and a print in guests' hands moments later — set up, staffed, and working the whole time.</p></div></div>
-      <div class="step2 reveal hover-lift" style="--i:0"><span class="num2">4</span><div><h4 data-i18n="m_s4_h">You get everything, after</h4><p data-i18n="m_s4_p">Every photo from the event, organised, plus a report — sessions, prints, and how the day actually went.</p></div></div>
+    <div class="tl tl-4">
+      <article class="frame reveal" style="--i:0">
+        <span class="pin"></span>
+        <span class="num2">1</span>
+        <h4 data-i18n="m_s1_h">Tell us about your event</h4>
+        <p data-i18n="m_s1_p">Your brand colours or your event's theme, the vibe you're going for, and roughly how many guests we're printing for.</p>
+      </article>
+      <article class="frame reveal" style="--i:1">
+        <span class="pin"></span>
+        <span class="num2">2</span>
+        <h4 data-i18n="m_s2_h">We design your booth</h4>
+        <p data-i18n="m_s2_p">Palette, frame art and layout, built to match — not a generic template with your logo dropped on top.</p>
+      </article>
+      <article class="frame reveal" style="--i:2">
+        <span class="pin"></span>
+        <span class="num2">3</span>
+        <h4 data-i18n="m_s3_h">We run it on the day</h4>
+        <p data-i18n="m_s3_p">Live view, a 3-2-1 flash, and a print in guests' hands moments later — set up, staffed, and working the whole time.</p>
+      </article>
+      <article class="frame reveal" style="--i:3">
+        <span class="pin"></span>
+        <span class="num2">4</span>
+        <h4 data-i18n="m_s4_h">You get everything, after</h4>
+        <p data-i18n="m_s4_p">Every photo from the event, organised, plus a report — sessions, prints, and how the day actually went.</p>
+      </article>
     </div>
   </div>
 </section>
@@ -228,6 +251,7 @@
   <div class="wrap">
     <div class="cta-block reveal" data-r="scale">
       <span class="mark bgm" aria-hidden="true"></span>
+      <span class="chip-float" data-i18n="m_cta_chip">Mock-up first, no obligation</span>
       <span class="eyebrow" style="color:#8fc2df" data-i18n="m_cta_eyebrow">Let's talk about your event</span>
       <h2 class="display h-lg" data-i18n="m_cta_h2">Tell us the date. We'll build the booth.</h2>
       <p data-i18n="m_cta_p">Share your event date, guest count and the vibe you're after — we'll come back with a themed mock-up before you commit to anything.</p>
@@ -268,7 +292,7 @@
   </div>
 </footer>
 
-<script src="js/i18n.js?v=12"></script>
+<script src="js/i18n.js?v=13"></script>
 <script src="js/site.js?v=13"></script>
 </body>
 </html>

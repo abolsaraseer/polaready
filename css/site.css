@@ -281,6 +281,7 @@ html[dir="rtl"] .frame .yr{font-weight:900}
 .frame .pin{position:absolute;top:26px;inset-inline-end:26px;width:14px;height:14px;border-radius:50%;background:var(--cream);border:3px solid var(--glacier)}
 .frame p{margin:0;color:var(--ink-soft);font-size:1.02rem;line-height:1.55}
 .frame .tag{display:block;margin-bottom:6px;color:var(--glacier)}
+.frame h4{font:800 1.05rem/1.3 var(--f-body);margin-bottom:8px;color:var(--navy)}
 
 /* ==========================================================================
    SCIENCE — sticky figure, scrolling text
@@ -655,34 +656,46 @@ html[dir="rtl"] .foot h5{letter-spacing:0;font-size:.9rem}
 
 
 /* ==========================================================================
-   MARKETING HOME — perks, theme gallery, process, contact
+   MARKETING HOME — brief, perks, on-paper, timeline, contact
    ========================================================================== */
+
+/* ------------------------------------------------------------ brief story
+   A spotlight moment, not a stray paragraph: text beside the mark, the same
+   circular-avatar treatment the brand kit uses elsewhere, so this reads as
+   a considered pairing instead of one more block of copy. */
+.brief-grid{display:grid;gap:clamp(30px,6vw,72px);grid-template-columns:1fr;align-items:center}
+@media (min-width:760px){.brief-grid{grid-template-columns:1fr auto}}
+.brief-mark{
+  width:150px;height:150px;border-radius:50%;background:var(--navy);color:var(--cream);
+  display:grid;place-items:center;justify-self:center;flex:none;position:relative;
+  transition:transform .6s var(--ease);
+}
+.brief-mark:hover{transform:rotate(-8deg) scale(1.05)}
+.brief-mark .mark{--s:78px}
+@media (max-width:759px){.brief-mark{order:-1;width:110px;height:110px}.brief-mark .mark{--s:58px}}
+
+/* ------------------------------------------------------------------ perks
+   An uneven bento instead of six identical tiles - one perk (already the
+   dark "no photo lost" one) reads as the headline claim, the rest support
+   it. Icons get their own small hover flourish, not just the card lift. */
 .perks{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.perk{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;transition:transform .5s var(--ease),box-shadow .5s}
-.perk:hover{transform:translateY(-6px);box-shadow:0 30px 50px -32px rgba(47,65,86,.4)}
-.perk .ico{width:46px;height:46px;border-radius:14px;background:var(--ice-soft);color:var(--navy);display:grid;place-items:center;margin-bottom:16px;flex:none}
-.perk .ico svg{width:24px;height:24px}
+@media (min-width:760px){
+  .perks{grid-template-columns:repeat(3,1fr)}
+  .perk:nth-child(2){grid-row:span 2}
+}
+.perk{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;transition:transform .5s var(--ease),box-shadow .5s,border-color .5s}
+.perk:hover{transform:translateY(-6px);box-shadow:0 30px 50px -32px rgba(47,65,86,.4);border-color:transparent}
+.perk .ico{width:46px;height:46px;border-radius:14px;background:var(--ice-soft);color:var(--navy);display:grid;place-items:center;margin-bottom:16px;flex:none;transition:transform .45s var(--ease),background .3s,color .3s}
+.perk .ico svg{width:24px;height:24px;transition:transform .45s var(--ease)}
+.perk:hover .ico{background:var(--glacier);color:#fff}
+.perk:hover .ico svg{transform:rotate(-8deg) scale(1.1)}
 .perk h4{font:800 1.14rem/1.3 var(--f-body);margin-bottom:8px;color:var(--navy)}
 .perk p{margin:0;color:var(--ink-soft);font-size:.98rem;line-height:1.55}
-.perk.dark{background:var(--navy);color:var(--cream)}
-.perk.dark h4{color:var(--cream)}
-.perk.dark p{color:rgba(245,239,235,.78)}
+.perk.dark{background:var(--navy);color:var(--cream);display:flex;flex-direction:column;justify-content:center}
+.perk.dark h4{color:var(--cream);font-size:1.32rem}
+.perk.dark p{color:rgba(245,239,235,.78);font-size:1.04rem}
 .perk.dark .ico{background:rgba(245,239,235,.12);color:var(--cream)}
-
-/* theme gallery: the same booth output, several palettes */
-.themes-grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
-.theme-card{border-radius:26px;overflow:hidden;border:1px solid var(--line);background:var(--surface);transition:transform .5s var(--ease),box-shadow .5s}
-.theme-card:hover{transform:translateY(-8px) rotate(-.6deg);box-shadow:0 34px 60px -34px rgba(47,65,86,.5)}
-.theme-card .tc-stage{aspect-ratio:4/5;position:relative;display:grid;place-items:center;padding:9%;background:var(--tc-bg,#2f4156)}
-.theme-card .tc-card{position:relative;width:100%;aspect-ratio:4/5;background:var(--tc-paper,#fff);border-radius:10px;padding:7% 7% 0;box-shadow:0 20px 34px -18px rgba(0,0,0,.4)}
-.theme-card .tc-photo{position:relative;aspect-ratio:1/1;border-radius:4px;overflow:hidden}
-.theme-card .tc-photo svg{position:absolute;inset:0;width:100%;height:100%}
-.theme-card .tc-wm{height:19%;display:grid;place-items:center;font:400 .85rem/1 var(--f-display);color:var(--tc-ink,#2f4156)}
-html[dir="rtl"] .theme-card .tc-wm{font-weight:900}
-.theme-card .tc-meta{padding:16px 18px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.theme-card .tc-meta b{font:800 .98rem/1 var(--f-body);color:var(--navy)}
-.theme-card .tc-meta span{font:500 .68rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
-html[dir="rtl"] .theme-card .tc-meta span{letter-spacing:0;font-size:.82rem}
+.perk.dark:hover .ico{background:var(--cream);color:var(--navy)}
 
 /* ------------------------------------------------------- ON PAPER (3D card)
    A real 2x6 print strip in a tilted 3D card - a plane, not a sculpted model,
@@ -693,7 +706,11 @@ html[dir="rtl"] .theme-card .tc-meta span{letter-spacing:0;font-size:.82rem}
    no `animation` or `transition` belongs here, both would fight the JS. */
 .op-layout{display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:clamp(30px,6vw,72px);align-items:center}
 @media (max-width:760px){.op-layout{grid-template-columns:1fr;justify-items:center;text-align:center}}
-.op-scene{perspective:1100px;display:grid;place-items:center;padding:26px 0}
+.op-scene{perspective:1100px;display:grid;place-items:center;padding:26px 0;position:relative}
+.op-scene::before{
+  content:"";position:absolute;inset:8% 18%;background:radial-gradient(closest-side,rgba(63,122,156,.22),transparent 70%);
+  z-index:-1;filter:blur(4px);
+}
 .op-tilt{width:210px;aspect-ratio:1/3;transform-style:preserve-3d;transform:rotateX(6deg) rotateY(-11deg)}
 @media (max-width:760px){.op-tilt{width:172px}}
 .op-card{position:relative;width:100%;height:100%;border-radius:7px;overflow:hidden;background:#fff;box-shadow:0 44px 74px -32px rgba(47,65,86,.55),0 6px 14px -6px rgba(47,65,86,.3);backface-visibility:hidden}
@@ -722,18 +739,18 @@ html[dir="rtl"] .op-btn:hover{transform:translateX(-4px)}
 .op-filter-btn:hover,.op-color-btn:hover{transform:translateY(-2px)}
 .op-filter-btn.on,.op-color-btn.on{background:var(--navy);border-color:var(--navy);color:var(--cream)}
 
-/* process list — plain, no scroll-jacking (this page should load fast and sell) */
-.steps2{display:grid;gap:14px;counter-reset:step}
-.step2{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:24px 26px;transition:transform .4s var(--ease),box-shadow .4s,border-color .4s}
-.step2.hover-lift:hover{transform:translateY(-5px);box-shadow:0 26px 46px -30px rgba(47,65,86,.4);border-color:transparent}
 /* generic hover-lift utility, reused wherever a card/button should feel
    tactile without a bespoke rule per element */
 .hover-lift{transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
 .hover-lift:hover{transform:translateY(-4px)}
-.step2 .num2{font:400 2.4rem/1 var(--f-display);color:var(--glacier);flex:none;min-width:1.4em}
-html[dir="rtl"] .step2 .num2{font-weight:900}
-.step2 h4{font:800 1.15rem/1.3 var(--f-body);margin-bottom:6px;color:var(--navy)}
-.step2 p{margin:0;color:var(--ink-soft);font-size:.98rem;line-height:1.55;max-width:60ch}
+
+/* the home page's "How it works" reuses the story page's own scroll-linked
+   timeline (.tl/.frame, progress line included) rather than a new component -
+   just a 4-up variant of it, since setupSections() already drives .tl's
+   --p custom property from scroll position on any page that has one. */
+@media (min-width:860px){.tl.tl-4{grid-template-columns:repeat(4,1fr)}}
+.tl .frame .num2{font:400 clamp(2.6rem,5vw,3.6rem)/1 var(--f-display);color:var(--glacier);display:block;margin-bottom:10px}
+html[dir="rtl"] .tl .frame .num2{font-weight:900}
 
 /* contact / CTA */
 .cta-block{background:var(--navy);color:var(--cream);border-radius:32px;padding:clamp(32px,6vw,64px);position:relative;overflow:hidden}
@@ -744,6 +761,7 @@ html[dir="rtl"] .step2 .num2{font-weight:900}
 .cta-block .btn{background:var(--cream);color:var(--navy);border-color:var(--cream)}
 .cta-block .btn.ghost{background:transparent;color:var(--cream);border-color:rgba(245,239,235,.4)}
 .cta-block .btn.ghost:hover{background:var(--cream);color:var(--navy)}
+.cta-block .chip-float{position:absolute;top:-14px;inset-inline-start:clamp(24px,6vw,56px)}
 
 
 /* ==========================================================================
