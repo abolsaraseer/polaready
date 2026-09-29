@@ -305,41 +305,86 @@
 
   /* ---------------------------------------------------------- on-paper card
      A flat plane in 3D space is all "tilted paper" needs - no model file, no
-     WebGL. .op-tilt carries the transform; the idle sway is a CSS animation,
-     replaced by a JS-driven one while the pointer is over the scene, and by
-     nothing at all under reduced motion. Switching templates swings the card
-     to edge-on, swaps the image while it's invisible, then swings back -
-     a flip without needing a texture for the card's own back. */
+     WebGL. Idle sway, hover-follow and the template-switch spin all drive the
+     SAME transform property, so they're run as one continuous
+     requestAnimationFrame loop that eases the current angle toward whatever
+     the current mode wants, rather than as separate CSS animations swapped in
+     and out by class. That swap approach was tried first and dropped: turning
+     a CSS animation off snaps the element to its static base transform
+     instantly, so leaving hover produced a visible pop back to a different
+     angle instead of a smooth handoff. Easing one continuous value avoids
+     that by construction - the rendered angle only ever moves a fraction of
+     the way to its target each frame, never jumps, no matter how the target
+     itself changes underneath it.
+
+     The template switch swings to SPIN_Y and back rather than to 90deg: a
+     flat plane at 90deg is edge-on - a hairline sliver, which reads as the
+     card vanishing rather than spinning. Stopping well short of that keeps
+     the face visible (just steeply tilted) for the whole motion, and the
+     image swaps at the peak of the swing rather than at an invisible instant. */
   function setupOnPaper() {
     var scene = $('.op-scene'), tilt = $('#opTilt'), img = $('#opImg');
     var btns = $$('.op-btn');
     if (!scene || !tilt || !btns.length) return;
+    var REST_X = 6, REST_Y = -11, SPIN_Y = 46;
 
-    if (!reduced) {
-      scene.addEventListener('mouseenter', function () { tilt.classList.add('hovering'); });
-      scene.addEventListener('mousemove', function (e) {
-        var r = scene.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
-        var rx = lerp(16, -4, clamp(py, 0, 1)), ry = lerp(-16, 16, clamp(px, 0, 1));
-        tilt.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+    function labelFor(b) {
+      var h = b.querySelector('b'), s = b.querySelector('span');
+      return (h ? h.textContent : '') + (s ? ' — ' + s.textContent : '');
+    }
+    img.alt = labelFor(btns[0]);
+
+    if (reduced) {
+      tilt.style.transform = 'rotateX(' + REST_X + 'deg) rotateY(' + REST_Y + 'deg)';
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (b.classList.contains('on')) return;
+          btns.forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+          img.src = b.getAttribute('data-src'); img.alt = labelFor(b);
+        });
       });
-      scene.addEventListener('mouseleave', function () { tilt.classList.remove('hovering'); tilt.style.transform = ''; });
+      return;
     }
 
-    var busy = false;
+    var rx = REST_X, ry = REST_Y;      // the rendered angle, eased every frame
+    var tx = REST_X, ty = REST_Y;      // what it's currently chasing
+    var hovering = false, phase = 'idle', busy = false;
+
+    /* Only the render loop lives on requestAnimationFrame, which a browser is
+       free to fully suspend for a backgrounded tab - fine for a visual sway,
+       since it just picks up the easing again whenever the tab is next
+       painted. The flip's own timing (when the image actually swaps, when
+       the button unlocks) runs on setTimeout instead, which keeps firing
+       (throttled, not suspended) even while hidden - tying that to "has the
+       eased value visually arrived yet" would leave a click permanently
+       stuck mid-flip if a frame never came to notice it had arrived. */
+    function tick() {
+      if (phase === 'idle' && !hovering) { tx = REST_X; ty = REST_Y + Math.sin(Date.now() / 3400) * 11; }
+      rx += (tx - rx) * 0.12; ry += (ty - ry) * 0.12;
+      tilt.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+
+    scene.addEventListener('mouseenter', function () { hovering = true; });
+    scene.addEventListener('mousemove', function (e) {
+      if (phase !== 'idle') return;
+      var r = scene.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+      tx = lerp(16, -4, clamp(py, 0, 1)); ty = lerp(-16, 16, clamp(px, 0, 1));
+    });
+    scene.addEventListener('mouseleave', function () { hovering = false; });
+
     btns.forEach(function (b) {
       b.addEventListener('click', function () {
         if (busy || b.classList.contains('on')) return;
         busy = true;
         btns.forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
-        var src = b.getAttribute('data-src');
-        if (reduced) { img.src = src; busy = false; return; }
-        tilt.classList.remove('hovering'); tilt.classList.add('flip');
-        tilt.style.transform = 'rotateY(92deg)';
+        phase = 'spin'; tx = rx; ty = SPIN_Y;
         setTimeout(function () {
-          img.src = src;
-          tilt.style.transform = 'rotateY(0deg)';
-          setTimeout(function () { tilt.classList.remove('flip'); tilt.style.transform = ''; busy = false; }, 340);
+          img.src = b.getAttribute('data-src'); img.alt = labelFor(b);
+          phase = 'settle'; tx = REST_X; ty = REST_Y;
+          setTimeout(function () { phase = 'idle'; busy = false; }, 420);
         }, 320);
       });
     });
