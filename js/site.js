@@ -303,6 +303,48 @@
     });
   }
 
+  /* ---------------------------------------------------------- on-paper card
+     A flat plane in 3D space is all "tilted paper" needs - no model file, no
+     WebGL. .op-tilt carries the transform; the idle sway is a CSS animation,
+     replaced by a JS-driven one while the pointer is over the scene, and by
+     nothing at all under reduced motion. Switching templates swings the card
+     to edge-on, swaps the image while it's invisible, then swings back -
+     a flip without needing a texture for the card's own back. */
+  function setupOnPaper() {
+    var scene = $('.op-scene'), tilt = $('#opTilt'), img = $('#opImg');
+    var btns = $$('.op-btn');
+    if (!scene || !tilt || !btns.length) return;
+
+    if (!reduced) {
+      scene.addEventListener('mouseenter', function () { tilt.classList.add('hovering'); });
+      scene.addEventListener('mousemove', function (e) {
+        var r = scene.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width, py = (e.clientY - r.top) / r.height;
+        var rx = lerp(16, -4, clamp(py, 0, 1)), ry = lerp(-16, 16, clamp(px, 0, 1));
+        tilt.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg)';
+      });
+      scene.addEventListener('mouseleave', function () { tilt.classList.remove('hovering'); tilt.style.transform = ''; });
+    }
+
+    var busy = false;
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (busy || b.classList.contains('on')) return;
+        busy = true;
+        btns.forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
+        var src = b.getAttribute('data-src');
+        if (reduced) { img.src = src; busy = false; return; }
+        tilt.classList.remove('hovering'); tilt.classList.add('flip');
+        tilt.style.transform = 'rotateY(92deg)';
+        setTimeout(function () {
+          img.src = src;
+          tilt.style.transform = 'rotateY(0deg)';
+          setTimeout(function () { tilt.classList.remove('flip'); tilt.style.transform = ''; busy = false; }, 340);
+        }, 320);
+      });
+    });
+  }
+
   /* ----------------------------------------------------- booth playground */
   var PAPERS = [
     { k: 'white', bg: '#ffffff', ink: '#2f4156' }, { k: 'noir', bg: '#1a1a1f', ink: '#ffffff' },
@@ -383,7 +425,7 @@
     doc.body.dataset.title = doc.title;
     $$('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), true); }); });
 
-    setupSections(); setupReveal(); setupHero(); setupCopy();
+    setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper();
     lang = want === 'ar' && window.I18N ? 'ar' : 'en';
     applyLang(lang, false);   /* also splits the words, once, in the right language */
     $$('.marq .track').forEach(function (t) { t.innerHTML += t.innerHTML; });
