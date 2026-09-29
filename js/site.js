@@ -410,6 +410,45 @@
     });
   }
 
+  /* ------------------------------------------------------- bear reveal
+     The "why a polar bear?" mark is a real link to /story/ - clicking it
+     grows the circle from wherever it sits on screen until it swallows
+     the viewport, then hands off to the story page as the reveal peaks.
+     A real <a href>, so it still works with no JS and for a middle-click
+     / open-in-new-tab; the animation is progressive enhancement only. */
+  function setupBearReveal() {
+    var btn = $('#bearReveal');
+    if (!btn || reduced) return;
+    var DUR = 680;
+    btn.addEventListener('click', function (e) {
+      if (btn.classList.contains('expanding')) { e.preventDefault(); return; }
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1) return; /* opening in new tab etc: let it be */
+      e.preventDefault();
+      var rect = btn.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
+      var dx = Math.max(cx, window.innerWidth - cx);
+      var dy = Math.max(cy, window.innerHeight - cy);
+      var reach = Math.sqrt(dx * dx + dy * dy);
+      var scale = (reach / (rect.width / 2)) * 1.18; /* a little past the far corner */
+
+      btn.style.position = 'fixed';
+      btn.style.top = rect.top + 'px';
+      btn.style.left = rect.left + 'px';
+      btn.style.width = rect.width + 'px';
+      btn.style.height = rect.height + 'px';
+      btn.style.margin = '0';
+      btn.style.transition = 'none';
+      btn.style.transform = 'scale(1)';
+      btn.classList.add('expanding');
+      void btn.offsetWidth; /* flush the pinned position before animating it */
+      requestAnimationFrame(function () {
+        btn.style.transition = 'transform ' + DUR + 'ms cubic-bezier(.65,0,.35,1)';
+        btn.style.transform = 'scale(' + scale + ')';
+      });
+      setTimeout(function () { location.href = btn.getAttribute('href'); }, DUR + 20);
+    });
+  }
+
   /* -------------------------------------------------------------- boot */
   function init() {
     navEl = $('.nav');
@@ -419,7 +458,7 @@
     doc.body.dataset.title = doc.title;
     $$('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), true); }); });
 
-    setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper();
+    setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper(); setupBearReveal();
     lang = want === 'ar' && window.I18N ? 'ar' : 'en';
     applyLang(lang, false);   /* also splits the words, once, in the right language */
     $$('.marq .track').forEach(function (t) { t.innerHTML += t.innerHTML; });

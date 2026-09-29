@@ -673,6 +673,10 @@ html[dir="rtl"] .foot h5{letter-spacing:0;font-size:.9rem}
 .brief-mark:hover{transform:rotate(-8deg) scale(1.05)}
 .brief-mark .mark{--s:78px}
 @media (max-width:759px){.brief-mark{order:-1;width:110px;height:110px}.brief-mark .mark{--s:58px}}
+/* clicked: JS pins it to its own on-screen rect via inline styles, then
+   scales it past the viewport diagonal - a circular reveal into /story/ */
+.brief-mark.expanding{pointer-events:none;will-change:transform;z-index:500}
+.brief-mark.expanding .mark{will-change:transform}
 
 /* ------------------------------------------------------------------ perks
    An uneven bento instead of six identical tiles - one perk (already the
