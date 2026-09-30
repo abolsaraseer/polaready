@@ -321,17 +321,44 @@
      card vanishing rather than spinning. Stopping well short of that keeps
      the face visible (just steeply tilted) for the whole motion, and the
      image swaps at the peak of the swing rather than at an invisible instant. */
-  /* Filter and Colour are kept strictly separate: Filter is a real CSS
-     filter on the photo itself and touches nothing else. Colour changes
-     the backdrop --op-scene sits on (a --op-bg custom property) and never
-     touches the photo - picking a mood colour behind the print, not
-     recolouring the print. Both persist across a template swap for free,
-     since neither lives on the <img src> the swap replaces. */
+  /* Filter and Colour reach different, non-overlapping layers of the SAME
+     source image, so there's never a seam to misalign:
+       - .op-bg is the full print, untouched by Filter. Colour applies a
+         real hue-rotate to it - it recolours the template's own
+         background/frame (the red frame actually turns another colour),
+         not a tint layered on top of it.
+       - three .op-photo elements sit above it showing that same image,
+         each clip-path'd down to just one photo window (OP_RECTS below,
+         measured once per template in its native 236x708 px). Filter only
+         ever applies to these, so B&W/Warm never touches the frame.
+     Every layer shares one <img src>, so a template swap never needs the
+     rects and the pixels to line back up - they're the same pixels. */
+  var OP_CANVAS = { w: 236, h: 708 };
+  var OP_RECTS = {
+    'assets/templates/wedding-1.png?v=2': [[89, 39, 212, 216], [89, 266, 212, 442], [89, 493, 212, 669]],
+    'assets/templates/wedding-2.png?v=2': [[49, 44, 186, 183], [49, 226, 186, 366], [49, 406, 186, 547]],
+    'assets/templates/wedding-3.png?v=3': [[27, 40, 209, 168], [27, 201, 209, 328], [27, 363, 209, 490]],
+    'assets/templates/business-1.png?v=1': [[24, 116, 211, 246], [24, 263, 211, 394], [24, 411, 211, 541]]
+  };
   var OP_FILTERS = { original: 'none', bw: 'grayscale(1) contrast(1.1)', warm: 'sepia(.4) saturate(1.3) contrast(1.05)' };
-  var OP_BG = { original: 'var(--surface)', blush: '#f5e3e5', sage: '#e6ebe0' };
+  /* hue-rotate() rotates AWAY from a template's own starting hue, so one
+     fixed degree value lands somewhere different on every template (300deg
+     turns wedding-2's red pink, but turns wedding-1's navy teal). Each
+     template gets its own degrees instead, worked out from its measured
+     background hue so "Blush"/"Sage" land on the same rosy-pink/sage-green
+     target everywhere. wedding-3 and business-1 are near-white
+     (next to no saturation to rotate), so they're colourised with
+     sepia() first - the standard trick for tinting a neutral image, since
+     plain hue-rotate on a colourless pixel is a no-op by definition. */
+  var OP_HUES = {
+    'assets/templates/wedding-1.png?v=2': { original: 'none', blush: 'hue-rotate(109deg) saturate(2.6) brightness(1.05)', sage: 'hue-rotate(234deg) saturate(2.6) brightness(1.05)' },
+    'assets/templates/wedding-2.png?v=2': { original: 'none', blush: 'hue-rotate(335deg) saturate(1.5)', sage: 'hue-rotate(100deg) saturate(1.5)' },
+    'assets/templates/wedding-3.png?v=3': { original: 'none', blush: 'sepia(.85) saturate(4) hue-rotate(300deg) brightness(1.04)', sage: 'sepia(.85) saturate(3) hue-rotate(65deg) brightness(1.02)' },
+    'assets/templates/business-1.png?v=1': { original: 'none', blush: 'sepia(.85) saturate(4) hue-rotate(300deg) brightness(1.04)', sage: 'sepia(.85) saturate(3) hue-rotate(65deg) brightness(1.02)' }
+  };
 
   function setupOnPaper() {
-    var scene = $('.op-scene'), tilt = $('#opTilt'), img = $('#opImg');
+    var scene = $('.op-scene'), tilt = $('#opTilt'), bg = $('#opBg'), photos = $$('.op-photo');
     var btns = $$('.op-btn'), filterBtns = $$('.op-filter-btn'), colorBtns = $$('.op-color-btn');
     if (!scene || !tilt || !btns.length) return;
     var REST_X = 6, REST_Y = -11, SPIN_Y = 46;
@@ -340,7 +367,32 @@
       var h = b.querySelector('b'), s = b.querySelector('span');
       return (h ? h.textContent : '') + (s ? ' — ' + s.textContent : '');
     }
-    img.alt = labelFor(btns[0]);
+    function applyRects(src) {
+      var rects = OP_RECTS[src] || [];
+      photos.forEach(function (p, i) {
+        var r = rects[i];
+        p.style.clipPath = r
+          ? 'inset(' + (r[1] / OP_CANVAS.h * 100) + '% ' + ((OP_CANVAS.w - r[2]) / OP_CANVAS.w * 100) + '% ' +
+            ((OP_CANVAS.h - r[3]) / OP_CANVAS.h * 100) + '% ' + (r[0] / OP_CANVAS.w * 100) + '%)'
+          : 'inset(100%)';
+      });
+    }
+    var currentSrc = btns[0].getAttribute('data-src');
+    function applyColor() {
+      var on = colorBtns.filter(function (b) { return b.classList.contains('on'); })[0];
+      var color = on ? on.getAttribute('data-color') : 'original';
+      var hues = OP_HUES[currentSrc] || {};
+      bg.style.filter = hues[color] || 'none';
+    }
+    function swapTo(b) {
+      currentSrc = b.getAttribute('data-src');
+      bg.src = currentSrc; bg.alt = labelFor(b);
+      photos.forEach(function (p) { p.src = currentSrc; });
+      applyRects(currentSrc);
+      applyColor(); /* re-resolve the current swatch against the new template's own hue map */
+    }
+    bg.alt = labelFor(btns[0]);
+    applyRects(currentSrc);
 
     function group(all, cls, apply) {
       all.forEach(function (b) {
@@ -351,8 +403,11 @@
         });
       });
     }
-    group(filterBtns, 'op-filter-btn', function (b) { img.style.filter = OP_FILTERS[b.getAttribute('data-filter')] || 'none'; });
-    group(colorBtns, 'op-color-btn', function (b) { scene.style.setProperty('--op-bg', OP_BG[b.getAttribute('data-color')] || 'var(--surface)'); });
+    group(filterBtns, 'op-filter-btn', function (b) {
+      var f = OP_FILTERS[b.getAttribute('data-filter')] || 'none';
+      photos.forEach(function (p) { p.style.filter = f; });
+    });
+    group(colorBtns, 'op-color-btn', function () { applyColor(); });
 
     if (reduced) {
       tilt.style.transform = 'rotateX(' + REST_X + 'deg) rotateY(' + REST_Y + 'deg)';
@@ -360,7 +415,7 @@
         b.addEventListener('click', function () {
           if (b.classList.contains('on')) return;
           btns.forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
-          img.src = b.getAttribute('data-src'); img.alt = labelFor(b);
+          swapTo(b);
         });
       });
       return;
@@ -402,7 +457,7 @@
         btns.forEach(function (x) { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); });
         phase = 'spin'; tx = rx; ty = SPIN_Y;
         setTimeout(function () {
-          img.src = b.getAttribute('data-src'); img.alt = labelFor(b);
+          swapTo(b);
           phase = 'settle'; tx = REST_X; ty = REST_Y;
           setTimeout(function () { phase = 'idle'; busy = false; }, 420);
         }, 320);
