@@ -321,17 +321,17 @@
      card vanishing rather than spinning. Stopping well short of that keeps
      the face visible (just steeply tilted) for the whole motion, and the
      image swaps at the peak of the swing rather than at an invisible instant. */
-  /* Filter is a real CSS filter on the photo itself - instant, no extra
-     assets. Colour is a translucent wash layered over it (mix-blend-mode)
-     rather than a second re-exported design: a live mood preview, not a
-     literal recolour of the template. Both persist across a template swap
-     for free, since they live on elements the swap never touches - the
-     <img>'s own inline style, and a sibling overlay div. */
+  /* Filter and Colour are kept strictly separate: Filter is a real CSS
+     filter on the photo itself and touches nothing else. Colour changes
+     the backdrop --op-scene sits on (a --op-bg custom property) and never
+     touches the photo - picking a mood colour behind the print, not
+     recolouring the print. Both persist across a template swap for free,
+     since neither lives on the <img src> the swap replaces. */
   var OP_FILTERS = { original: 'none', bw: 'grayscale(1) contrast(1.1)', warm: 'sepia(.4) saturate(1.3) contrast(1.05)' };
-  var OP_WASHES = { original: 'transparent', blush: 'rgba(201,90,110,.3)', sage: 'rgba(88,120,84,.28)' };
+  var OP_BG = { original: 'var(--surface)', blush: '#f5e3e5', sage: '#e6ebe0' };
 
   function setupOnPaper() {
-    var scene = $('.op-scene'), tilt = $('#opTilt'), img = $('#opImg'), wash = $('#opWash');
+    var scene = $('.op-scene'), tilt = $('#opTilt'), img = $('#opImg');
     var btns = $$('.op-btn'), filterBtns = $$('.op-filter-btn'), colorBtns = $$('.op-color-btn');
     if (!scene || !tilt || !btns.length) return;
     var REST_X = 6, REST_Y = -11, SPIN_Y = 46;
@@ -352,7 +352,7 @@
       });
     }
     group(filterBtns, 'op-filter-btn', function (b) { img.style.filter = OP_FILTERS[b.getAttribute('data-filter')] || 'none'; });
-    group(colorBtns, 'op-color-btn', function (b) { if (wash) wash.style.background = OP_WASHES[b.getAttribute('data-color')] || 'transparent'; });
+    group(colorBtns, 'op-color-btn', function (b) { scene.style.setProperty('--op-bg', OP_BG[b.getAttribute('data-color')] || 'var(--surface)'); });
 
     if (reduced) {
       tilt.style.transform = 'rotateX(' + REST_X + 'deg) rotateY(' + REST_Y + 'deg)';
@@ -410,45 +410,6 @@
     });
   }
 
-  /* ------------------------------------------------------- bear reveal
-     The "why a polar bear?" mark is a real link to /story/ - clicking it
-     grows the circle from wherever it sits on screen until it swallows
-     the viewport, then hands off to the story page as the reveal peaks.
-     A real <a href>, so it still works with no JS and for a middle-click
-     / open-in-new-tab; the animation is progressive enhancement only. */
-  function setupBearReveal() {
-    var btn = $('#bearReveal');
-    if (!btn || reduced) return;
-    var DUR = 680;
-    btn.addEventListener('click', function (e) {
-      if (btn.classList.contains('expanding')) { e.preventDefault(); return; }
-      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button === 1) return; /* opening in new tab etc: let it be */
-      e.preventDefault();
-      var rect = btn.getBoundingClientRect();
-      var cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
-      var dx = Math.max(cx, window.innerWidth - cx);
-      var dy = Math.max(cy, window.innerHeight - cy);
-      var reach = Math.sqrt(dx * dx + dy * dy);
-      var scale = (reach / (rect.width / 2)) * 1.18; /* a little past the far corner */
-
-      btn.style.position = 'fixed';
-      btn.style.top = rect.top + 'px';
-      btn.style.left = rect.left + 'px';
-      btn.style.width = rect.width + 'px';
-      btn.style.height = rect.height + 'px';
-      btn.style.margin = '0';
-      btn.style.transition = 'none';
-      btn.style.transform = 'scale(1)';
-      btn.classList.add('expanding');
-      void btn.offsetWidth; /* flush the pinned position before animating it */
-      requestAnimationFrame(function () {
-        btn.style.transition = 'transform ' + DUR + 'ms cubic-bezier(.65,0,.35,1)';
-        btn.style.transform = 'scale(' + scale + ')';
-      });
-      setTimeout(function () { location.href = btn.getAttribute('href'); }, DUR + 20);
-    });
-  }
-
   /* -------------------------------------------------------------- boot */
   function init() {
     navEl = $('.nav');
@@ -458,7 +419,7 @@
     doc.body.dataset.title = doc.title;
     $$('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), true); }); });
 
-    setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper(); setupBearReveal();
+    setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper();
     lang = want === 'ar' && window.I18N ? 'ar' : 'en';
     applyLang(lang, false);   /* also splits the words, once, in the right language */
     $$('.marq .track').forEach(function (t) { t.innerHTML += t.innerHTML; });
