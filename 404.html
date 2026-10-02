@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Page not found — PolaReady</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=IBM+Plex+Mono:wght@500&family=Nunito+Sans:opsz,wght@6..12,300..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css?v=22">
+<style>
+  /* Deliberately self-contained: no site.js dependency, so this page keeps
+     working even if a script fails to load — the one case where that
+     actually matters. */
+  body{min-height:100svh;display:grid;place-items:center;text-align:center;padding:40px var(--gut)}
+  .err-mark{width:110px;height:110px;border-radius:50%;background:var(--navy);color:var(--cream);display:grid;place-items:center;margin:0 auto 28px}
+  .err-mark .mark{--s:58px}
+  .err-code{font:700 .78rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:14px}
+  .err-h{font:400 clamp(1.8rem,5vw,2.6rem)/1.1 var(--f-display);color:var(--navy);max-width:16ch;margin-inline:auto;margin-block-end:14px}
+  .err-p{color:var(--ink-soft);max-width:42ch;margin-inline:auto;margin-block-end:30px}
+  .err-p.ar{font-family:'Nunito Sans',sans-serif;direction:rtl;margin-block-start:-18px}
+  .err-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+</style>
+</head>
+<body>
+
+<div>
+  <div class="err-mark" aria-hidden="true"><span class="mark"></span></div>
+  <div class="err-code">404 — not found</div>
+  <h1 class="err-h">This page didn't make it home.</h1>
+  <p class="err-p">The link's broken or the page has moved. Everything else is exactly where it should be.</p>
+  <p class="err-p ar">الرابط غير صحيح أو تم نقل الصفحة. كل شيء آخر في مكانه.</p>
+  <div class="err-ctas">
+    <a class="btn" href="/"><span>Back to home</span> <span class="arr" aria-hidden="true">→</span></a>
+    <a class="btn ghost" href="/#contact"><span>Book your event</span></a>
+  </div>
+</div>
+
+</body>
+</html>
