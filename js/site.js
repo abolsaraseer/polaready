@@ -193,6 +193,10 @@
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; update(); }); } }
 
   function setupSections() {
+    var hero = $('.hero');
+    if (hero && !reduced) secs.push({ el: hero, fn: function (el, r) {
+      el.style.setProperty('--hp', clamp(-r.top / vh, 0, 1).toFixed(3));
+    } });
     var tl = $('.tl');
     if (tl) secs.push({ el: tl, fn: function (el, r) {
       var p = clamp((vh * 0.82 - r.top) / (r.height * 0.9 + vh * 0.1), 0, 1);
@@ -249,6 +253,78 @@
       });
       host.addEventListener('pointerleave', function () { card.style.setProperty('--ry', '0deg'); card.style.setProperty('--rx', '0deg'); });
     }
+  }
+
+  /* ------------------------------------------------------------- cursor
+     A dot that tracks the pointer exactly (no CSS transition on its
+     transform - any lag there would fight the eye) and a ring that
+     trails it via a rAF lerp, the same easing-toward-a-target technique
+     setupOnPaper already uses for the card's idle sway. Skipped entirely
+     on touch/no-hover devices and under reduced-motion, in which case
+     the native cursor is left completely alone. */
+  function setupCursor() {
+    if (reduced || !window.matchMedia || !window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+    var dot = doc.createElement('div'); dot.className = 'cursor-dot'; doc.body.appendChild(dot);
+    var ring = doc.createElement('div'); ring.className = 'cursor-ring'; doc.body.appendChild(ring);
+    doc.body.classList.add('cursor-on');
+    var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, seen = false;
+    doc.addEventListener('mousemove', function (e) {
+      mx = e.clientX; my = e.clientY;
+      dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
+      if (!seen) { rx = mx; ry = my; seen = true; } /* snap the ring in on the very first move, don't let it swoop in from centre */
+    });
+    function loop() {
+      rx = lerp(rx, mx, 0.2); ry = lerp(ry, my, 0.2);
+      ring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0) translate(-50%,-50%)';
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+    var hoverables = 'a, button, .perk, .op-btn, .op-filter-btn, .op-color-btn, input';
+    doc.addEventListener('mouseover', function (e) { if (e.target.closest(hoverables)) doc.body.classList.add('cursor-hover'); });
+    doc.addEventListener('mouseout', function (e) { if (e.target.closest(hoverables)) doc.body.classList.remove('cursor-hover'); });
+    doc.addEventListener('mouseleave', function () { dot.style.opacity = ring.style.opacity = '0'; });
+    doc.addEventListener('mouseenter', function () { dot.style.opacity = ring.style.opacity = ''; });
+  }
+
+  /* ---------------------------------------------------------- magnetic
+     .btn owns its hover-lift, magnetic pull and press-scale as one inline
+     transform instead of fighting the CSS :hover/:active rules - an
+     inline style always wins over those regardless of specificity, so
+     splitting the effect between JS and CSS would just mean the CSS half
+     silently stops applying. Reduced-motion skips this entirely and the
+     plain CSS :hover/:active rules are what that visitor gets instead. */
+  function setupMagnetic() {
+    if (reduced) return;
+    $$('.btn').forEach(function (btn) {
+      var tx = 0, ty = 0, pressed = false;
+      function apply() { btn.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + (ty - 3).toFixed(1) + 'px) scale(' + (pressed ? 0.97 : 1) + ')'; }
+      btn.addEventListener('mousemove', function (e) {
+        var r = btn.getBoundingClientRect();
+        tx = (e.clientX - (r.left + r.width / 2)) * 0.25;
+        ty = (e.clientY - (r.top + r.height / 2)) * 0.25;
+        apply();
+      });
+      btn.addEventListener('mousedown', function () { pressed = true; apply(); });
+      btn.addEventListener('mouseup', function () { pressed = false; apply(); });
+      btn.addEventListener('mouseleave', function () { pressed = false; btn.style.transform = ''; });
+    });
+  }
+
+  /* ---------------------------------------------------------- spotlight
+     Cards read the cursor position back as --mx/--my (set here) to
+     position a radial-gradient glow in their own ::before - see .perk in
+     site.css. Purely a custom-property writer; the glow's fade in/out is
+     a plain CSS opacity transition on :hover, so this still degrades
+     gracefully (no glow, but nothing broken) if reduced-motion skips it. */
+  function setupSpotlight() {
+    if (reduced) return;
+    $$('.perk, .op-btn').forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
   }
 
   /* --------------------------------------------------------------- intro */
@@ -462,7 +538,7 @@
     doc.body.dataset.title = doc.title;
     $$('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), true); }); });
 
-    setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper();
+    setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper(); setupCursor(); setupMagnetic(); setupSpotlight();
     lang = want === 'ar' && window.I18N ? 'ar' : 'en';
     applyLang(lang, false);   /* also splits the words, once, in the right language */
     $$('.marq .track').forEach(function (t) { t.innerHTML += t.innerHTML; });

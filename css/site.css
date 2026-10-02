@@ -53,6 +53,27 @@ h1,h2,h3,h4{margin:0;font-weight:400;text-wrap:balance}
 ::selection{background:var(--glacier);color:#fff}
 :focus-visible{outline:3px solid var(--glacier);outline-offset:3px;border-radius:6px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ------------------------------------------------------- custom cursor
+   Fine-pointer devices only (touch/no-hover gets the native cursor
+   untouched) and skipped entirely under prefers-reduced-motion - see
+   setupCursor in site.js, which only runs the JS half when both of
+   those hold. Position tracking has no CSS transition on either
+   element (the dot must track instantly; the ring's lag comes from a
+   JS rAF lerp, not CSS, so the two effects don't double up). Only
+   width/height/colour are allowed to transition. */
+@media (hover:hover) and (pointer:fine){
+  .js.cursor-on, .js.cursor-on a, .js.cursor-on button,
+  .js.cursor-on .perk, .js.cursor-on .op-btn, .js.cursor-on .op-filter-btn, .js.cursor-on .op-color-btn{cursor:none}
+}
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:600;border-radius:50%;transform:translate(-50%,-50%);will-change:transform}
+.cursor-dot{width:8px;height:8px;background:var(--navy);transition:background .25s,width .25s var(--ease),height .25s var(--ease)}
+.cursor-ring{width:36px;height:36px;border:1.5px solid rgba(47,65,86,.3);transition:width .35s var(--ease),height .35s var(--ease),border-color .3s,background .3s}
+body.cursor-hover .cursor-dot{width:0;height:0}
+body.cursor-hover .cursor-ring{width:58px;height:58px;background:rgba(63,122,156,.12);border-color:var(--glacier)}
+body.on-dark .cursor-dot{background:var(--cream)}
+body.on-dark .cursor-ring{border-color:rgba(245,239,235,.4)}
+body.on-dark.cursor-hover .cursor-ring{background:rgba(245,239,235,.14);border-color:var(--cream)}
 .skip{position:fixed;inset-inline-start:12px;top:-60px;z-index:100;background:var(--navy);color:var(--cream);padding:10px 16px;border-radius:999px;transition:top .2s}
 .skip:focus{top:12px}
 
@@ -183,7 +204,14 @@ html[dir="rtl"] .intro .num{font-weight:900}
 /* ==========================================================================
    HERO
    ========================================================================== */
-.hero{position:relative;min-height:100svh;display:grid;align-items:center;padding-top:96px;padding-bottom:70px;overflow:clip}
+.hero{position:relative;min-height:100svh;display:grid;align-items:center;padding-top:96px;padding-bottom:70px;overflow:clip;--hp:0}
+/* scroll-linked depth, driven by --hp (0-1, how far the hero has scrolled
+   past) from the same per-section scroll fn pattern setupSections already
+   uses for .tl/.sci/.lockup/.foot - the photo drifts and fades faster
+   than the text column, the snow drifts slower, for real parallax rather
+   than everything moving in lockstep. */
+.hero .stagecard{transform:translateY(calc(var(--hp) * -50px)) scale(calc(1 - var(--hp) * 0.1));opacity:calc(1 - var(--hp) * 0.7)}
+.hero .snow{transform:translateY(calc(var(--hp) * 70px))}
 .hero .grid{display:grid;gap:clamp(30px,5vw,80px);align-items:center;grid-template-columns:1fr}
 @media (min-width:960px){.hero .grid{grid-template-columns:1.18fr .82fr}}
 .hero h1{margin-bottom:1.6rem}
@@ -697,8 +725,17 @@ html[dir="rtl"] .foot h5{letter-spacing:0;font-size:.9rem}
   .perk:nth-child(3){grid-column:2;grid-row:2}
   .perk:nth-child(4){grid-column:2;grid-row:3}
 }
-.perk{background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;transition:transform .5s var(--ease),box-shadow .5s,border-color .5s}
+.perk{position:relative;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px;transition:transform .5s var(--ease),box-shadow .5s,border-color .5s}
 .perk:hover{transform:translateY(-6px);box-shadow:0 30px 50px -32px rgba(47,65,86,.4);border-color:transparent}
+/* spotlight glow tracking the cursor - set by setupSpotlight in site.js via
+   --mx/--my on mousemove, a plain opacity fade on enter/leave so the glow
+   doesn't need to be positioned off-card before the first mousemove fires. */
+.perk::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .4s;pointer-events:none;
+  background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(63,122,156,.16),transparent 70%);
+}
+.perk:hover::before{opacity:1}
+.perk-dark::before{background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),rgba(245,239,235,.16),transparent 70%)}
 .perk .ico{width:46px;height:46px;border-radius:14px;background:var(--ice-soft);color:var(--navy);display:grid;place-items:center;margin-bottom:16px;flex:none;transition:transform .45s var(--ease),background .3s,color .3s}
 .perk .ico svg{width:24px;height:24px;transition:transform .45s var(--ease)}
 .perk:hover .ico{background:var(--glacier);color:#fff}
@@ -758,7 +795,10 @@ html[dir="rtl"] .foot h5{letter-spacing:0;font-size:.9rem}
 .op-picker-row{display:flex;gap:18px}
 .op-picker-row>div{flex:1;min-width:0}
 .op-btns{display:flex;flex-direction:column;gap:10px}
-.op-btn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:13px 18px;border-radius:14px;border:1px solid var(--line);background:var(--surface);cursor:pointer;text-align:start;transition:background .25s,border-color .25s,transform .25s}
+.op-btn{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:13px 18px;border-radius:14px;border:1px solid var(--line);background:var(--surface);cursor:pointer;text-align:start;transition:background .25s,border-color .25s,transform .25s}
+.op-btn::before{content:"";position:absolute;inset:0;border-radius:inherit;opacity:0;transition:opacity .35s;pointer-events:none;background:radial-gradient(160px circle at var(--mx,50%) var(--my,50%),rgba(63,122,156,.14),transparent 70%)}
+.op-btn:hover::before{opacity:1}
+.op-btn.on::before{background:radial-gradient(160px circle at var(--mx,50%) var(--my,50%),rgba(245,239,235,.16),transparent 70%)}
 @media (max-width:760px){.op-btn{align-items:center;text-align:center}}
 .op-btn b{font:800 .95rem/1 var(--f-body);color:var(--navy)}
 .op-btn span{font:500 .7rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
