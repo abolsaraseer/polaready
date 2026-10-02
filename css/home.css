@@ -1,0 +1,361 @@
+/* ==========================================================================
+   PolaReady — home page (rebuilt)
+   Loaded after site.css, so the brand tokens, nav, buttons, footer and the
+   On Paper configurator's base rules all come from there. Everything here
+   reads correctly with no JavaScript at all; the choreography in home.js
+   only layers motion on top. Rules under `.anim` are the few places a
+   resting state differs once that choreography is known to be running.
+   ========================================================================== */
+
+/* until home.js has split the headings and set its starting poses, keep the
+   hero still rather than flash it fully laid out and then snap it hidden.
+   home.js adds .built; site.css's curtain or the intro usually covers this. */
+.anim:not(.built) .hx-pin{visibility:hidden}
+
+/* ------------------------------------------------------------------ hero */
+.hx{position:relative}
+.hx-pin{position:relative;min-height:100svh;display:grid;align-items:center;overflow:hidden;padding-block:104px 72px}
+.hx-glow{
+  position:absolute;inset-block-start:-18%;inset-inline-end:-12%;width:min(78vw,980px);aspect-ratio:1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(63,122,156,.2),rgba(63,122,156,.06) 55%,transparent 72%);
+}
+.hx-grid{display:grid;gap:clamp(24px,4vw,56px);grid-template-columns:1fr;align-items:center;width:100%;position:relative}
+@media (min-width:960px){.hx-grid{grid-template-columns:1.12fr .88fr}}
+.hx-title{font-size:clamp(3.1rem,8.2vw,8.4rem);line-height:.9;letter-spacing:-.03em;margin-bottom:1.5rem}
+.hx-title em{display:block}
+html[dir="rtl"] .hx-title{font-size:clamp(2.7rem,6.4vw,6.2rem);line-height:1.2;letter-spacing:0}
+.hx-lede{max-width:40ch;margin-bottom:2rem}
+.hx-ctas{display:flex;flex-wrap:wrap;gap:12px}
+
+/* the dealt hand. Static fallback = a fixed fan from these custom props;
+   home.js replaces it with the same pose set from script, then animates. */
+.hx-fan{position:relative;height:min(66vh,620px);min-height:360px}
+.hx-card{
+  --w:calc(min(66vh,620px) * .29);
+  position:absolute;left:50%;bottom:6%;width:var(--w);min-width:120px;aspect-ratio:1/3;
+  transform-origin:50% 125%;
+  transform:translateX(calc(-50% + (var(--n) - 1.5) * var(--w) * .72)) rotate(calc((var(--n) - 1.5) * 9deg));
+}
+.hx-m,.hx-s{width:100%;height:100%}
+.hx-s img{
+  width:100%;height:100%;object-fit:cover;border-radius:6px;background:#fff;
+  box-shadow:0 0 0 5px #fff,0 40px 60px -28px rgba(47,65,86,.55),0 8px 18px -8px rgba(47,65,86,.3);
+}
+@media (max-width:959px){
+  .hx-pin{padding-block:96px 48px;min-height:auto}
+  .hx-fan{height:clamp(330px,80vw,480px);min-height:0;margin-top:clamp(40px,10vw,70px)}
+  .hx-card{bottom:0}
+  .hx-card{--w:clamp(92px,17vw,150px)}
+}
+
+/* rotating badge, bottom corner of the hero */
+.hx-badge{
+  position:absolute;inset-inline-end:var(--gut);bottom:30px;width:128px;height:128px;display:grid;place-items:center;
+  color:var(--navy);text-decoration:none;border-radius:50%;z-index:2;
+}
+.hx-badge-spin{position:absolute;inset:0;animation:spin 22s linear infinite}
+.hx-badge svg{width:100%;height:100%;overflow:visible}
+.hx-badge text{font:500 15px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;fill:currentColor}
+html[dir="rtl"] .hx-badge text{font:700 17px/1 "Cairo",sans-serif;letter-spacing:0}
+/* text on a circular path must run from the path's start point; inheriting
+   rtl would lay it out backwards off the path (the Arabic still joins and
+   reads right-to-left within the run) */
+.hx-badge text,.brief-ring text{direction:ltr}
+.hx-badge>.mark{--s:42px;transition:transform .5s var(--ease)}
+.hx-badge::before{content:"";position:absolute;inset:26%;border-radius:50%;background:var(--surface);box-shadow:0 14px 30px -14px rgba(47,65,86,.5);transition:transform .5s var(--ease),background .3s}
+.hx-badge:hover::before{transform:scale(1.15);background:var(--navy)}
+.hx-badge:hover>.mark{color:var(--cream);transform:rotate(-12deg) scale(1.08)}
+.hx-badge>.mark{position:relative}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (max-width:959px){.hx-badge{display:none}}
+
+/* --------------------------------------------------------------- marquee */
+.vmq{overflow:hidden;direction:ltr;padding-block:clamp(22px,3.4vw,44px);border-block:1px solid var(--line);background:var(--cream);display:grid;gap:4px}
+.vmq-row{white-space:nowrap}
+.vmq-track{display:inline-flex;will-change:transform;animation:mq 42s linear infinite}
+.vmq-out .vmq-track{animation-direction:reverse;animation-duration:52s}
+.anim .vmq-track{animation:none}
+.vmq-track span{font:400 clamp(2.5rem,7.4vw,7rem)/1.12 var(--f-display);color:var(--navy);display:inline-flex;align-items:center;gap:.42em;padding-inline-end:.42em}
+html[dir="rtl"] .vmq-track span{font-weight:900}
+.vmq-track span::after{content:"";width:.26em;height:.26em;border-radius:50%;background:var(--glacier);flex:none}
+.vmq-out span{color:transparent;-webkit-text-stroke:1.5px var(--navy)}
+.vmq-out span::after{background:transparent;box-shadow:inset 0 0 0 2px var(--glacier)}
+
+/* ------------------------------------------------------------- the looks */
+.looks{
+  --lk-bg:var(--cream);--lk-fg:var(--navy);
+  position:relative;background:var(--lk-bg);color:var(--lk-fg);
+}
+/* the head and the card row have to share one pinned screen, so the card
+   height is whatever's left after the head, capped */
+.lk-pin{height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:center;gap:clamp(18px,3.4vh,36px);padding-block:84px 28px;overflow:hidden}
+.lk-head{display:grid;gap:14px 40px;grid-template-columns:1fr;align-items:end;width:100%}
+@media (min-width:900px){.lk-head{grid-template-columns:1fr auto}}
+.lk-title{font-size:clamp(2rem,3.7vw,3.5rem);line-height:1;max-width:20ch}
+html[dir="rtl"] .lk-title{line-height:1.3}
+.lk-side{max-width:34ch;display:grid;gap:16px}
+.lk-side p{margin:0;opacity:.82;font-size:1.02rem;line-height:1.55}
+.lk-meter{display:flex;align-items:center;gap:14px}
+.lk-count{font:500 .78rem/1 var(--f-mono);letter-spacing:.14em;flex:none;font-variant-numeric:tabular-nums}
+.lk-meter i{flex:1;height:2px;background:currentColor;opacity:.25;position:relative;border-radius:2px;min-width:80px}
+.lk-meter b{position:absolute;inset:0;background:currentColor;transform:scaleX(var(--lp,0));transform-origin:left;border-radius:2px}
+html[dir="rtl"] .lk-meter b{transform-origin:right}
+.anim .lk-meter i{opacity:1;background:color-mix(in srgb,currentColor 25%,transparent)}
+
+/* without the pinned scroll the row is a plain swipeable carousel */
+.lk-scroller{overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding-block:6px}
+.lk-scroller::-webkit-scrollbar{display:none}
+.anim .lk-scroller{overflow:visible;scroll-snap-type:none}
+.lk-track{display:flex;gap:clamp(16px,2.6vw,36px);padding-inline:var(--gut);width:max-content}
+.lk-card{
+  position:relative;flex:none;scroll-snap-align:center;width:min(74vw,780px);height:min(58svh,500px);min-height:340px;
+  border-radius:30px;overflow:hidden;display:grid;grid-template-columns:.9fr 1.1fr;
+  /* one row exactly the card's height, so the strip's % height resolves
+     against it instead of growing the row to the image's natural size */
+  grid-template-rows:minmax(0,1fr);
+  background:var(--c-bg);color:var(--c-fg);text-decoration:none;
+  box-shadow:0 50px 80px -50px rgba(0,0,0,.55);
+}
+.lk-blur{position:absolute;inset:-25%;width:150%;height:150%;object-fit:cover;filter:blur(46px) saturate(1.25);opacity:.5;pointer-events:none}
+.lk-art{position:relative;display:grid;place-items:center;perspective:900px;height:100%;min-height:0}
+.lk-strip{
+  height:84%;width:auto;aspect-ratio:1/3;border-radius:5px;transform:rotate(-5deg);
+  box-shadow:0 0 0 4px rgba(255,255,255,.9),0 40px 60px -26px rgba(0,0,0,.6);
+}
+.lk-meta{position:relative;padding:clamp(24px,3.6vw,46px);display:flex;flex-direction:column;justify-content:space-between;gap:20px}
+.lk-n{font:400 clamp(4.4rem,10vw,8.6rem)/.8 "Fugaz One",var(--f-display);color:transparent;-webkit-text-stroke:1.5px var(--c-fg);opacity:.75}
+.lk-meta h3{font:400 clamp(1.9rem,3.6vw,3.2rem)/1 var(--f-display);margin-bottom:.5rem}
+html[dir="rtl"] .lk-meta h3{font-weight:900;line-height:1.3}
+.lk-meta p{font:500 .8rem/1.4 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;opacity:.75;margin:0 0 1.4rem}
+.lk-meta p.lk-p{font:400 1.05rem/1.5 var(--f-body);letter-spacing:0;text-transform:none;max-width:30ch;opacity:.85}
+html[dir="rtl"] .lk-meta p{letter-spacing:0;font-size:.95rem}
+.lk-try{display:inline-flex;align-items:center;gap:.5em;font:800 .9rem/1 var(--f-body);padding:.9em 1.3em;border-radius:999px;border:1.5px solid currentColor;transition:background .3s,color .3s}
+.lk-card:hover .lk-try{background:var(--c-fg);color:var(--c-bg)}
+.lk-try .arr{transition:transform .3s var(--ease)}
+.lk-card:hover .lk-try .arr{transform:translateX(calc(4px * var(--dir)))}
+html[dir="rtl"] .lk-card:hover .lk-try .arr{transform:scaleX(-1) translateX(4px)}
+
+/* the "yours next" card: a blank strip waiting to be designed */
+.lk-ghost{position:relative;height:84%;aspect-ratio:1/3;border:2px dashed rgba(245,239,235,.45);border-radius:6px;display:grid;grid-template-rows:repeat(3,1fr) .7fr;gap:7%;padding:9%}
+.lk-ghost i{border-radius:4px;background:rgba(245,239,235,.08);animation:ghost 2.6s ease-in-out infinite}
+.lk-ghost i:nth-child(2){animation-delay:.3s}.lk-ghost i:nth-child(3){animation-delay:.6s}
+.lk-ghost .mark{--s:44%;justify-self:center;align-self:center;color:var(--cream);opacity:.7}
+@keyframes ghost{0%,100%{background:rgba(245,239,235,.06)}50%{background:rgba(143,194,223,.24)}}
+@media (max-width:759px){
+  .lk-pin{padding-top:76px}
+  .lk-side p{display:none}
+  .lk-card{width:84vw;height:auto;min-height:0;grid-template-columns:1fr;grid-template-rows:auto auto}
+  .lk-art{height:auto}
+  .lk-art{padding-top:22px;height:clamp(200px,38svh,320px)}
+  .lk-strip,.lk-ghost{height:100%}
+  .lk-meta{flex-direction:row;align-items:flex-end;gap:14px;padding:22px 22px 24px}
+  .lk-n{font-size:3.4rem;order:2}
+  .lk-meta h3{font-size:1.7rem}
+  .lk-meta p{margin-bottom:1rem}
+}
+
+/* ------------------------------------------------------- why: manifesto */
+.why2{position:relative;padding-block:clamp(110px,15vw,190px) clamp(40px,6vw,80px)}
+.mf{display:grid}
+.mf-text{font-size:clamp(2.3rem,5.6vw,5.4rem);line-height:1.02;letter-spacing:-.02em;max-width:19ch;margin-bottom:clamp(26px,4vw,48px)}
+html[dir="rtl"] .mf-text{line-height:1.4;letter-spacing:0}
+.mf-lede{max-width:46ch;justify-self:end}
+@media (max-width:759px){.mf-lede{justify-self:start}}
+
+/* ------------------------------------------------------ why: card stack */
+.stack{display:grid;margin-top:clamp(60px,9vw,120px)}
+.sc{
+  position:sticky;top:calc(92px + var(--i) * 16px);
+  min-height:min(66vh,540px);margin-bottom:7vh;border-radius:32px;overflow:hidden;
+  display:grid;grid-template-columns:1fr;transform-origin:50% 0;
+  box-shadow:0 -30px 60px -40px rgba(47,65,86,.45);
+}
+.sc:last-child{margin-bottom:0}
+@media (min-width:860px){.sc{grid-template-columns:1fr 1fr}}
+.sc::after{content:"";position:absolute;inset:0;background:#0b1520;opacity:var(--dim,0);pointer-events:none;border-radius:inherit}
+.sc-copy{padding:clamp(28px,4.6vw,60px);display:flex;flex-direction:column;justify-content:space-between;gap:28px;position:relative;z-index:1}
+.sc-n{font:400 clamp(4rem,8.6vw,7.6rem)/.82 "Fugaz One",var(--f-display);letter-spacing:-.03em}
+.sc h3{font:400 clamp(1.7rem,3vw,2.7rem)/1.04 var(--f-display);margin-bottom:.9rem;max-width:17ch}
+html[dir="rtl"] .sc h3{font-weight:900;line-height:1.4}
+.sc p{margin:0;max-width:42ch;font-size:1.05rem;line-height:1.6;opacity:.84}
+.sc-vis{position:relative;min-height:280px;display:grid;place-items:center;overflow:hidden}
+.sc-a{background:var(--surface);color:var(--navy)}
+.sc-a .sc-n{color:var(--glacier)}
+.sc-b{background:var(--navy);color:var(--cream)}
+.sc-b .sc-n{color:#8fc2df}
+.sc-c{background:var(--glacier);color:#fff}
+.sc-c .sc-n{color:var(--navy)}
+.sc-d{background:#e9e0d9;color:var(--navy)}
+.sc-d .sc-n{color:var(--glacier)}
+@media (max-width:859px){
+  .sc{min-height:0;top:calc(80px + var(--i) * 12px)}
+  .sc-vis{min-height:230px}
+}
+
+/* visual 1: a strip that keeps re-theming itself */
+.vis-pal{gap:22px;align-content:center;background:var(--surface-2)}
+.vp-strip{
+  width:clamp(120px,13vw,150px);aspect-ratio:1/2.8;border-radius:5px;padding:9px 9px 0;display:grid;gap:8px;grid-template-rows:repeat(3,1fr) .55fr;
+  background:#4a5687;animation:vpc 8s infinite;box-shadow:0 30px 50px -24px rgba(47,65,86,.55);transform:rotate(-4deg);
+}
+.vp-strip i{border-radius:3px;overflow:hidden;position:relative;background:var(--ice-soft)}
+.vp-strip svg{position:absolute;inset:0;width:100%;height:100%}
+.vp-strip b{display:grid;place-items:center;font:400 .8rem/1 "Fugaz One",sans-serif;color:#fff;letter-spacing:.02em}
+@keyframes vpc{0%,20%{background:#4a5687}25%,45%{background:#7a2328}50%,70%{background:#c2a466}75%,95%{background:#3f7a9c}100%{background:#4a5687}}
+.vp-sw{display:flex;gap:10px;justify-content:center}
+.vp-sw span{width:22px;height:22px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px #fff,0 0 0 3.5px rgba(47,65,86,.12);animation:vps 8s var(--d) infinite}
+@keyframes vps{0%,22%{transform:scale(1.3)}27%,100%{transform:scale(1)}}
+
+/* visual 2: an editor writing a layout */
+.vis-code{background:#24344a}
+.vc-win{width:min(86%,380px);border-radius:16px;background:#1a2738;box-shadow:0 40px 60px -30px rgba(0,0,0,.6),0 0 0 1px rgba(245,239,235,.08);overflow:hidden}
+.vc-bar{display:flex;gap:6px;padding:12px 14px;border-bottom:1px solid rgba(245,239,235,.07)}
+.vc-bar i{width:9px;height:9px;border-radius:50%;background:rgba(245,239,235,.18)}
+.vc-bar i:first-child{background:#8fc2df}
+.vc-body{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;padding:18px}
+.vc-lines{display:grid;gap:9px;align-content:start}
+.vc-lines span{height:7px;border-radius:4px;width:var(--w);background:rgba(245,239,235,.28);transform-origin:left;animation:type 5.2s calc(var(--k) * .28s) infinite both}
+.vc-lines span.t{background:#8fc2df;margin-inline-start:12px}
+html[dir="rtl"] .vc-lines span{transform-origin:right}
+@keyframes type{0%{transform:scaleX(0)}18%,82%{transform:scaleX(1)}100%{transform:scaleX(0)}}
+.vc-prev{display:grid;gap:10px;align-content:start}
+.vc-frame{aspect-ratio:3/4;border-radius:6px;overflow:hidden;position:relative;box-shadow:0 0 0 3px #fff;animation:retheme 5.2s infinite}
+.vc-frame svg{position:absolute;inset:0;width:100%;height:100%}
+@keyframes retheme{0%,45%{filter:none}55%,95%{filter:hue-rotate(150deg) saturate(1.4)}100%{filter:none}}
+.vc-tog{width:38px;height:20px;border-radius:999px;background:rgba(245,239,235,.15);position:relative;justify-self:center;animation:togbg 5.2s infinite}
+.vc-tog b{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--cream);animation:tog 5.2s infinite}
+@keyframes tog{0%,45%{transform:none}55%,95%{transform:translateX(18px)}100%{transform:none}}
+@keyframes togbg{0%,45%{background:rgba(245,239,235,.15)}55%,95%{background:#3f7a9c}100%{background:rgba(245,239,235,.15)}}
+
+/* visual 3: the lens, with a flash every few seconds */
+.vis-lens{background:#356a88}
+.vl-body{position:relative;width:min(64%,250px);aspect-ratio:1}
+.vl-body svg{width:100%;height:100%;overflow:visible}
+.vl-o{fill:#1a2738;stroke:rgba(255,255,255,.12);stroke-width:2}
+.vl-d{fill:none;stroke:rgba(255,255,255,.35);stroke-width:2;stroke-dasharray:2 7}
+.vl-ticks{transform-origin:100px 100px;animation:spin 16s linear infinite}
+.vl-i{fill:#0e1620;stroke:#2f4156;stroke-width:4}
+.vl-g{fill:#21405a}
+.vl-c{fill:#0b1520;transform-origin:100px 100px;animation:iris 4s ease-in-out infinite}
+.vl-h{fill:rgba(255,255,255,.55)}
+@keyframes iris{0%,60%,100%{transform:scale(1)}70%{transform:scale(.45)}80%{transform:scale(1.25)}}
+.vl-flash{position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(closest-side,#fff,rgba(255,255,255,0));opacity:0;animation:vflash 4s ease-out infinite;pointer-events:none}
+@keyframes vflash{0%,68%{opacity:0;transform:scale(.6)}71%{opacity:.95;transform:scale(1)}90%,100%{opacity:0;transform:scale(1.2)}}
+
+/* visual 4: the after-event report */
+.vis-rep{background:#dcd1c8}
+.vr-card{width:min(84%,360px);background:var(--surface);border-radius:18px;padding:18px;box-shadow:0 34px 60px -34px rgba(47,65,86,.55);display:grid;gap:16px;transform:rotate(2deg)}
+.vr-head{display:flex;align-items:center;gap:8px}
+.vr-head .mark{--s:22px;color:var(--navy)}
+.vr-head i{height:7px;border-radius:4px;background:var(--wash-strong);width:34%}
+.vr-head i+i{width:18%;margin-inline-start:auto;background:var(--ice-soft)}
+.vr-bars{display:flex;align-items:flex-end;gap:7px;height:96px;padding-bottom:2px;border-bottom:1px solid var(--line)}
+.vr-bars i{flex:1;height:var(--h);border-radius:5px 5px 2px 2px;background:var(--glacier);transform-origin:bottom;animation:bar 4.8s calc(var(--k) * .09s) ease-in-out infinite both}
+.vr-bars i:nth-child(5){background:var(--navy)}
+@keyframes bar{0%{transform:scaleY(.08)}25%,80%{transform:scaleY(1)}100%{transform:scaleY(.08)}}
+.vr-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.vr-thumbs i{aspect-ratio:1;border-radius:6px;overflow:hidden;position:relative}
+.vr-thumbs svg{position:absolute;inset:0;width:100%;height:100%}
+
+/* ------------------------------------------------------------- on paper */
+.op2{position:relative;background:var(--surface-2);overflow:hidden}
+.op2-light{position:absolute;inset:0;pointer-events:none;background:radial-gradient(520px circle at var(--lx,70%) var(--ly,45%),rgba(255,255,255,.75),transparent 70%)}
+.op2-head{display:grid;gap:14px 50px;grid-template-columns:1fr;align-items:end;margin-bottom:clamp(36px,6vw,70px);position:relative}
+@media (min-width:900px){.op2-head{grid-template-columns:1.1fr .9fr}}
+.op2-head h2{max-width:14ch}
+.op2-head .lede{margin:0;max-width:38ch}
+.op2 .op-layout{position:relative}
+.op2 .op-tilt{width:clamp(160px,min(14vw,24vh),210px)}
+
+/* --------------------------------------------------------- how it works */
+.how2{position:relative;background:var(--navy);color:var(--cream)}
+.how-pin{position:relative;min-height:100svh;display:grid;align-items:center;padding-block:clamp(90px,12vw,140px);overflow:hidden}
+.how-grid{display:grid;gap:clamp(26px,4vw,64px);grid-template-columns:1fr;align-items:center;position:relative}
+.how-head .eyebrow{color:var(--ice-soft)}
+.how-head h2{max-width:11ch}
+.how-bar{display:none;gap:8px;margin-top:2rem;max-width:280px}
+.how-bar i{flex:1;height:4px;border-radius:4px;background:rgba(245,239,235,.16);position:relative;overflow:hidden}
+.how-bar i::after{content:"";position:absolute;inset:0;background:#8fc2df;transform:scaleX(var(--f,0));transform-origin:left}
+html[dir="rtl"] .how-bar i::after{transform-origin:right}
+.how-num{display:none}
+.how-steps{list-style:none;margin:0;padding:0;display:grid;gap:30px}
+.how-steps li{max-width:40ch}
+.how-ln{display:block;font:400 2.6rem/1 "Fugaz One",sans-serif;color:#8fc2df;margin-bottom:10px}
+.how-steps h3{font:400 clamp(1.7rem,2.8vw,2.5rem)/1.06 var(--f-display);margin-bottom:.8rem}
+html[dir="rtl"] .how-steps h3{font-weight:900;line-height:1.4}
+.how-steps p{margin:0;font-size:1.08rem;line-height:1.6;color:rgba(245,239,235,.8)}
+.how-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;z-index:3}
+/* choreographed: the numeral column appears and the steps stack in one cell */
+.anim .how-bar{display:flex}
+.anim .how-num{display:block;height:1em;overflow:hidden;font:400 clamp(9rem,26vw,24rem)/1 "Fugaz One",sans-serif;color:#8fc2df;letter-spacing:-.04em;text-align:center}
+.anim .how-roll b{display:block;height:1em;font-weight:400}
+.anim .how-steps{gap:0}
+.anim .how-steps li{grid-area:1/1}
+.anim .how-ln{display:none}
+@media (min-width:960px){.anim .how-grid{grid-template-columns:1fr auto 1fr}}
+@media (max-width:959px){
+  .anim .how-pin{padding-block:86px 40px}
+  .anim .how-head .eyebrow{display:none}
+  .anim .how-head h2{font-size:clamp(2rem,8vw,2.8rem)}
+  .anim .how-num{font-size:clamp(7rem,36vw,11rem);text-align:start}
+  .anim .how-grid{gap:16px}
+}
+
+/* --------------------------------------------------------------- contact */
+.cta2{position:relative;padding-block:clamp(110px,15vw,190px) clamp(80px,10vw,130px)}
+.cta2-chip{display:inline-block;font:500 .74rem/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:10px 14px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft)}
+html[dir="rtl"] .cta2-chip{letter-spacing:0;font-size:.9rem;font-weight:700}
+.cta2-title{font-size:clamp(3rem,8.4vw,8.4rem);line-height:.92;letter-spacing:-.03em;max-width:12ch;margin:1.3rem 0 clamp(34px,5vw,64px)}
+html[dir="rtl"] .cta2-title{font-size:clamp(2.6rem,6.6vw,6.4rem);line-height:1.22;letter-spacing:0}
+.cta2-row{display:grid;gap:40px;grid-template-columns:1fr;align-items:center}
+@media (min-width:860px){.cta2-row{grid-template-columns:1fr auto}}
+.cta2-copy .lede{max-width:44ch;margin-bottom:1.6rem}
+.cta2-copy .ctas{display:flex;flex-wrap:wrap;gap:12px}
+.orb{
+  position:relative;justify-self:center;width:clamp(180px,19vw,250px);aspect-ratio:1;border-radius:50%;
+  display:grid;place-items:center;text-align:center;text-decoration:none;
+  background:var(--navy);color:var(--cream);font:800 1.08rem/1.2 var(--f-body);
+  transition:background .4s var(--ease);
+}
+.orb::before{content:"";position:absolute;inset:-14px;border-radius:50%;border:1.5px solid var(--glacier);opacity:.5;animation:orbring 2.8s var(--ease) infinite}
+@keyframes orbring{0%{transform:scale(.92);opacity:.6}100%{transform:scale(1.18);opacity:0}}
+.orb:hover{background:var(--glacier)}
+.orb-in{display:inline-flex;align-items:center;gap:.5em;padding:0 18px}
+.orb .arr{transition:transform .3s var(--ease)}
+.orb:hover .arr{transform:translateX(calc(5px * var(--dir)))}
+html[dir="rtl"] .orb:hover .arr{transform:scaleX(-1) translateX(5px)}
+
+/* ----------------------------------------------------------- story brief */
+.brief2{padding-block:clamp(60px,8vw,110px) clamp(90px,12vw,150px)}
+.brief-mark{width:210px;height:210px;border-radius:50%;background:none;position:relative;display:grid;place-items:center;color:var(--navy);text-decoration:none}
+.brief-mark:hover{transform:none}
+.brief-ring{position:absolute;inset:0;animation:spin 26s linear infinite}
+.brief-ring svg{width:100%;height:100%;overflow:visible}
+.brief-ring text{font:500 13.5px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;fill:currentColor}
+html[dir="rtl"] .brief-ring text{font:700 15px/1 "Cairo",sans-serif;letter-spacing:0}
+.brief-disc{width:132px;height:132px;border-radius:50%;background:var(--navy);color:var(--cream);display:grid;place-items:center;transition:transform .6s var(--ease),background .3s}
+.brief-disc .mark{--s:70px;transition:transform .6s var(--ease)}
+.brief-mark:hover .brief-disc{transform:scale(1.08);background:var(--glacier)}
+.brief-mark:hover .brief-disc .mark{transform:rotate(-12deg)}
+@media (max-width:759px){.brief-mark{width:170px;height:170px}.brief-disc{width:104px;height:104px}.brief-disc .mark{--s:54px}}
+
+/* ------------------------------------------------------- footer wordmark */
+.foot-word{
+  position:relative;direction:ltr;display:flex;justify-content:center;margin-top:clamp(40px,6vw,80px);
+  font:400 clamp(4.6rem,19.5vw,22rem)/.8 "Fugaz One",sans-serif;letter-spacing:-.04em;color:var(--cream);
+  overflow:hidden;padding-bottom:.06em;user-select:none;
+}
+.foot-word span{display:inline-block}
+.foot-word span:nth-child(n+5){color:#8fc2df}
+.foot{padding-bottom:0}
+.foot .end{margin-bottom:0}
+
+/* ----------------------------------------------------------- split text
+   SplitText's line masks: each line clips its own words/letters so they can
+   rise into place from below. */
+.ln-mask{padding-bottom:.08em;margin-bottom:-.08em}
+html[dir="rtl"] .ln-mask{padding-block:.12em;margin-block:-.12em}
+
+@media (prefers-reduced-motion:reduce){
+  .hx-badge-spin,.brief-ring,.vl-ticks,.vl-c,.vl-flash,.vc-lines span,.vc-frame,.vc-tog,.vc-tog b,.vr-bars i,.vp-strip,.vp-sw span,.lk-ghost i,.orb::before{animation:none}
+}

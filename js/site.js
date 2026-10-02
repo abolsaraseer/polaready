@@ -26,6 +26,8 @@
     return (lang === 'ar' && d.ar && d.ar[key] != null) ? d.ar[key] : (d.en && d.en[key]) || key;
   }
   function applyLang(next, persist) {
+    /* scenes that split text into letters (home.js) undo that first */
+    doc.dispatchEvent(new CustomEvent('polaready:beforelang', { detail: next }));
     lang = next;
     var ar = window.I18N && window.I18N.ar;
     $$('[data-i18n]').forEach(function (el) {
@@ -54,6 +56,7 @@
     splitWords();
     measure();
     update();
+    doc.dispatchEvent(new CustomEvent('polaready:lang', { detail: next }));
   }
 
   /* ------------------------------------------------------- word splitting */
@@ -266,6 +269,7 @@
     if (reduced || !window.matchMedia || !window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
     var dot = doc.createElement('div'); dot.className = 'cursor-dot'; doc.body.appendChild(dot);
     var ring = doc.createElement('div'); ring.className = 'cursor-ring'; doc.body.appendChild(ring);
+    var label = doc.createElement('span'); label.className = 'cursor-label'; ring.appendChild(label);
     doc.body.classList.add('cursor-on');
     var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, seen = false;
     doc.addEventListener('mousemove', function (e) {
@@ -274,16 +278,105 @@
       if (!seen) { rx = mx; ry = my; seen = true; } /* snap the ring in on the very first move, don't let it swoop in from centre */
     });
     function loop() {
-      rx = lerp(rx, mx, 0.2); ry = lerp(ry, my, 0.2);
+      rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
       ring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0) translate(-50%,-50%)';
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
-    var hoverables = 'a, button, .perk, .op-btn, .op-filter-btn, .op-color-btn, input';
-    doc.addEventListener('mouseover', function (e) { if (e.target.closest(hoverables)) doc.body.classList.add('cursor-hover'); });
-    doc.addEventListener('mouseout', function (e) { if (e.target.closest(hoverables)) doc.body.classList.remove('cursor-hover'); });
+    /* [data-cursor] elements swap the ring for a filled disc carrying a
+       short label (an i18n key, so it follows the language); anything else
+       clickable just swells the ring */
+    var hoverables = 'a, button, .op-btn, .op-filter-btn, .op-color-btn, input, .swatch, .line';
+    doc.addEventListener('mouseover', function (e) {
+      var lab = e.target.closest('[data-cursor]');
+      if (lab) { label.textContent = T(lab.getAttribute('data-cursor')); doc.body.classList.add('cursor-labeled'); doc.body.classList.remove('cursor-hover'); return; }
+      if (e.target.closest(hoverables)) doc.body.classList.add('cursor-hover');
+    });
+    doc.addEventListener('mouseout', function (e) {
+      var to = e.relatedTarget;
+      var lab = e.target.closest('[data-cursor]');
+      if (lab && !(to && lab.contains(to))) doc.body.classList.remove('cursor-labeled');
+      var h = e.target.closest(hoverables);
+      if (h && !(to && h.contains(to))) doc.body.classList.remove('cursor-hover');
+    });
+    doc.addEventListener('mousedown', function () { doc.body.classList.add('cursor-down'); });
+    doc.addEventListener('mouseup', function () { doc.body.classList.remove('cursor-down'); });
     doc.addEventListener('mouseleave', function () { dot.style.opacity = ring.style.opacity = '0'; });
     doc.addEventListener('mouseenter', function () { dot.style.opacity = ring.style.opacity = ''; });
+  }
+
+  /* --------------------------------------------------------- smooth scroll
+     Lenis eases the wheel into an inertial glide. It moves the real window
+     scroll position, so sticky sections, the scroll engine above and
+     ScrollTrigger all keep reading ordinary scrollY. Where GSAP is on the
+     page it drives Lenis from its own ticker so the two never disagree about
+     the current frame. Touch keeps native scrolling. */
+  var lenis = null;
+  function setupSmooth() {
+    if (reduced || !window.Lenis) return;
+    lenis = new window.Lenis({ lerp: 0.1, smoothWheel: true, wheelMultiplier: 1 });
+    if (window.gsap && window.ScrollTrigger) {
+      lenis.on('scroll', window.ScrollTrigger.update);
+      window.gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+      window.gsap.ticker.lagSmoothing(0);
+    } else {
+      var raf = function (t) { lenis.raf(t); requestAnimationFrame(raf); };
+      requestAnimationFrame(raf);
+    }
+  }
+  function scrollToEl(t) {
+    var y = t.getBoundingClientRect().top + window.scrollY - 4;
+    if (lenis) lenis.scrollTo(y, { duration: 1.5 });
+    else window.scrollTo({ top: y, behavior: reduced ? 'auto' : 'smooth' });
+  }
+
+  /* ------------------------------------------------------------- curtain
+     Leaving for another page on this site drops a navy curtain carrying the
+     bear; the next page starts with it down (an inline head script sets
+     html.curtain-in from the session flag before first paint) and lifts it.
+     Skipped for new tabs, modified clicks, downloads, other origins and
+     in-page anchors, and under reduced motion. */
+  var curtain = null;
+  function makeCurtain() {
+    curtain = doc.createElement('div');
+    curtain.className = 'curtain';
+    curtain.setAttribute('aria-hidden', 'true');
+    curtain.innerHTML = '<span class="mark"></span>';
+    doc.body.appendChild(curtain);
+  }
+  function setupCurtain() {
+    if (reduced) { root.classList.remove('curtain-in'); return; }
+    makeCurtain();
+    var arriving = root.classList.contains('curtain-in');
+    try { sessionStorage.removeItem('polaready-curtain'); } catch (e) {}
+    if (arriving) {
+      curtain.classList.add('cover', 'still');
+      root.classList.remove('curtain-in');
+      void curtain.offsetWidth;
+      curtain.classList.remove('still');
+      requestAnimationFrame(function () { curtain.classList.add('lift'); });
+      /* park it back below the screen without animating across it */
+      setTimeout(function () {
+        curtain.classList.add('still'); curtain.classList.remove('cover', 'lift');
+        void curtain.offsetWidth; curtain.classList.remove('still');
+      }, 1100);
+    }
+    doc.addEventListener('click', function (e) {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      var a = e.target.closest('a[href]');
+      if (!a || a.target === '_blank' || a.hasAttribute('download')) return;
+      var url = new URL(a.href, location.href);
+      if (url.origin !== location.origin) return;
+      if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
+      e.preventDefault();
+      try { sessionStorage.setItem('polaready-curtain', '1'); } catch (err) {}
+      curtain.classList.remove('lift');
+      curtain.classList.add('cover');
+      setTimeout(function () { location.href = url.href; }, 620);
+    });
+    /* coming back through the back/forward cache: the page is restored with
+       the curtain still down, so put it away */
+    window.addEventListener('pageshow', function (e) { if (e.persisted) curtain.classList.remove('cover', 'lift'); });
   }
 
   /* ---------------------------------------------------------- magnetic
@@ -340,6 +433,7 @@
     el.innerHTML = '<div class="num"></div><div class="cap">' + T('intro_cap') + '</div><button class="skipbtn" type="button">' + T('intro_skip') + '</button><div class="white"></div>';
     doc.body.appendChild(el);
     doc.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
     var num = $('.num', el), timers = [], finished = false;
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     function show(n) { num.textContent = n; num.classList.remove('pop'); void num.offsetWidth; num.classList.add('pop'); }
@@ -349,6 +443,7 @@
       root.classList.add('go');
       el.classList.add('done');
       doc.body.style.overflow = '';
+      if (lenis) lenis.start();
       setTimeout(function () { el.remove(); }, 60);
     }
     show(3); later(function () { show(2); }, 520); later(function () { show(1); }, 1040);
@@ -538,6 +633,7 @@
     doc.body.dataset.title = doc.title;
     $$('.lang button').forEach(function (b) { b.addEventListener('click', function () { applyLang(b.getAttribute('data-lang'), true); }); });
 
+    setupSmooth(); setupCurtain();
     setupSections(); setupReveal(); setupHero(); setupCopy(); setupOnPaper(); setupCursor(); setupMagnetic(); setupSpotlight();
     lang = want === 'ar' && window.I18N ? 'ar' : 'en';
     applyLang(lang, false);   /* also splits the words, once, in the right language */
@@ -552,11 +648,12 @@
       var a = e.target.closest('a[href^="#"]'); if (!a) return;
       var t = $(a.getAttribute('href')); if (!t) return;
       e.preventDefault();
-      window.scrollTo({ top: t.getBoundingClientRect().top + window.scrollY - 4, behavior: reduced ? 'auto' : 'smooth' });
+      scrollToEl(t);
     });
   }
   /* a small hook so the page can be driven and checked without a real scroll */
   window.PolaReady = {
+    lenis: function () { return lenis; },
     update: function () { measure(); update(); },
     revealAll: function () { $$('.reveal,.pr').forEach(function (e) { e.classList.add('in'); }); $$('[data-count]').forEach(function (e) { e.textContent = e.getAttribute('data-count'); }); }
   };

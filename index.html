@@ -18,8 +18,19 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300..900&family=Fugaz+One&family=IBM+Plex+Mono:wght@400;500&family=Nunito+Sans:opsz,wght@6..12,300..1000&display=swap" rel="stylesheet">
-<script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="css/site.css?v=23">
+<script>
+  /* js: scripted styles on. anim: the scroll choreography in home.js will run,
+     so its elements may start hidden (home.js drops this class again if the
+     animation library fails to load). curtain-in: arriving via a page
+     transition, keep the curtain down until site.js lifts it. */
+  (function (r) {
+    r.classList.add('js');
+    if (!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches)) r.classList.add('anim');
+    try { if (sessionStorage.getItem('polaready-curtain')) r.classList.add('curtain-in'); } catch (e) {}
+  })(document.documentElement);
+</script>
+<link rel="stylesheet" href="css/site.css?v=24">
+<link rel="stylesheet" href="css/home.css?v=1">
 </head>
 <body data-page="marketing" data-intro data-title-ar="بولاريدي — كشك تصوير يُصمَّم لفعاليتك">
 
@@ -30,10 +41,10 @@
   <div class="wrap in">
     <a class="brand" href="#top" aria-label="PolaReady"><span class="mark" style="--s:30px"></span><span>PolaReady</span></a>
     <ul>
+      <li><a href="#looks" data-i18n="m_nav_looks">The looks</a></li>
       <li><a href="#why" data-i18n="m_nav_why">Why us</a></li>
       <li><a href="#on-paper" data-i18n="m_nav_paper">See it on paper</a></li>
       <li><a href="#how" data-i18n="m_nav_how">How it works</a></li>
-      <li><a href="demo/" data-i18n="m_nav_try">Test it live ↗</a></li>
       <li><a href="story/" data-i18n="m_nav_story">Our story ↗</a></li>
     </ul>
     <div class="lang" role="group" aria-label="Language">
@@ -46,6 +57,7 @@
 
 <nav class="dots" aria-label="Sections">
   <a href="#top"><span data-i18n="m_d_top">Start</span></a>
+  <a href="#looks"><span data-i18n="m_nav_looks">The looks</span></a>
   <a href="#why"><span data-i18n="m_nav_why">Why us</span></a>
   <a href="#on-paper"><span data-i18n="m_nav_paper">On paper</span></a>
   <a href="#how"><span data-i18n="m_nav_how">Process</span></a>
@@ -72,78 +84,238 @@
 
 <main id="main">
 
-<!-- ================================================= HERO -->
-<section class="hero" id="top" data-sec>
-  <div class="snow" aria-hidden="true"></div>
-  <div class="wrap grid">
-    <div>
-      <span class="eyebrow" data-i18n="m_hero_eyebrow">Event photobooths, rebuilt per event</span>
-      <h1 class="display h-xl" data-hw data-i18n="m_hero_h1">One booth. <em>Every event's own look.</em></h1>
-      <p class="lede" data-i18n="m_hero_lede">We re-theme PolaReady for every event we run. Your colours, your layouts, your vibe, while what's underneath stays exactly as reliable: instant prints, and not one guest photo ever lost.</p>
-      <div class="ctas">
-        <a class="btn" href="#contact"><span data-i18n="m_hero_cta1">Book your event</span> <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn ghost" href="#on-paper"><span data-i18n="m_hero_cta2">See it on paper</span> <span class="arr" aria-hidden="true">↓</span></a>
-      </div>
-    </div>
-    <div class="stagecard">
-      <div class="pcard" aria-hidden="true">
-        <span class="tape"></span>
-        <div class="photo">
-          <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg>
-          <span class="mark peek"></span>
-          <div class="veil"></div>
+<!-- ================================================= HERO
+     A dealt hand of the four real print strips beside the headline. home.js
+     deals them in, gives them mouse depth, and on desktop pins the hero so
+     the first scroll throws the hand up and away. -->
+<section class="hx" id="top" data-sec>
+  <div class="hx-pin">
+    <div class="hx-glow" aria-hidden="true"></div>
+    <div class="wrap hx-grid">
+      <div class="hx-copy">
+        <span class="eyebrow hx-up" data-i18n="m_hero_eyebrow">Event photobooths, rebuilt per event</span>
+        <h1 class="display hx-title" data-i18n="m_hero_h1">One booth. <em>Every event's own look.</em></h1>
+        <p class="lede hx-lede hx-up" data-i18n="m_hero_lede">We re-theme PolaReady for every event we run. Your colours, your layouts, your vibe, while what's underneath stays exactly as reliable: instant prints, and not one guest photo ever lost.</p>
+        <div class="ctas hx-ctas hx-up">
+          <a class="btn" href="#contact"><span data-i18n="m_hero_cta1">Book your event</span> <span class="arr" aria-hidden="true">→</span></a>
+          <a class="btn ghost" href="#looks"><span data-i18n="m_hero_cta2">See the looks</span> <span class="arr" aria-hidden="true">↓</span></a>
         </div>
-        <div class="lab">PolaReady</div>
-        <span class="chip-float a" data-i18n="m_chip_a">Themed for you.</span>
-        <span class="chip-float b" data-i18n="m_chip_b">Printed on the spot.</span>
+      </div>
+      <div class="hx-fan" aria-hidden="true">
+        <div class="hx-card" style="--n:0"><div class="hx-m"><div class="hx-s"><img src="assets/templates/wedding-2.png?v=2" alt="" width="236" height="708"></div></div></div>
+        <div class="hx-card" style="--n:1"><div class="hx-m"><div class="hx-s"><img src="assets/templates/wedding-1.png?v=2" alt="" width="236" height="708"></div></div></div>
+        <div class="hx-card" style="--n:2"><div class="hx-m"><div class="hx-s"><img src="assets/templates/wedding-3.png?v=3" alt="" width="236" height="708"></div></div></div>
+        <div class="hx-card" style="--n:3"><div class="hx-m"><div class="hx-s"><img src="assets/templates/business-1.png?v=1" alt="" width="236" height="708"></div></div></div>
+      </div>
+    </div>
+    <a class="hx-badge" href="#looks" aria-label="See the looks" data-i18n-attr="aria-label:m_hero_cta2">
+      <span class="hx-badge-spin">
+        <svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="hxRing" d="M100,100 m-80,0 a80,80 0 1,1 160,0 a80,80 0 1,1 -160,0"/></defs><text><textPath href="#hxRing" data-i18n="m_badge">Instant prints · Themed per event · </textPath></text></svg>
+      </span>
+      <span class="mark" aria-hidden="true"></span>
+    </a>
+  </div>
+</section>
+
+<!-- ================================================= MARQUEE (scroll-velocity driven in home.js) -->
+<div class="vmq" aria-hidden="true">
+  <div class="vmq-row"><div class="vmq-track">
+    <span data-i18n="m_mq1">Any palette.</span><span data-i18n="m_mq2">Any layout.</span><span data-i18n="m_mq3">Any logo.</span><span data-i18n="m_mq4">Any venue.</span><span data-i18n="m_mq5">One reliable booth.</span>
+    <span data-i18n="m_mq1">Any palette.</span><span data-i18n="m_mq2">Any layout.</span><span data-i18n="m_mq3">Any logo.</span><span data-i18n="m_mq4">Any venue.</span><span data-i18n="m_mq5">One reliable booth.</span>
+  </div></div>
+  <div class="vmq-row vmq-out"><div class="vmq-track">
+    <span data-i18n="m_mq5">One reliable booth.</span><span data-i18n="m_mq4">Any venue.</span><span data-i18n="m_mq3">Any logo.</span><span data-i18n="m_mq2">Any layout.</span><span data-i18n="m_mq1">Any palette.</span>
+    <span data-i18n="m_mq5">One reliable booth.</span><span data-i18n="m_mq4">Any venue.</span><span data-i18n="m_mq3">Any logo.</span><span data-i18n="m_mq2">Any layout.</span><span data-i18n="m_mq1">Any palette.</span>
+  </div></div>
+</div>
+
+<!-- ================================================= THE LOOKS
+     Pinned horizontal run through the four real templates. As each one takes
+     the centre, the whole section re-themes into that print's own colours,
+     so the page does the thing the headline promises. Each card is a
+     shortcut into the configurator with that template already picked. -->
+<section class="looks" id="looks" data-sec>
+  <div class="lk-pin">
+    <div class="wrap lk-head">
+      <h2 class="display lk-title" data-split data-i18n="m_th_h2">Same engine. A different look for every booking.</h2>
+      <div class="lk-side">
+        <p data-i18n="m_lk_lede">Four real strips from four real bookings. Keep scrolling and watch the page take on each one's colours.</p>
+        <div class="lk-meter" aria-hidden="true"><span class="lk-count">01 / 05</span><i><b></b></i></div>
+      </div>
+    </div>
+    <div class="lk-scroller">
+      <div class="lk-track">
+        <a class="lk-card" href="#on-paper" data-pick="assets/templates/wedding-1.png?v=2" data-cursor="m_cur_try" style="--c-bg:#4a5687;--c-fg:#f5efeb" data-sbg="#2c3458" data-sfg="#f5efeb" data-dark="1">
+          <img class="lk-blur" src="assets/templates/wedding-1.png?v=2" alt="" aria-hidden="true">
+          <div class="lk-art"><img class="lk-strip" src="assets/templates/wedding-1.png?v=2" alt="Wedding strip, lace and navy" width="236" height="708"></div>
+          <div class="lk-meta">
+            <span class="lk-n" aria-hidden="true">01</span>
+            <div>
+              <h3 data-i18n="m_op_w1_b">Wedding</h3>
+              <p data-i18n="m_op_w1_s">Lace &amp; navy</p>
+              <span class="lk-try"><span data-i18n="m_lk_try">Try this look</span> <span class="arr" aria-hidden="true">→</span></span>
+            </div>
+          </div>
+        </a>
+        <a class="lk-card" href="#on-paper" data-pick="assets/templates/wedding-2.png?v=2" data-cursor="m_cur_try" style="--c-bg:#7a2328;--c-fg:#f5efeb" data-sbg="#45110f" data-sfg="#f5efeb" data-dark="1">
+          <img class="lk-blur" src="assets/templates/wedding-2.png?v=2" alt="" aria-hidden="true">
+          <div class="lk-art"><img class="lk-strip" src="assets/templates/wedding-2.png?v=2" alt="Wedding strip, royal red frame" width="236" height="708"></div>
+          <div class="lk-meta">
+            <span class="lk-n" aria-hidden="true">02</span>
+            <div>
+              <h3 data-i18n="m_op_w2_b">Wedding</h3>
+              <p data-i18n="m_op_w2_s">Royal red frame</p>
+              <span class="lk-try"><span data-i18n="m_lk_try">Try this look</span> <span class="arr" aria-hidden="true">→</span></span>
+            </div>
+          </div>
+        </a>
+        <a class="lk-card" href="#on-paper" data-pick="assets/templates/wedding-3.png?v=3" data-cursor="m_cur_try" style="--c-bg:#f6f1ea;--c-fg:#5b4520" data-sbg="#ddcfb8" data-sfg="#4a3818" data-dark="0">
+          <img class="lk-blur" src="assets/templates/wedding-3.png?v=3" alt="" aria-hidden="true">
+          <div class="lk-art"><img class="lk-strip" src="assets/templates/wedding-3.png?v=3" alt="Wedding strip, gold monogram" width="236" height="708"></div>
+          <div class="lk-meta">
+            <span class="lk-n" aria-hidden="true">03</span>
+            <div>
+              <h3 data-i18n="m_op_w3_b">Wedding</h3>
+              <p data-i18n="m_op_w3_s">Monogram</p>
+              <span class="lk-try"><span data-i18n="m_lk_try">Try this look</span> <span class="arr" aria-hidden="true">→</span></span>
+            </div>
+          </div>
+        </a>
+        <a class="lk-card" href="#on-paper" data-pick="assets/templates/business-1.png?v=1" data-cursor="m_cur_try" style="--c-bg:#f4f8fc;--c-fg:#173f73" data-sbg="#c9dcee" data-sfg="#143766" data-dark="0">
+          <img class="lk-blur" src="assets/templates/business-1.png?v=1" alt="" aria-hidden="true">
+          <div class="lk-art"><img class="lk-strip" src="assets/templates/business-1.png?v=1" alt="Corporate event strip in brand colours" width="236" height="708"></div>
+          <div class="lk-meta">
+            <span class="lk-n" aria-hidden="true">04</span>
+            <div>
+              <h3 data-i18n="m_op_b1_b">Corporate event</h3>
+              <p data-i18n="m_op_b1_s">Brand colours</p>
+              <span class="lk-try"><span data-i18n="m_lk_try">Try this look</span> <span class="arr" aria-hidden="true">→</span></span>
+            </div>
+          </div>
+        </a>
+        <a class="lk-card lk-next" href="#contact" data-cursor="m_cur_book" style="--c-bg:#2f4156;--c-fg:#f5efeb" data-sbg="#1c2836" data-sfg="#f5efeb" data-dark="1">
+          <div class="lk-art"><div class="lk-ghost" aria-hidden="true"><i></i><i></i><i></i><span class="mark"></span></div></div>
+          <div class="lk-meta">
+            <span class="lk-n" aria-hidden="true">05</span>
+            <div>
+              <h3 data-i18n="m_lk_next_h">Yours is next.</h3>
+              <p class="lk-p" data-i18n="m_lk_next_p">Send us your colours and we'll mock up your strip before you commit.</p>
+              <span class="lk-try"><span data-i18n="m_hero_cta1">Book your event</span> <span class="arr" aria-hidden="true">→</span></span>
+            </div>
+          </div>
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<div class="marq" style="padding-block:22px;background:var(--surface-2)"><div class="track">
-  <span data-i18n="m_mq1">Any palette.</span><span data-i18n="m_mq2">Any layout.</span><span data-i18n="m_mq3">Any logo.</span><span data-i18n="m_mq4">Any venue.</span><span data-i18n="m_mq5">One reliable booth.</span>
-</div></div>
+<!-- ================================================= WHY US
+     A manifesto that develops word by word, then four cards that stack onto
+     each other as you scroll, each with its own small working illustration. -->
+<section class="why2" id="why" data-sec>
+  <div class="wrap mf">
+    <span class="eyebrow mf-eb" data-i18n="m_why_eyebrow">Why organisers book PolaReady</span>
+    <h2 class="display mf-text" data-i18n="m_why_h2">A corporate launch and a wedding never look like the same machine.</h2>
+    <p class="lede mf-lede" data-i18n="m_why_lede">Most photobooths are the same box at every event. We rebuild ours around yours, then run it on the one thing that has to work every single time: the moment a guest taps the screen.</p>
+  </div>
 
-<!-- ================================================= WHY US -->
-<section class="section" id="why" data-sec>
-  <div class="wrap">
-    <h2 class="display h-lg reveal" data-r="scale" style="max-width:18ch;margin-bottom:1.2rem" data-i18n="m_why_h2">A corporate launch and a wedding never look like the same machine.</h2>
-    <p class="lede reveal" style="max-width:60ch;margin-bottom:clamp(30px,5vw,56px)" data-i18n="m_why_lede">Most photobooths are the same box at every event. We rebuild ours around yours, then run it on the one thing that has to work every single time: the moment a guest taps the screen.</p>
+  <div class="wrap stack">
+    <article class="sc sc-a" style="--i:0">
+      <div class="sc-copy">
+        <span class="sc-n" aria-hidden="true">01</span>
+        <div>
+          <h3 data-i18n="m_p1_h">Designed for your event, not adapted to it</h3>
+          <p data-i18n="m_p1_p">Colours, frame art and layout style are rebuilt to match your brand or theme before the day. Not a generic template with your logo dropped on top.</p>
+        </div>
+      </div>
+      <div class="sc-vis vis-pal" aria-hidden="true">
+        <div class="vp-strip">
+          <i><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></i>
+          <i><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></i>
+          <i><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></i>
+          <b>PolaReady</b>
+        </div>
+        <div class="vp-sw"><span style="--c:#4a5687;--d:0s"></span><span style="--c:#7a2328;--d:2s"></span><span style="--c:#c2a466;--d:4s"></span><span style="--c:#3f7a9c;--d:6s"></span></div>
+      </div>
+    </article>
 
-    <div class="perks">
-      <div class="perk perk-lg reveal" style="--i:0">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.4 7h7.6l-6 4.6 2.3 7.4-6.3-4.6-6.3 4.6 2.3-7.4-6-4.6h7.6z"/></svg></div>
-        <h4 data-i18n="m_p1_h">Designed for your event, not adapted to it</h4>
-        <p data-i18n="m_p1_p">Colours, frame art and layout style are rebuilt to match your brand or theme before the day. Not a generic template with your logo dropped on top.</p>
+    <article class="sc sc-b" style="--i:1">
+      <div class="sc-copy">
+        <span class="sc-n" aria-hidden="true">02</span>
+        <div>
+          <h3 data-i18n="m_p7_h">Built by us, rebuilt for you</h3>
+          <p data-i18n="m_p7_p">The software behind every screen, layout and filter is designed and developed in-house by the PolaReady team. That's exactly why it can look completely different for every event, not just relabelled.</p>
+        </div>
       </div>
-      <div class="perk perk-dark reveal" style="--i:1">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg></div>
-        <h4 data-i18n="m_p7_h">Built by us, rebuilt for you</h4>
-        <p data-i18n="m_p7_p">The software behind every screen, layout and filter is designed and developed in-house by the PolaReady team. That's exactly why it can look completely different for every event, not just relabelled.</p>
+      <div class="sc-vis vis-code" aria-hidden="true">
+        <div class="vc-win">
+          <div class="vc-bar"><i></i><i></i><i></i></div>
+          <div class="vc-body">
+            <div class="vc-lines"><span style="--w:64%;--k:0"></span><span class="t" style="--w:40%;--k:1"></span><span style="--w:78%;--k:2"></span><span class="t" style="--w:52%;--k:3"></span><span style="--w:34%;--k:4"></span><span style="--w:70%;--k:5"></span></div>
+            <div class="vc-prev"><div class="vc-frame"><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></div><div class="vc-tog"><b></b></div></div>
+          </div>
+        </div>
       </div>
-      <div class="perk reveal" style="--i:2">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
-        <h4 data-i18n="m_p8_h">Studio-quality, not selfie-quality</h4>
-        <p data-i18n="m_p8_p">A real camera and a real dye-sublimation printer do the work: sharp, true-to-colour photos, the same quality you'd expect from a proper photo studio.</p>
+    </article>
+
+    <article class="sc sc-c" style="--i:2">
+      <div class="sc-copy">
+        <span class="sc-n" aria-hidden="true">03</span>
+        <div>
+          <h3 data-i18n="m_p8_h">Studio-quality, not selfie-quality</h3>
+          <p data-i18n="m_p8_p">A real camera and a real dye-sublimation printer do the work: sharp, true-to-colour photos, the same quality you'd expect from a proper photo studio.</p>
+        </div>
       </div>
-      <div class="perk reveal" style="--i:3">
-        <div class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="M8 15l4-5 3 3 4-6"/></svg></div>
-        <h4 data-i18n="m_p6_h">Everything, after</h4>
-        <p data-i18n="m_p6_p">Once the booth closes, you get a full report: every session, every print, plus every photo from the event, organised and ready to send to your team.</p>
+      <div class="sc-vis vis-lens" aria-hidden="true">
+        <div class="vl-body">
+          <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="92" class="vl-o"/>
+            <g class="vl-ticks"><circle cx="100" cy="100" r="80" class="vl-d"/></g>
+            <circle cx="100" cy="100" r="64" class="vl-i"/>
+            <circle cx="100" cy="100" r="50" class="vl-g"/>
+            <circle cx="100" cy="100" r="22" class="vl-c"/>
+            <ellipse cx="82" cy="80" rx="14" ry="8" class="vl-h" transform="rotate(-35 82 80)"/>
+          </svg>
+          <span class="vl-flash"></span>
+        </div>
       </div>
-    </div>
+    </article>
+
+    <article class="sc sc-d" style="--i:3">
+      <div class="sc-copy">
+        <span class="sc-n" aria-hidden="true">04</span>
+        <div>
+          <h3 data-i18n="m_p6_h">Everything, after</h3>
+          <p data-i18n="m_p6_p">Once the booth closes, you get a full report: every session, every print, plus every photo from the event, organised and ready to send to your team.</p>
+        </div>
+      </div>
+      <div class="sc-vis vis-rep" aria-hidden="true">
+        <div class="vr-card">
+          <div class="vr-head"><span class="mark"></span><i></i><i></i></div>
+          <div class="vr-bars"><i style="--h:34%;--k:0"></i><i style="--h:52%;--k:1"></i><i style="--h:46%;--k:2"></i><i style="--h:71%;--k:3"></i><i style="--h:88%;--k:4"></i><i style="--h:63%;--k:5"></i><i style="--h:79%;--k:6"></i></div>
+          <div class="vr-thumbs">
+            <i><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></i>
+            <i><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></i>
+            <i><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></i>
+            <i><svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/><use href="#pp"/></svg></i>
+          </div>
+        </div>
+      </div>
+    </article>
   </div>
 </section>
 
-<!-- ================================================= ON PAPER -->
-<section class="section" id="on-paper" data-sec style="background:var(--surface-2)">
+<!-- ================================================= ON PAPER (configurator; behaviour unchanged, see setupOnPaper in site.js) -->
+<section class="section op2" id="on-paper" data-sec>
+  <div class="op2-light" aria-hidden="true"></div>
   <div class="wrap">
-    <h2 class="display h-lg reveal" data-r="scale" style="max-width:18ch;margin-bottom:1.2rem" data-i18n="m_op_h2">The exact strip your guests take home.</h2>
-    <p class="lede reveal" style="max-width:60ch;margin-bottom:clamp(30px,5vw,56px)" data-i18n="m_op_lede">Real templates from real bookings. Pick one and watch the print itself change.</p>
+    <div class="op2-head">
+      <h2 class="display h-lg" data-split data-i18n="m_op_h2">The exact strip your guests take home.</h2>
+      <p class="lede" data-i18n="m_op_lede">Real templates from real bookings. Pick one and watch the print itself change.</p>
+    </div>
 
     <div class="op-layout">
-      <div class="op-scene reveal" data-r="scale">
+      <div class="op-scene">
         <div class="op-tilt" id="opTilt">
           <div class="op-card" id="opCard">
             <img id="opBg" class="op-layer op-bg" src="assets/templates/wedding-1.png?v=2" alt="Wedding — Lace &amp; navy">
@@ -155,7 +327,7 @@
         </div>
       </div>
       <div class="op-controls">
-        <div class="op-picker reveal">
+        <div class="op-picker">
           <h5 data-i18n="m_op_g_template">Template</h5>
           <div class="op-btns">
             <button type="button" class="op-btn on" data-src="assets/templates/wedding-1.png?v=2" aria-pressed="true"><b data-i18n="m_op_w1_b">Wedding</b><span data-i18n="m_op_w1_s">Lace &amp; navy</span></button>
@@ -164,7 +336,7 @@
             <button type="button" class="op-btn" data-src="assets/templates/business-1.png?v=1" aria-pressed="false"><b data-i18n="m_op_b1_b">Corporate event</b><span data-i18n="m_op_b1_s">Brand colours</span></button>
           </div>
         </div>
-        <div class="op-picker reveal op-picker-row">
+        <div class="op-picker op-picker-row">
           <div>
             <h5 data-i18n="m_op_g_filter">Filter</h5>
             <div class="op-btns op-btns-sm">
@@ -187,67 +359,63 @@
   </div>
 </section>
 
-<!-- ================================================= HOW IT WORKS -->
-<section class="section" id="how" data-sec style="background:var(--surface-2)">
-  <div class="wrap">
-    <span class="eyebrow reveal" data-i18n="m_how_eyebrow">How it works</span>
-    <h2 class="display h-lg reveal" data-r="scale" style="max-width:14ch;margin-bottom:clamp(30px,5vw,56px)" data-i18n="m_how_h2">From brief to keepsake</h2>
-    <div class="tl tl-4">
-      <article class="frame reveal" style="--i:0">
-        <span class="pin"></span>
-        <span class="num2">1</span>
-        <h4 data-i18n="m_s1_h">Tell us about your event</h4>
-        <p data-i18n="m_s1_p">Your brand colours or your event's theme, the vibe you're going for, and roughly how many guests we're printing for.</p>
-      </article>
-      <article class="frame reveal" style="--i:1">
-        <span class="pin"></span>
-        <span class="num2">2</span>
-        <h4 data-i18n="m_s2_h">We design your booth</h4>
-        <p data-i18n="m_s2_p">Palette, frame art and layout, built to match. Not a generic template with your logo dropped on top.</p>
-      </article>
-      <article class="frame reveal" style="--i:2">
-        <span class="pin"></span>
-        <span class="num2">3</span>
-        <h4 data-i18n="m_s3_h">We run it on the day</h4>
-        <p data-i18n="m_s3_p">Live view, a 3-2-1 flash, and a print in guests' hands moments later. Set up, staffed, and working the whole time.</p>
-      </article>
-      <article class="frame reveal" style="--i:3">
-        <span class="pin"></span>
-        <span class="num2">4</span>
-        <h4 data-i18n="m_s4_h">You get everything, after</h4>
-        <p data-i18n="m_s4_p">Every photo from the event, organised, plus a report: sessions, prints, and how the day actually went.</p>
-      </article>
+<!-- ================================================= HOW IT WORKS
+     Pinned countdown: one giant numeral rolls 1 to 4 while the steps swap
+     beside it, and the run ends on a camera flash. Without the animation
+     library this is simply a numbered list. -->
+<section class="how2" id="how" data-sec data-dark="always">
+  <div class="how-pin">
+    <div class="wrap how-grid">
+      <div class="how-head">
+        <span class="eyebrow" data-i18n="m_how_eyebrow">How it works</span>
+        <h2 class="display h-lg" data-i18n="m_how_h2">From brief to keepsake</h2>
+        <div class="how-bar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="how-num" aria-hidden="true"><div class="how-roll"><b>1</b><b>2</b><b>3</b><b>4</b></div></div>
+      <ol class="how-steps">
+        <li><span class="how-ln" aria-hidden="true">01</span><h3 data-i18n="m_s1_h">Tell us about your event</h3><p data-i18n="m_s1_p">Your brand colours or your event's theme, the vibe you're going for, and roughly how many guests we're printing for.</p></li>
+        <li><span class="how-ln" aria-hidden="true">02</span><h3 data-i18n="m_s2_h">We design your booth</h3><p data-i18n="m_s2_p">Palette, frame art and layout, built to match. Not a generic template with your logo dropped on top.</p></li>
+        <li><span class="how-ln" aria-hidden="true">03</span><h3 data-i18n="m_s3_h">We run it on the day</h3><p data-i18n="m_s3_p">Live view, a 3-2-1 flash, and a print in guests' hands moments later. Set up, staffed, and working the whole time.</p></li>
+        <li><span class="how-ln" aria-hidden="true">04</span><h3 data-i18n="m_s4_h">You get everything, after</h3><p data-i18n="m_s4_p">Every photo from the event, organised, plus a report: sessions, prints, and how the day actually went.</p></li>
+      </ol>
     </div>
+    <div class="how-flash" aria-hidden="true"></div>
   </div>
 </section>
 
 <!-- ================================================= CONTACT -->
-<section class="section" id="contact" data-sec>
+<section class="cta2" id="contact" data-sec>
   <div class="wrap">
-    <div class="cta-block reveal" data-r="scale">
-      <span class="mark bgm" aria-hidden="true"></span>
-      <span class="chip-float" data-i18n="m_cta_chip">Mock-up first, no obligation</span>
-      <h2 class="display h-lg" data-i18n="m_cta_h2">Tell us the date. We'll build the booth.</h2>
-      <p data-i18n="m_cta_p">Share your event date, guest count and the vibe you're after. We'll come back with a themed mock-up before you commit to anything.</p>
-      <div class="ctas">
-        <a class="btn" href="https://wa.me/962779413439?text=Hi%20PolaReady%2C%20I%27d%20like%20to%20book%20a%20photobooth%20for%20my%20event." target="_blank" rel="noopener"><span data-i18n="m_cta_btn0">WhatsApp us</span> <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn ghost" href="mailto:mohammednasser7432@gmail.com?subject=PolaReady%20—%20event%20booking"><span data-i18n="m_cta_btn1">Email us</span></a>
-        <a class="btn ghost" href="story/"><span data-i18n="m_cta_btn2">Read our story</span> <span class="arr" aria-hidden="true">→</span></a>
+    <span class="cta2-chip" data-i18n="m_cta_chip">Mock-up first, no obligation</span>
+    <h2 class="display cta2-title" data-split data-i18n="m_cta_h2">Tell us the date. We'll build the booth.</h2>
+    <div class="cta2-row">
+      <div class="cta2-copy">
+        <p class="lede" data-i18n="m_cta_p">Share your event date, guest count and the vibe you're after. We'll come back with a themed mock-up before you commit to anything.</p>
+        <div class="ctas">
+          <a class="btn ghost" href="mailto:mohammednasser7432@gmail.com?subject=PolaReady%20—%20event%20booking"><span data-i18n="m_cta_btn1">Email us</span></a>
+          <a class="btn ghost" href="story/"><span data-i18n="m_cta_btn2">Read our story</span> <span class="arr" aria-hidden="true">→</span></a>
+        </div>
       </div>
+      <a class="orb" href="https://wa.me/962779413439?text=Hi%20PolaReady%2C%20I%27d%20like%20to%20book%20a%20photobooth%20for%20my%20event." target="_blank" rel="noopener">
+        <span class="orb-in"><span data-i18n="m_cta_btn0">WhatsApp us</span> <span class="arr" aria-hidden="true">→</span></span>
+      </a>
     </div>
   </div>
 </section>
 
 <!-- ================================================= STORY, BRIEFLY -->
-<section class="section" id="story-brief" data-sec style="padding-block:clamp(56px,8vw,96px)">
+<section class="section brief2" id="story-brief" data-sec>
   <div class="wrap">
     <div class="brief-grid">
-      <div class="reveal" data-r="left">
-        <h2 class="display h-lg" style="max-width:16ch;margin-bottom:1rem" data-i18n="m_sb_h2">Why a polar bear?</h2>
+      <div class="brief-copy">
+        <h2 class="display h-lg" data-split style="max-width:16ch;margin-bottom:1rem" data-i18n="m_sb_h2">Why a polar bear?</h2>
         <p class="lede" style="max-width:56ch" data-i18n="m_sb_p">Not a pun. The name traces straight back to an animal built entirely for readiness, for showing up prepared no matter the whiteout. That's the one-line version.</p>
         <a class="btn ghost" href="story/" style="margin-top:20px"><span data-i18n="m_sb_cta">Read the full story</span> <span class="arr" aria-hidden="true">→</span></a>
       </div>
-      <a class="brief-mark reveal" data-r="scale" href="story/" aria-label="Read the full story" data-i18n-attr="aria-label:m_sb_cta"><span class="mark"></span></a>
+      <a class="brief-mark" href="story/" aria-label="Read the full story" data-i18n-attr="aria-label:m_sb_cta" data-cursor="m_cur_read">
+        <span class="brief-ring" aria-hidden="true"><svg viewBox="0 0 200 200"><defs><path id="sbRing" d="M100,100 m-86,0 a86,86 0 1,1 172,0 a86,86 0 1,1 -172,0"/></defs><text><textPath href="#sbRing" data-i18n="m_sb_ring">Why a polar bear · Read the story · </textPath></text></svg></span>
+        <span class="brief-disc"><span class="mark"></span></span>
+      </a>
     </div>
   </div>
 </section>
@@ -278,9 +446,15 @@
     </div>
     <div class="end"><span class="brand" style="font-size:1.1rem"><span class="mark" style="--s:26px"></span><span>PolaReady</span></span><span data-i18n="m_foot_note">Instant photobooths, themed per event</span></div>
   </div>
+  <div class="foot-word" aria-hidden="true"><span>P</span><span>o</span><span>l</span><span>a</span><span>R</span><span>e</span><span>a</span><span>d</span><span>y</span></div>
 </footer>
 
-<script src="js/i18n.js?v=15"></script>
-<script src="js/site.js?v=19"></script>
+<script src="js/i18n.js?v=16"></script>
+<script src="js/vendor/gsap.min.js?v=3.15.0"></script>
+<script src="js/vendor/ScrollTrigger.min.js?v=3.15.0"></script>
+<script src="js/vendor/SplitText.min.js?v=3.15.0"></script>
+<script src="js/vendor/lenis.min.js?v=1.3.26"></script>
+<script src="js/site.js?v=20"></script>
+<script src="js/home.js?v=1"></script>
 </body>
 </html>

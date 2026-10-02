@@ -11,7 +11,9 @@ window.I18N = {
     p_lavender: "Lavender", p_sunset: "Sunset", p_sky: "Sky",
     f_original: "Original", f_bw: "B&W", f_sepia: "Sepia", f_vintage: "Vintage", f_fade: "Fade",
     f_cool: "Cool", f_crisp: "Crisp", f_instant: "Instant", f_mono: "Mono", f_pop: "Pop",
-    m1: "Happy Birthday! 🎂", m2: "Best day ever ✨", m3: "Love you! ❤️", m4: "Squad goals 😎", m5: "Making memories 📸", m6: "Party time! 🎉"
+    m1: "Happy Birthday! 🎂", m2: "Best day ever ✨", m3: "Love you! ❤️", m4: "Squad goals 😎", m5: "Making memories 📸", m6: "Party time! 🎉",
+    /* labels the custom cursor shows over [data-cursor] elements */
+    m_cur_try: "Try it", m_cur_book: "Book", m_cur_read: "Read"
   },
   ar: {
     page_title: "بولاريدي — صُنعنا من أجل الوهج الأبيض",
@@ -189,6 +191,16 @@ window.I18N = {
     h_cta: "جاهزون للبدء؟ أخبرونا عن فعاليتكم",
     c_home: "العودة للرئيسية",
     m_foot_go: "احجز فعاليتك", m_foot_top: "إلى الأعلى",
-    m_foot_note: "أكشاك تصوير فورية، بهوية مخصصة لكل فعالية"
+    m_foot_note: "أكشاك تصوير فورية، بهوية مخصصة لكل فعالية",
+
+    /* rebuilt home page */
+    m_nav_looks: "الأنماط",
+    m_badge: "طباعة فورية · هوية لكل فعالية · ",
+    m_lk_lede: "أربعة أشرطة حقيقية من أربعة حجوزات حقيقية. تابعوا التمرير وشاهدوا الصفحة تأخذ ألوان كلٍّ منها.",
+    m_lk_try: "جرّبوا هذا النمط",
+    m_lk_next_h: "دوركم التالي.",
+    m_lk_next_p: "أرسلوا لنا ألوانكم وسنصمّم نموذج شريطكم قبل أي التزام.",
+    m_sb_ring: "لماذا دبّ قطبي · اقرأ القصة · ",
+    m_cur_try: "جرّبه", m_cur_book: "احجز", m_cur_read: "اقرأ"
   }
 };

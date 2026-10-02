@@ -62,18 +62,54 @@ h1,h2,h3,h4{margin:0;font-weight:400;text-wrap:balance}
    element (the dot must track instantly; the ring's lag comes from a
    JS rAF lerp, not CSS, so the two effects don't double up). Only
    width/height/colour are allowed to transition. */
+/* .cursor-on lives on <body> (set by script), so it is matched on body itself
+   - never combined with .js, which is on <html> */
 @media (hover:hover) and (pointer:fine){
-  .js.cursor-on, .js.cursor-on a, .js.cursor-on button,
-  .js.cursor-on .perk, .js.cursor-on .op-btn, .js.cursor-on .op-filter-btn, .js.cursor-on .op-color-btn{cursor:none}
+  body.cursor-on,body.cursor-on *{cursor:none!important}
+  body.cursor-on input,body.cursor-on textarea{cursor:text!important}
 }
 .cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:600;border-radius:50%;transform:translate(-50%,-50%);will-change:transform}
 .cursor-dot{width:8px;height:8px;background:var(--navy);transition:background .25s,width .25s var(--ease),height .25s var(--ease)}
-.cursor-ring{width:36px;height:36px;border:1.5px solid rgba(47,65,86,.3);transition:width .35s var(--ease),height .35s var(--ease),border-color .3s,background .3s}
+.cursor-ring{width:36px;height:36px;border:1.5px solid rgba(47,65,86,.3);display:grid;place-items:center;transition:width .4s var(--ease),height .4s var(--ease),border-color .3s,background .3s}
+.cursor-label{font:800 .8rem/1 var(--f-body);color:#fff;white-space:nowrap;opacity:0;transform:scale(.5);transition:opacity .2s,transform .4s var(--ease)}
 body.cursor-hover .cursor-dot{width:0;height:0}
 body.cursor-hover .cursor-ring{width:58px;height:58px;background:rgba(63,122,156,.12);border-color:var(--glacier)}
+body.cursor-labeled .cursor-dot{width:0;height:0}
+body.cursor-labeled .cursor-ring{width:96px;height:96px;background:var(--glacier);border-color:transparent}
+body.cursor-labeled .cursor-label{opacity:1;transform:none}
+body.cursor-down .cursor-ring{width:24px;height:24px}
+body.cursor-down.cursor-hover .cursor-ring{width:44px;height:44px}
+body.cursor-down.cursor-labeled .cursor-ring{width:80px;height:80px}
 body.on-dark .cursor-dot{background:var(--cream)}
 body.on-dark .cursor-ring{border-color:rgba(245,239,235,.4)}
 body.on-dark.cursor-hover .cursor-ring{background:rgba(245,239,235,.14);border-color:var(--cream)}
+
+/* ---------------------------------------------------------- film grain
+   One fixed, tiled noise layer over everything (below the cursor), so the
+   flat brand colours read as printed paper rather than screen fill. */
+body::after{
+  content:"";position:fixed;inset:0;z-index:550;pointer-events:none;opacity:.07;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ------------------------------------------------------- page curtain
+   See setupCurtain in site.js. Sits below the cursor, above the intro. */
+.curtain{
+  position:fixed;inset:0;z-index:580;background:var(--navy);color:var(--cream);display:grid;place-items:center;
+  transform:translateY(101%);transition:transform .62s cubic-bezier(.76,0,.24,1);pointer-events:none;
+}
+.curtain .mark{--s:76px;opacity:0;transform:translateY(18px);transition:opacity .3s .2s,transform .5s var(--ease) .2s}
+.curtain.cover{transform:none;pointer-events:auto}
+.curtain.cover .mark{opacity:1;transform:none}
+.curtain.cover.lift{transform:translateY(-101%);transition-duration:.95s}
+.curtain.still,.curtain.still .mark{transition:none}
+html.curtain-in body::before{content:"";position:fixed;inset:0;z-index:580;background:var(--navy)}
+
+/* ------------------------------------------------------ smooth scroll (Lenis) */
+html.lenis,html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto!important}
+.lenis.lenis-smooth [data-lenis-prevent]{overscroll-behavior:contain}
+.lenis.lenis-stopped{overflow:hidden}
 .skip{position:fixed;inset-inline-start:12px;top:-60px;z-index:100;background:var(--navy);color:var(--cream);padding:10px 16px;border-radius:999px;transition:top .2s}
 .skip:focus{top:12px}
 
@@ -164,6 +200,11 @@ html[dir="rtl"] .brand{font-weight:900}
 .nav.dark ul a{color:rgba(245,239,235,.72)}
 .nav.dark ul a:hover,.nav.dark ul a.on{background:var(--cream);color:var(--navy)}
 @media (max-width:860px){.nav ul{display:none}.nav .in{justify-content:space-between}}
+/* phones: the nav button never wraps, and gives way entirely when the bar
+   is too narrow for brand + language switch + button (every section has
+   its own booking button anyway) */
+.nav .in>.btn{white-space:nowrap}
+@media (max-width:440px){.nav .in>.btn{display:none}}
 
 /* chapter dots (desktop) */
 .dots{position:fixed;inset-inline-end:18px;top:50%;transform:translateY(-50%);z-index:55;display:none;flex-direction:column;gap:14px}
