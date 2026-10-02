@@ -716,15 +716,19 @@ html[dir="rtl"] .foot h5{letter-spacing:0;font-size:.9rem}
 .op-tilt{width:210px;aspect-ratio:1/3;transform-style:preserve-3d;transform:rotateX(6deg) rotateY(-11deg)}
 @media (max-width:760px){.op-tilt{width:172px}}
 .op-card{position:relative;width:100%;height:100%;border-radius:7px;overflow:hidden;background:#fff;box-shadow:0 44px 74px -32px rgba(47,65,86,.55),0 6px 14px -6px rgba(47,65,86,.3);backface-visibility:hidden}
-/* Two kinds of layer, both showing the SAME template image so there is
-   never a seam between them: .op-bg is the whole print (Colour recolours
-   it with a real hue-rotate - the template's own background/frame, not a
-   tint on top of it), and three .op-photo copies sit above it, each
-   clip-path'd down to just one of the strip's photo windows (see the
-   per-template rects in OP_RECTS in site.js) so Filter only ever reaches
-   the couple's photos. */
+/* Three stacked layers, the bottom two sharing the SAME template image so
+   there is never a seam between them:
+     1. .op-bg - the original print, always shown true-to-source.
+     2. .op-fill - a plain solid-color sheet. Transparent for Classic, so
+        .op-bg shows through unmodified; opaque for Blush/Sage, so it
+        replaces the frame's own pattern with a flat colour instead of
+        tinting it (no hue-rotate - a real colour swap, not a filter).
+     3. three .op-photo copies of the same template image, each
+        clip-path'd down to just one photo window (OP_RECTS in site.js),
+        sitting on top of the fill so the couple's photos are never
+        covered by it. Filter only ever reaches these. */
 .op-layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.op-bg{transition:filter .4s var(--ease)}
+.op-fill{background:transparent;transition:background .4s var(--ease);pointer-events:none}
 .op-photo{transition:filter .35s var(--ease),clip-path .3s var(--ease)}
 .op-controls{display:flex;flex-direction:column;gap:22px;width:100%;max-width:360px}
 @media (max-width:760px){.op-controls{max-width:400px}}
