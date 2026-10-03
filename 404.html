@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=IBM+Plex+Mono:wght@500&family=Nunito+Sans:opsz,wght@6..12,300..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/site.css?v=24">
+<link rel="stylesheet" href="css/site.css?v=25">
 <style>
   /* Deliberately self-contained: no site.js dependency, so this page keeps
      working even if a script fails to load — the one case where that
@@ -23,9 +23,23 @@
   .err-p{color:var(--ink-soft);max-width:42ch;margin-inline:auto;margin-block-end:30px}
   .err-p.ar{font-family:'Nunito Sans',sans-serif;direction:rtl;margin-block-start:-18px}
   .err-ctas{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  /* motion, CSS only so this page still needs no script: the bear surfaces
+     into its disc and keeps bobbing, the lines rise in one after another */
+  .err-mark{position:relative;overflow:hidden;animation:pop404 .9s var(--ease) both}
+  .err-mark .mark{animation:surface 1.1s var(--ease) .35s both,bob404 4s ease-in-out 1.5s infinite}
+  .err-code,.err-h,.err-p,.err-ctas{animation:rise404 1s var(--ease) both}
+  .err-code{animation-delay:.5s}.err-h{animation-delay:.6s}.err-p{animation-delay:.72s}.err-p.ar{animation-delay:.8s}.err-ctas{animation-delay:.9s}
+  .big404{position:fixed;inset:auto 0 -6vw;text-align:center;font:400 34vw/1 "Fugaz One",sans-serif;color:var(--navy);opacity:.045;pointer-events:none;letter-spacing:-.04em;animation:lift404 1.6s var(--ease) both}
+  @keyframes lift404{from{transform:translateY(30%)}to{transform:none}}
+  @keyframes pop404{from{transform:scale(0) rotate(-40deg)}to{transform:none}}
+  @keyframes surface{from{transform:translateY(110%)}to{transform:none}}
+  @keyframes bob404{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-4deg)}}
+  @keyframes rise404{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+  @media (prefers-reduced-motion:reduce){.err-mark,.err-mark .mark,.err-code,.err-h,.err-p,.err-ctas,.big404{animation:none}}
 </style>
 </head>
 <body>
+<div class="big404" aria-hidden="true">404</div>
 
 <div>
   <div class="err-mark" aria-hidden="true"><span class="mark"></span></div>

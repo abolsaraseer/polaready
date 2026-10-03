@@ -339,23 +339,6 @@ html[dir="rtl"] .brief-ring text{font:700 15px/1 "Cairo",sans-serif;letter-spaci
 .brief-mark:hover .brief-disc .mark{transform:rotate(-12deg)}
 @media (max-width:759px){.brief-mark{width:170px;height:170px}.brief-disc{width:104px;height:104px}.brief-disc .mark{--s:54px}}
 
-/* ------------------------------------------------------- footer wordmark */
-.foot-word{
-  position:relative;direction:ltr;display:flex;justify-content:center;margin-top:clamp(40px,6vw,80px);
-  font:400 clamp(4.6rem,19.5vw,22rem)/.8 "Fugaz One",sans-serif;letter-spacing:-.04em;color:var(--cream);
-  overflow:hidden;padding-bottom:.06em;user-select:none;
-}
-.foot-word span{display:inline-block}
-.foot-word span:nth-child(n+5){color:#8fc2df}
-.foot{padding-bottom:0}
-.foot .end{margin-bottom:0}
-
-/* ----------------------------------------------------------- split text
-   SplitText's line masks: each line clips its own words/letters so they can
-   rise into place from below. */
-.ln-mask{padding-bottom:.08em;margin-bottom:-.08em}
-html[dir="rtl"] .ln-mask{padding-block:.12em;margin-block:-.12em}
-
 @media (prefers-reduced-motion:reduce){
   .hx-badge-spin,.brief-ring,.vl-ticks,.vl-c,.vl-flash,.vc-lines span,.vc-frame,.vc-tog,.vc-tog b,.vr-bars i,.vp-strip,.vp-sw span,.lk-ghost i,.orb::before{animation:none}
 }

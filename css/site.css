@@ -256,6 +256,9 @@ html[dir="rtl"] .intro .num{font-weight:900}
 .hero .grid{display:grid;gap:clamp(30px,5vw,80px);align-items:center;grid-template-columns:1fr}
 @media (min-width:960px){.hero .grid{grid-template-columns:1.18fr .82fr}}
 .hero h1{margin-bottom:1.6rem}
+/* the story headline: big, but "whiteout." must still fit its column whole */
+.hero h1.h-xl{font-size:clamp(3.2rem,7.2vw,7rem)}
+html[dir="rtl"] .hero h1.h-xl{font-size:clamp(2.8rem,6.2vw,6rem)}
 .hero h1 em{display:inline-block}
 .hero .lede{margin-bottom:2.2rem}
 .hero .ctas{display:flex;flex-wrap:wrap;gap:12px}
@@ -492,9 +495,9 @@ html[dir="rtl"] .steps .n{font-weight:900}
   .b-copy h2{font-size:clamp(1.9rem,8vw,2.6rem);margin-bottom:.6rem}
   /* the whole rig - screen, slot and the strip that prints out - has to fit the pinned view */
   .rig{width:min(400px,84%)}
-  .out{height:84px;width:104px}
-  .out .paper{height:200px}
-  .out .paper .fr{margin-bottom:5px}
+  .rig .out{height:84px;width:104px}
+  .rig .out .paper{height:200px}
+  .rig .out .paper .fr{margin-bottom:5px}
 }
 @media (max-height:760px) and (max-width:959px){.rig{width:min(340px,74%)}}
 .rig{position:relative;justify-self:center;width:min(640px,100%)}
@@ -526,11 +529,11 @@ html[dir="rtl"] .screen .smile{font-weight:900}
 [data-state]:not([data-state="idle"]) .start{opacity:0;transform:translateY(20px)}
 [data-state="result"] .result,[data-state="print"] .result{opacity:1;transform:none}
 .slot{position:relative;height:14px;background:#141d29;border-radius:0 0 12px 12px;margin:-2px 8% 0;z-index:3}
-.out{position:relative;height:150px;overflow:hidden;margin:0 auto;width:150px;z-index:2}
-.out .paper{position:absolute;inset-inline:0;top:0;height:290px;background:#fff;border-radius:2px 2px 6px 6px;padding:10px 10px 0;transform:translateY(calc((var(--print,0) - 1) * 100%));box-shadow:0 20px 30px -12px rgba(0,0,0,.5)}
-.out .paper .fr{aspect-ratio:4/3;border-radius:3px;overflow:hidden;margin-bottom:8px;position:relative}
-.out .paper .fr svg{position:absolute;inset:0;width:100%;height:100%}
-.out .paper .wmk{text-align:center;font:400 .8rem/1 var(--f-display);color:var(--navy);margin-top:6px}
+.rig .out{position:relative;height:150px;overflow:hidden;margin:0 auto;width:150px;z-index:2}
+.rig .out .paper{position:absolute;inset-inline:0;top:0;height:290px;background:#fff;border-radius:2px 2px 6px 6px;padding:10px 10px 0;transform:translateY(calc((var(--print,0) - 1) * 100%));box-shadow:0 20px 30px -12px rgba(0,0,0,.5)}
+.rig .out .paper .fr{aspect-ratio:4/3;border-radius:3px;overflow:hidden;margin-bottom:8px;position:relative}
+.rig .out .paper .fr svg{position:absolute;inset:0;width:100%;height:100%}
+.rig .out .paper .wmk{text-align:center;font:400 .8rem/1 var(--f-display);color:var(--navy);margin-top:6px}
 
 /* ---------- the playground ---------- */
 .play{display:grid;gap:clamp(28px,5vw,70px);grid-template-columns:1fr;align-items:center}
@@ -705,6 +708,32 @@ html[dir="rtl"] .foot h5{letter-spacing:0;font-size:.9rem}
 .tags{display:flex;flex-wrap:wrap;gap:8px}
 .tags button{font:800 .9rem/1 var(--f-body);padding:11px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--navy);cursor:pointer;transition:all .25s}
 .tags button:hover{background:var(--navy);color:var(--cream)}
+
+/* ------------------------------------------------------- footer wordmark */
+.foot-word{
+  position:relative;direction:ltr;display:flex;justify-content:center;margin-top:clamp(40px,6vw,80px);
+  font:400 clamp(4.6rem,19.5vw,22rem)/.8 "Fugaz One",sans-serif;letter-spacing:-.04em;color:var(--cream);
+  overflow:hidden;padding-bottom:.06em;user-select:none;
+}
+.foot-word span{display:inline-block}
+.foot-word span:nth-child(n+5){color:#8fc2df}
+.foot{padding-bottom:0}
+.foot .end{margin-bottom:0}
+
+/* ----------------------------------------------------------- split text
+   SplitText's line masks: each line clips its own words/letters so they can
+   rise into place from below. */
+.ln-mask{padding-bottom:.08em;margin-bottom:-.08em}
+html[dir="rtl"] .ln-mask{padding-block:.12em;margin-block:-.12em}
+
+/* inner pages (motion.js): hold the hero headline still until it has been
+   split, so it never flashes fully set and then snaps hidden */
+.anim:not(.built) .hero h1,.anim:not(.built) .kit-hero h1{visibility:hidden}
+/* the scroll-velocity marquee drives .marq tracks from script */
+.vmarq .marq .track{animation:none}
+/* brand kit hero: one big bear drifting behind the headline */
+.kit-bear{position:absolute;inset-inline-end:-6%;top:8%;width:min(52vw,620px);--s:100%;color:var(--navy);opacity:.06;pointer-events:none}
+@media (max-width:760px){.kit-bear{width:80vw;top:auto;bottom:-10%;opacity:.05}}
 
 /* ==========================================================================
    MOTION SAFETY
@@ -898,6 +927,21 @@ body[data-page="demo"]{background:var(--cream)}
 .demo-narrow .mark{margin-inline:auto;margin-bottom:18px}
 .demo-narrow h4{font:800 .74rem/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:10px}
 .linklike{background:none;border:0;padding:0;color:var(--glacier);text-decoration:underline;text-underline-offset:2px;cursor:pointer;font:inherit}
+/* entrances: each screen of the booth arrives rather than appears - the
+   intro's lines rise in turn and the bear keeps breathing, the camera view
+   and the editor scale up into place */
+@keyframes riseIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes camIn{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none}}
+@keyframes breathe{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-4deg)}}
+#app[data-state="intro"] .demo-narrow>*,#app[data-state="denied"] .demo-narrow>*{animation:riseIn 1s var(--ease) both}
+#app[data-state="intro"] .demo-narrow>:nth-child(2){animation-delay:.08s}
+#app[data-state="intro"] .demo-narrow>:nth-child(3){animation-delay:.16s}
+#app[data-state="intro"] .demo-narrow>:nth-child(4){animation-delay:.24s}
+#app[data-state="intro"] .demo-narrow>:nth-child(5){animation-delay:.32s}
+#app[data-state="intro"] .demo-narrow>:nth-child(6){animation-delay:.4s}
+#app[data-state="intro"] .demo-narrow>.mark{animation:riseIn 1s var(--ease) both,breathe 4s ease-in-out 1s infinite}
+#app[data-state="live"] .camwrap{animation:camIn .8s var(--ease) both}
+#app[data-state="edit"] .edit-shell{animation:riseIn .8s var(--ease) both}
 .linklike:hover{color:var(--navy)}
 
 /* ---------------------------------------------------------- real buttons
