@@ -47,6 +47,9 @@ body{
   overflow-x:clip;
 }
 img,svg{max-width:100%;display:block}
+/* nothing tilted, thrown or parallaxed near an edge may widen the page on a
+   phone; clip (not hidden) so sticky sections inside keep working */
+main{overflow-x:clip}
 a{color:inherit}
 p{margin:0 0 1.1em;text-wrap:pretty}
 h1,h2,h3,h4{margin:0;font-weight:400;text-wrap:balance}
@@ -199,6 +202,10 @@ html[dir="rtl"] .brand{font-weight:900}
 .nav.dark .lang button[aria-pressed="true"]{background:var(--cream);color:var(--navy)}
 .nav.dark ul a{color:rgba(245,239,235,.72)}
 .nav.dark ul a:hover,.nav.dark ul a.on{background:var(--cream);color:var(--navy)}
+/* ghost buttons in the bar would be navy on navy once it goes dark */
+.nav.dark .btn.ghost{color:var(--cream);border-color:rgba(245,239,235,.45)}
+.nav.dark .btn.ghost:hover{background:var(--cream);color:var(--navy)}
+.nav.dark .btn:not(.ghost){background:var(--cream);color:var(--navy);border-color:var(--cream)}
 @media (max-width:860px){.nav ul{display:none}.nav .in{justify-content:space-between}}
 /* phones: the nav button never wraps, and gives way entirely when the bar
    is too narrow for brand + language switch + button (every section has

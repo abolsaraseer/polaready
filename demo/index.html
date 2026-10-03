@@ -18,9 +18,10 @@
     try { if (sessionStorage.getItem('polaready-curtain')) r.classList.add('curtain-in'); } catch (e) {}
   })(document.documentElement);
 </script>
-<link rel="stylesheet" href="../css/site.css?v=25">
+<link rel="stylesheet" href="../css/site.css?v=28">
+<link rel="stylesheet" href="demo.css?v=1">
 </head>
-<body data-page="demo">
+<body data-page="demo" data-dark="always">
 
 <header class="nav" style="position:sticky;transform:none">
   <div class="wrap in">
@@ -30,13 +31,30 @@
   </div>
 </header>
 
+<!-- the booth's light: an umbrella softbox on a strobe, like the real rig.
+     It fires with every shot (fx.js). Decoration only. -->
+<div class="softbox" aria-hidden="true">
+  <span class="sb-bloom"></span>
+  <svg viewBox="0 0 220 300" fill="none">
+    <path class="sb-canopy" d="M14 112 A96 82 0 0 1 206 112 Q160 96 110 98 Q60 96 14 112Z"/>
+    <path class="sb-ribs" d="M110 30 L14 112 M110 30 L52 104 M110 30 L90 99 M110 30 L130 99 M110 30 L168 104 M110 30 L206 112"/>
+    <path class="sb-pole" d="M110 30 V128"/>
+    <rect class="sb-head" x="92" y="118" width="36" height="30" rx="7"/>
+    <path class="sb-stand" d="M110 148 V290 M110 290 L80 300 M110 290 L140 300"/>
+  </svg>
+</div>
+
 <main class="demo-shell" id="app" data-state="intro">
+  <div class="device">
+  <span class="device-cam" aria-hidden="true"></span>
+  <div class="device-screen">
 
   <!-- ============================================ INTRO — camera gate
        This replaces the app's own network/camera setup screen, which has no
        meaning on a website: there is no printer or Sony camera to find, so a
        visitor goes straight to what the app calls "live". -->
   <section class="demo-panel" data-panel="intro">
+    <div class="intro-deco" aria-hidden="true"><span>3</span><span>2</span><span>1</span></div>
     <div class="demo-narrow">
       <span class="mark" style="--s:52px;color:var(--navy)"></span>
       <span class="eyebrow" style="justify-content:center">No setup screen — just the booth</span>
@@ -63,6 +81,8 @@
   <section class="demo-panel" data-panel="live">
     <div class="camwrap">
       <video id="video" playsinline muted autoplay></video>
+      <span class="vf" aria-hidden="true"></span>
+      <span class="rec" aria-hidden="true">Live</span>
       <canvas id="capCanvas" hidden></canvas>
       <div class="cd" id="cdNum"></div>
       <div class="smile" id="smileText">Smile!</div>
@@ -110,12 +130,20 @@
     </div>
   </section>
 
+  </div><!-- /device-screen -->
+  </div><!-- /device -->
+  <!-- the printer under the screen: on Review, the finished strip feeds out
+       of this slot (fx.js copies the real rendered strip into it) -->
+  <div class="printer" aria-hidden="true"><span class="slot"></span><div class="print-out"><img alt=""></div></div>
 </main>
+<!-- every frame taken drops into this pile as it's shot -->
+<div class="tray" aria-hidden="true"></div>
 
 <div class="toast" id="toast" role="status"></div>
 
 <script src="../js/vendor/lenis.min.js?v=1.3.26"></script>
-<script src="../js/site.js?v=21"></script>
+<script src="../js/site.js?v=22"></script>
 <script src="demo.js?v=2"></script>
+<script src="fx.js?v=1"></script>
 </body>
 </html>

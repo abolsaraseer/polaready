@@ -24,7 +24,8 @@
     try { if (sessionStorage.getItem('polaready-curtain')) r.classList.add('curtain-in'); } catch (e) {}
   })(document.documentElement);
 </script>
-<link rel="stylesheet" href="../css/site.css?v=25">
+<link rel="stylesheet" href="../css/site.css?v=28">
+<link rel="stylesheet" href="../css/play.css?v=1">
 </head>
 <body data-page="kit" data-title-ar="بولاريدي — هوية العلامة">
 
@@ -88,6 +89,23 @@
     </div>
     <p class="hint reveal" style="margin-top:20px;max-width:70ch">Tints, not new colours: Ink Soft (<code>#5B6777</code>) is Navy blended toward Cream and carries secondary and tertiary text. <strong>Ink Faint (<code>#7E8792</code>) is for decoration only</strong> — measured, it falls to 3.2:1 on Cream and 3.6:1 on white, below the 4.5:1 needed for small text.</p>
 
+
+    <h3 class="display h-md" style="margin:clamp(40px,6vw,72px) 0 10px">Try any pairing</h3>
+    <p class="hint" style="margin-bottom:22px;max-width:60ch">Pick a text colour and a ground. The ratio is worked out live with the same WCAG formula as the table below.</p>
+    <div class="cl">
+      <div class="cl-ctl">
+        <h4>Text</h4><div class="cl-sw" data-role="fg"><button type="button" data-c="#2f4156" aria-pressed="true" aria-label="Navy" style="--c:#2F4156"></button><button type="button" data-c="#3f7a9c" aria-pressed="false" aria-label="Glacier" style="--c:#3F7A9C"></button><button type="button" data-c="#f5efeb" aria-pressed="false" aria-label="Cream" style="--c:#F5EFEB"></button><button type="button" data-c="#ffffff" aria-pressed="false" aria-label="Snowbank" style="--c:#FFFFFF"></button><button type="button" data-c="#d1d0d0" aria-pressed="false" aria-label="Ash Line" style="--c:#D1D0D0"></button></div>
+        <button type="button" class="cl-swap" aria-label="Swap text and ground"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16"/><path d="m3 8 4-4 4 4"/><path d="M17 20V4"/><path d="m21 16-4 4-4-4"/></svg></button>
+        <h4>Ground</h4><div class="cl-sw" data-role="bg"><button type="button" data-c="#2f4156" aria-pressed="false" aria-label="Navy" style="--c:#2F4156"></button><button type="button" data-c="#3f7a9c" aria-pressed="false" aria-label="Glacier" style="--c:#3F7A9C"></button><button type="button" data-c="#f5efeb" aria-pressed="true" aria-label="Cream" style="--c:#F5EFEB"></button><button type="button" data-c="#ffffff" aria-pressed="false" aria-label="Snowbank" style="--c:#FFFFFF"></button><button type="button" data-c="#d1d0d0" aria-pressed="false" aria-label="Ash Line" style="--c:#D1D0D0"></button></div>
+      </div>
+      <div class="cl-prev">
+        <div class="cl-big">Made for the whiteout.</div>
+        <p class="cl-small">Step up and the flash goes in 3, 2, 1. Small text has to stay readable too.</p>
+        <div class="cl-score"><span class="cl-num">9.2</span><span class="cl-to">:1</span></div>
+        <div class="cl-verdict">Body text, any size</div>
+        <div class="cl-badges"><span data-min="3">AA large</span><span data-min="4.5">AA</span><span data-min="7">AAA</span></div>
+      </div>
+    </div>
     <h3 class="display h-md reveal" style="margin:clamp(40px,6vw,72px) 0 18px">Contrast, measured</h3>
     <div class="reveal" style="overflow-x:auto">
       <table class="tbl">
@@ -117,6 +135,19 @@
       <div class="spec reveal" style="--i:2"><span class="fam">Label / mono — IBM Plex Mono</span><div class="mono" style="font-size:1rem;margin-bottom:12px;color:var(--navy)">PolaReady · Brand kit · v1</div><p style="margin:0;color:var(--ink-soft);font-size:.98rem">Eyebrows, tags, timestamps — anything meant to read as a stamp or a spec sheet rather than a sentence.</p></div>
       <div class="spec reveal" style="--i:3" dir="rtl" lang="ar"><span class="fam" dir="ltr">Arabic — Cairo, weights 300–900</span><div style="font:900 clamp(1.8rem,3.4vw,2.6rem)/1.3 'Cairo',sans-serif;margin-bottom:12px">صُنعنا من أجل الوهج الأبيض</div><p style="margin:0;color:var(--ink-soft);font-size:1rem;font-family:'Cairo',sans-serif">تُستخدم Cairo لكل الأدوار في النص العربي: العناوين والنصوص والأزرار.</p></div>
     </div>
+    <div class="tt">
+      <div class="tt-bar">
+        <div class="tt-fonts" role="group" aria-label="Typeface">
+          <button type="button" aria-pressed="true" data-f="'Fugaz One',sans-serif" style="font-family:'Fugaz One'">Fugaz One</button>
+          <button type="button" aria-pressed="false" data-f="'Nunito Sans',sans-serif" data-w="800" style="font-family:'Nunito Sans';font-weight:800">Nunito Sans</button>
+          <button type="button" aria-pressed="false" data-f="'IBM Plex Mono',monospace" data-w="500" style="font-family:'IBM Plex Mono'">IBM Plex Mono</button>
+          <button type="button" aria-pressed="false" data-f="'Cairo',sans-serif" data-w="900" data-rtl data-sample="صُنعنا من أجل الوهج الأبيض" style="font-family:'Cairo';font-weight:800">Cairo عربي</button>
+        </div>
+        <label class="tt-size">Size <input type="range" min="28" max="170" value="96"> <output>96px</output></label>
+      </div>
+      <div class="tt-stage" contenteditable="true" spellcheck="false" role="textbox" aria-label="Type tester: type anything" data-lenis-prevent>Type anything here.</div>
+      <p class="hint" style="margin:12px 0 0">Click the line above and type your own words.</p>
+    </div>
   </div>
 </section>
 
@@ -127,14 +158,33 @@
     <h2 class="display h-lg reveal" style="max-width:16ch;margin-bottom:1.4rem">A bear held in negative space</h2>
     <p class="lede reveal" style="max-width:60ch;margin-bottom:clamp(30px,5vw,56px)">The mark is the polar bear's face straight from the logo file: ears, eyes and snout all cut from one rounded silhouette, so the animal is made of the ground it sits on. With no accent in the mark itself, it only has to prove itself on light and dark — Navy on Cream for everyday use, Cream on Navy for booth signage and anywhere the brand needs to hold a dark room.</p>
     <div class="grounds">
-      <div class="ground reveal" data-r="scale" style="background:var(--cream);color:var(--navy)"><span class="mark" style="--s:min(56%,230px)"></span><span class="lbl">Navy on Cream — light ground</span></div>
-      <div class="ground reveal" data-r="scale" style="background:var(--navy);color:var(--cream);--i:1"><span class="mark" style="--s:min(56%,230px)"></span><span class="lbl">Cream on Navy — dark ground</span></div>
+      <div class="ground reveal" data-r="scale" style="background:var(--cream);color:var(--navy)"><span class="mark" data-eyes style="--s:min(56%,230px)"></span><span class="lbl">Navy on Cream — light ground</span></div>
+      <div class="ground reveal" data-r="scale" style="background:var(--navy);color:var(--cream);--i:1"><span class="mark" data-eyes="navy" style="--s:min(56%,230px)"></span><span class="lbl">Cream on Navy — dark ground</span></div>
     </div>
     <div class="variants">
       <div class="vcard cream reveal" style="--i:0"><div class="stage-v"><div class="tinyframe" style="padding:16px 22px 16px 16px;gap:16px"><span class="mark" style="--s:64px;color:var(--navy)"></span><b style="font-size:1.9rem">PolaReady</b></div></div><small>Full lockup — mark + wordmark</small></div>
-      <div class="vcard cream reveal" style="--i:1"><div class="stage-v"><span class="mark" style="--s:120px;color:var(--navy)"></span></div><small>Icon only — the bear</small></div>
+      <div class="vcard cream reveal" style="--i:1"><div class="stage-v"><span class="mark" data-eyes style="--s:120px;color:var(--navy)"></span></div><small>Icon only — the bear</small></div>
       <div class="vcard stamp reveal" style="--i:2"><div class="stage-v"><div class="avatar"><span class="mark" style="--s:98px"></span></div></div><small>Stamp — for social avatars</small></div>
-      <div class="vcard navy reveal" style="--i:3"><div class="stage-v"><span class="mark" style="--s:120px;color:var(--cream)"></span></div><small>Reversed — for dark grounds</small></div>
+      <div class="vcard navy reveal" style="--i:3"><div class="stage-v"><span class="mark" data-eyes="navy" style="--s:120px;color:var(--cream)"></span></div><small>Reversed — for dark grounds</small></div>
+    </div>
+
+    <h3 class="display h-md" style="margin:clamp(48px,7vw,84px) 0 10px">Play with the mark</h3>
+    <p class="hint" style="margin-bottom:22px;max-width:60ch">Change its ground and size, switch on the clear space, and give it a spin. It's watching you either way.</p>
+    <div class="mp">
+      <div class="mp-stage" data-ground="cream"><span class="mp-box"><span class="mark mp-mark" data-eyes></span></span></div>
+      <div class="mp-ctl">
+        <h4>Ground</h4>
+        <div class="mp-grounds">
+          <button type="button" aria-pressed="true" data-g="cream" data-catch="#f5efeb">Cream</button>
+          <button type="button" aria-pressed="false" data-g="navy" data-catch="#2f4156">Navy</button>
+          <button type="button" aria-pressed="false" data-g="glacier" data-catch="#3f7a9c">Glacier</button>
+          <button type="button" aria-pressed="false" data-g="photo" data-catch="#f5efeb">On a photo</button>
+        </div>
+        <h4>Size</h4>
+        <label class="mp-size"><input type="range" min="25" max="80" value="56" aria-label="Mark size"></label>
+        <label class="mp-space"><input type="checkbox"> Show clear space</label>
+        <button type="button" class="btn ghost mp-spin">Spin it</button>
+      </div>
     </div>
   </div>
 </section>
@@ -151,7 +201,7 @@
       </div>
       <div class="app av reveal" style="--i:1">
         <span class="cap2">Social avatar — stamp mark</span>
-        <div style="width:100%;display:grid;place-items:center"><div class="avatar" style="width:190px;height:190px"><span class="mark" style="--s:126px"></span></div></div>
+        <div style="width:100%;display:grid;place-items:center"><div class="avatar" style="width:190px;height:190px"><span class="mark" data-eyes="navy" style="--s:126px"></span></div></div>
         <span></span>
       </div>
       <div class="app reveal" style="--i:2;background:var(--surface)">
@@ -169,6 +219,14 @@
     <span class="eyebrow reveal">The caption library</span>
     <h2 class="display h-lg reveal" style="max-width:13ch;margin-bottom:1.4rem">Copy for every surface</h2>
     <p class="lede reveal" style="max-width:56ch;margin-bottom:clamp(30px,5vw,56px)">The full set — booth signage, bios, captions, event lines and the pitch-deck one-liner — so nobody has to write brand copy from scratch. Click any line to copy it.</p>
+
+    <div class="cs">
+      <div class="cs-window" aria-live="polite"><div class="cs-reel"></div></div>
+      <div class="cs-ctl">
+        <button type="button" class="btn cs-spin">Give me a caption</button>
+        <button type="button" class="btn ghost cs-copy">Copy it</button>
+      </div>
+    </div>
     <div class="lib">
       <div class="reveal"><h3>Booth signage</h3><div class="lines">
         <button class="line" type="button" data-copy="Made for the whiteout."><span>Made for the whiteout.</span><span class="cp">Copy</span></button>
@@ -220,11 +278,16 @@
   <div class="foot-word" aria-hidden="true"><span>P</span><span>o</span><span>l</span><span>a</span><span>R</span><span>e</span><span>a</span><span>d</span><span>y</span></div>
 </footer>
 
+<script src="../js/i18n.js?v=17"></script>
 <script src="../js/vendor/gsap.min.js?v=3.15.0"></script>
 <script src="../js/vendor/ScrollTrigger.min.js?v=3.15.0"></script>
 <script src="../js/vendor/SplitText.min.js?v=3.15.0"></script>
+<script src="../js/vendor/Draggable.min.js?v=3.15.0"></script>
+<script src="../js/vendor/InertiaPlugin.min.js?v=3.15.0"></script>
+<script src="../js/vendor/Flip.min.js?v=3.15.0"></script>
 <script src="../js/vendor/lenis.min.js?v=1.3.26"></script>
-<script src="../js/site.js?v=21"></script>
+<script src="../js/site.js?v=22"></script>
 <script src="../js/motion.js?v=1"></script>
+<script src="../js/play.js?v=1"></script>
 </body>
 </html>

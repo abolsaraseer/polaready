@@ -25,7 +25,8 @@
     try { if (sessionStorage.getItem('polaready-curtain')) r.classList.add('curtain-in'); } catch (e) {}
   })(document.documentElement);
 </script>
-<link rel="stylesheet" href="../css/site.css?v=25">
+<link rel="stylesheet" href="../css/site.css?v=28">
+<link rel="stylesheet" href="../css/play.css?v=1">
 </head>
 <body data-page="story" data-intro data-title-ar="بولاريدي — صُنعنا من أجل الوهج الأبيض">
 
@@ -105,17 +106,20 @@
       </div>
     </div>
     <div class="stagecard">
+      <div class="pdrag" data-cursor="p_shoot" aria-label="Take a photo">
       <div class="pcard" aria-hidden="true">
         <span class="tape"></span>
         <div class="photo">
           <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice"><use href="#sc"/></svg>
-          <span class="mark peek"></span>
+          <span class="mark peek" data-eyes></span>
           <div class="veil"></div>
         </div>
         <div class="lab">PolaReady</div>
         <span class="chip-float a" data-i18n="chip_a">Flash first.</span>
         <span class="chip-float b" data-i18n="chip_b">Focus after.</span>
       </div>
+      </div>
+      <p class="play-hint" data-i18n="p_hint_card">Tap to shoot · drag to throw</p>
     </div>
   </div>
   <div class="cue" aria-hidden="true"><i></i><span data-i18n="cue">Scroll — flash in 3, 2, 1</span></div>
@@ -157,7 +161,7 @@
 <section class="section" id="science" data-sec style="padding-top:clamp(40px,6vw,80px)">
   <div class="wrap sci">
     <div class="sci-sticky reveal" data-r="scale">
-      <div class="sci-fig" role="img" data-i18n-attr="aria-label:fig_label" aria-label="An illustration of a snowy landscape: on one side washed out by glare, on the other clear through a polarizing filter.">
+      <div class="sci-fig" data-cursor="p_drag" role="img" data-i18n-attr="aria-label:fig_label" aria-label="An illustration of a snowy landscape: on one side washed out by glare, on the other clear through a polarizing filter.">
         <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" class="base">
           <use href="#sci"/>
           <rect width="400" height="500" fill="#fff" opacity=".84"/>
@@ -173,6 +177,7 @@
         </svg>
         <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" class="top"><use href="#sci"/></svg>
         <div class="lens" aria-hidden="true"><i></i></div>
+        <span class="fig-hint" data-i18n="p_hint_lens">Drag the lens</span>
         <span class="lab l" data-i18n="fig_with">With a filter</span>
         <span class="lab r" data-i18n="fig_without">Without</span>
       </div>
@@ -244,7 +249,7 @@
       <div class="lockup reveal" data-r="tilt" aria-hidden="true">
         <div class="ph">
           <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" style="--sky:#d7e6ec"><use href="#sc"/></svg>
-          <span class="mark bear"></span>
+          <span class="mark bear" data-eyes></span>
         </div>
         <div class="wm">PolaReady</div>
         <span class="arrow-note" data-i18n="lock_note">Full lockup</span>
@@ -253,15 +258,15 @@
 
     <div class="variants">
       <div class="vcard cream reveal" style="--i:0">
-        <div class="stage-v"><span class="mark" style="--s:120px;color:var(--navy)"></span></div>
+        <div class="stage-v"><span class="mark" data-eyes style="--s:120px;color:var(--navy)"></span></div>
         <small data-i18n="v1">Icon — the bear, on Cream</small>
       </div>
       <div class="vcard navy reveal" style="--i:1">
-        <div class="stage-v"><span class="mark" style="--s:120px;color:var(--cream)"></span></div>
+        <div class="stage-v"><span class="mark" data-eyes="navy" style="--s:120px;color:var(--cream)"></span></div>
         <small data-i18n="v2">Reversed — on Navy</small>
       </div>
       <div class="vcard stamp reveal" style="--i:2">
-        <div class="stage-v"><div class="avatar"><span class="mark" style="--s:98px"></span></div></div>
+        <div class="stage-v"><div class="avatar"><span class="mark" data-eyes="navy" style="--s:98px"></span></div></div>
         <small data-i18n="v3">Stamp — for avatars</small>
       </div>
       <div class="vcard cream reveal" style="--i:3">
@@ -341,6 +346,10 @@
       <div class="say sf reveal" style="--i:2"><span class="t" data-i18n="t_cap">Social caption</span><span class="x" data-i18n="x_cap3">Developed in the time it takes to blink.</span></div>
       <div class="say wide reveal"><span class="t" data-i18n="t_pitch">Pitch deck — the one-liner</span><span class="x" data-i18n="x_pitch">PolaReady is an instant photobooth brand built on the real, century-old science of polarized light — the same physics that makes snow blinding is the physics that makes our photos instant, with a polar bear standing calm at the center of the flash.</span></div>
     </div>
+    <div class="says-bar">
+      <button type="button" class="btn shuffle"><svg class="ic" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/></svg> <span data-i18n="p_shuffle">Shuffle the cards</span></button>
+      <span class="play-hint" data-i18n="p_hint_says">Click any card to copy its line.</span>
+    </div>
     <p style="margin-top:28px" class="reveal"><a class="btn ghost" href="../brand-kit/#library"><span data-i18n="w_more">Every line lives in the brand kit</span> <span class="arr" aria-hidden="true">→</span></a></p>
   </div>
 </section>
@@ -350,6 +359,7 @@
   <div class="wrap">
     <span class="eyebrow reveal" data-i18n="name_eyebrow">The name</span>
     <div class="pr" aria-label="Pola plus Ready"><span class="pola">Pola</span><span class="plus">+</span><span class="ready">Ready</span></div>
+    <p class="play-hint name-hint" data-i18n="p_hint_name">Go on, throw the letters.</p>
     <div class="meanings">
       <div class="mean reveal" style="--i:0"><h4>Pola</h4><p data-i18n="mean1">Polaroid, polar. The physics and the place.</p></div>
       <div class="mean r reveal" style="--i:1"><h4>Ready</h4><p data-i18n="mean2">Always on, camera-ready, instant.</p></div>
@@ -406,12 +416,16 @@
   <div class="foot-word" aria-hidden="true"><span>P</span><span>o</span><span>l</span><span>a</span><span>R</span><span>e</span><span>a</span><span>d</span><span>y</span></div>
 </footer>
 
-<script src="../js/i18n.js?v=16"></script>
+<script src="../js/i18n.js?v=17"></script>
 <script src="../js/vendor/gsap.min.js?v=3.15.0"></script>
 <script src="../js/vendor/ScrollTrigger.min.js?v=3.15.0"></script>
 <script src="../js/vendor/SplitText.min.js?v=3.15.0"></script>
+<script src="../js/vendor/Draggable.min.js?v=3.15.0"></script>
+<script src="../js/vendor/InertiaPlugin.min.js?v=3.15.0"></script>
+<script src="../js/vendor/Flip.min.js?v=3.15.0"></script>
 <script src="../js/vendor/lenis.min.js?v=1.3.26"></script>
-<script src="../js/site.js?v=21"></script>
+<script src="../js/site.js?v=22"></script>
 <script src="../js/motion.js?v=1"></script>
+<script src="../js/play.js?v=1"></script>
 </body>
 </html>

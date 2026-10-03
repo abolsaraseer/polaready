@@ -1,0 +1,137 @@
+/* ==========================================================================
+   PolaReady — the test booth, staged
+   The page is the inside of the booth: a dark room, the umbrella softbox
+   that fires with each shot, and the app running on the booth's own screen.
+   Everything inside .device-screen keeps the real app's look (cream ground,
+   glacier actions - see the TEST BOOTH block in site.css); this file only
+   builds the room around it and the moments that happen in it.
+   ========================================================================== */
+
+body[data-page="demo"]{
+  background:
+    radial-gradient(900px 520px at 22% -6%,rgba(143,194,223,.16),transparent 70%),
+    radial-gradient(1200px 800px at 50% 120%,#0a1018,transparent 60%),
+    #131c28;
+  color:var(--cream);min-height:100svh;
+}
+body[data-page="demo"] .nav .mono{color:rgba(245,239,235,.7)}
+
+/* ----------------------------------------------------------------- room */
+.demo-shell{min-height:0;display:block;padding:clamp(14px,3vw,34px) var(--gut) clamp(40px,6vw,70px);position:relative;transition:padding-bottom 1.2s var(--ease)}
+.demo-shell.printing{padding-bottom:calc(var(--ph,420px) + 70px)}
+
+.softbox{position:fixed;top:78px;left:max(8px,calc(50% - 790px));width:200px;z-index:0;pointer-events:none;transform:rotate(14deg);transform-origin:50% 10%}
+.softbox svg{width:100%;height:auto;display:block;position:relative}
+.sb-canopy{fill:#e9eef2;stroke:#c9d3db;stroke-width:2}
+.sb-ribs{stroke:#b9c4cd;stroke-width:1.4}
+.sb-pole,.sb-stand{stroke:#2c3a4b;stroke-width:5;stroke-linecap:round}
+.sb-head{fill:#1c2735;stroke:#3b4a5d;stroke-width:2}
+.sb-bloom{position:absolute;left:50%;top:26%;width:340px;height:340px;margin:-170px 0 0 -170px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.95),rgba(220,236,246,.35) 45%,transparent 72%);opacity:.12;transition:opacity .2s}
+.softbox.fire .sb-bloom{animation:bloom .9s ease-out}
+.softbox.fire .sb-canopy{animation:canopy .9s ease-out}
+@keyframes bloom{0%{opacity:.12;transform:scale(.9)}6%{opacity:1;transform:scale(1.35)}100%{opacity:.12;transform:scale(.9)}}
+@keyframes canopy{6%{fill:#fff;filter:drop-shadow(0 0 30px #fff)}}
+@media (max-width:1279px){.softbox{display:none}}
+
+/* a room-wide flash for every shot */
+.roomflash{position:fixed;inset:0;z-index:45;background:#fff;opacity:0;pointer-events:none}
+.roomflash.pop{animation:roomflash .75s ease-out}
+@keyframes roomflash{0%{opacity:0}6%{opacity:.75}100%{opacity:0}}
+
+/* --------------------------------------------------------------- device */
+.device{
+  position:relative;z-index:1;max-width:1080px;margin-inline:auto;border-radius:44px;padding:clamp(8px,1.3vw,16px);
+  background:linear-gradient(160deg,#2a3746,#0b1118 62%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.07),0 70px 120px -50px rgba(0,0,0,.85),0 0 160px -40px rgba(143,194,223,.28);
+  animation:deviceIn 1s var(--ease) both;
+}
+@keyframes deviceIn{from{opacity:0;transform:translateY(40px) scale(.97)}to{opacity:1;transform:none}}
+.device-cam{position:absolute;top:clamp(2px,.45vw,5px);left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:50%;background:#05080c;box-shadow:inset 0 0 0 1.5px #1f2a37}
+.device-screen{
+  position:relative;border-radius:clamp(20px,2.6vw,32px);overflow:hidden;background:var(--cream);color:var(--navy);
+  min-height:clamp(520px,calc(100svh - 230px),820px);display:flex;flex-direction:column;
+}
+.device-screen .demo-panel{flex:1;position:relative}
+@media (max-width:640px){.device{border-radius:30px}}
+
+/* --------------------------------------------------------------- intro */
+.intro-deco{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.intro-deco span{position:absolute;font:400 clamp(9rem,22vw,20rem)/1 "Fugaz One",sans-serif;color:var(--navy);opacity:.045;animation:drift 10s ease-in-out infinite}
+.intro-deco span:nth-child(1){left:4%;top:4%}
+.intro-deco span:nth-child(2){right:6%;top:26%;animation-delay:-3s}
+.intro-deco span:nth-child(3){left:30%;bottom:-8%;animation-delay:-6s}
+@keyframes drift{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-22px) rotate(3deg)}}
+[data-panel="intro"] .demo-narrow{position:relative;margin-block:auto}
+[data-panel="intro"] h1{font-size:clamp(2.6rem,6.4vw,4.6rem)!important;line-height:.98!important}
+#startCam{font-size:1.15rem!important;padding:20px 40px;border-radius:999px;position:relative;animation:camPulse 2.2s ease-in-out infinite}
+@keyframes camPulse{0%,100%{box-shadow:0 0 0 0 rgba(63,122,156,.45)}50%{box-shadow:0 0 0 18px rgba(63,122,156,0)}}
+#startCam:hover{transform:translateY(-2px) scale(1.03)}
+
+/* ---------------------------------------------------------------- live */
+[data-panel="live"]{justify-content:center}
+.camwrap{border-radius:22px}
+.vf{
+  position:absolute;inset:18px;pointer-events:none;z-index:2;--c:rgba(255,255,255,.9);--l:38px;--t:3px;
+  background:
+    linear-gradient(var(--c),var(--c)) top left/var(--l) var(--t) no-repeat,
+    linear-gradient(var(--c),var(--c)) top left/var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) top right/var(--l) var(--t) no-repeat,
+    linear-gradient(var(--c),var(--c)) top right/var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom left/var(--l) var(--t) no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom left/var(--t) var(--l) no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom right/var(--l) var(--t) no-repeat,
+    linear-gradient(var(--c),var(--c)) bottom right/var(--t) var(--l) no-repeat;
+}
+#app.shooting .vf{animation:focus 1.6s ease-in-out infinite}
+@keyframes focus{50%{inset:30px}}
+.rec{position:absolute;top:22px;inset-inline-start:26px;z-index:3;display:flex;align-items:center;gap:8px;font:500 .72rem/1 var(--f-mono);letter-spacing:.18em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.rec::before{content:"";width:9px;height:9px;border-radius:50%;background:#ff6b6b;animation:recblink 1.2s steps(1) infinite}
+@keyframes recblink{50%{opacity:.2}}
+.camwrap .cd{font-family:"Fugaz One",sans-serif;font-weight:400}
+.camwrap .cd::before,.camwrap .cd::after{content:"";position:absolute;inset:0;margin:auto;width:min(46%,250px);aspect-ratio:1;border-radius:50%;opacity:0}
+.camwrap .cd::before{border:5px solid rgba(255,255,255,.95)}
+.camwrap .cd::after{border:2px solid rgba(255,255,255,.5);width:min(62%,330px)}
+.camwrap .cd.show::before{animation:ring .8s ease-out}
+.camwrap .cd.show::after{animation:ring .8s ease-out .08s}
+@keyframes ring{0%{transform:scale(1.5);opacity:0}30%{opacity:1}100%{transform:scale(.85);opacity:0}}
+.camwrap .smile{font-family:"Fugaz One",sans-serif;font-weight:400}
+.camwrap .smile.show{animation:smile .75s var(--ease)}
+@keyframes smile{0%{transform:scale(.6) rotate(-8deg)}60%{transform:scale(1.08) rotate(2deg)}100%{transform:scale(1)}}
+
+/* --------------------------------------------------------------- tray
+   Each frame drops onto a little pile, bottom corner, as it's taken. */
+.tray{position:fixed;inset-inline-start:clamp(10px,2vw,26px);bottom:clamp(10px,2vw,26px);z-index:46;pointer-events:none;width:92px;height:120px}
+.tray .snap{position:absolute;left:0;bottom:0;width:86px;background:#fff;padding:5px 5px 16px;border-radius:3px;box-shadow:0 18px 30px -12px rgba(0,0,0,.6);transform:rotate(var(--r));animation:snapIn .9s var(--ease) both}
+.tray .snap img{width:100%;aspect-ratio:1;object-fit:cover;display:block;border-radius:2px}
+.tray .snap.gone{animation:snapOut .5s ease-in forwards}
+@keyframes snapIn{from{transform:translate(calc(50vw - 60px),calc(-48vh)) rotate(0deg) scale(2.6);opacity:0}30%{opacity:1}to{transform:rotate(var(--r));opacity:1}}
+@keyframes snapOut{to{transform:translateY(140%) rotate(var(--r));opacity:0}}
+
+/* --------------------------------------------------------------- edit */
+.edit-steps{position:relative}
+.edit-steps .step-pill{position:absolute;top:0;height:100%;border-radius:999px;background:var(--navy);transition:left .45s var(--ease),width .45s var(--ease);z-index:0}
+.edit-steps.has-pill span{position:relative;z-index:1;transition:color .3s}
+.edit-steps.has-pill span.on{background:transparent;color:var(--cream)}
+.edit-preview img{transition:transform .5s var(--ease)}
+.edit-preview img.dev{animation:devimg .9s ease-out}
+@keyframes devimg{0%{filter:brightness(1.9) saturate(.1) blur(2px);transform:scale(.97)}100%{filter:none;transform:none}}
+.edit-preview img:hover{transform:rotate(-1.5deg) scale(1.02)}
+.lux-chip,.lux-sw,.lux-btn{transition:transform .25s var(--ease),background .2s,box-shadow .2s}
+.lux-chip:hover:not(:disabled){transform:translateY(-2px)}
+.lux-chip[aria-pressed="true"]{animation:chipPop .4s var(--ease)}
+@keyframes chipPop{50%{transform:scale(1.1)}}
+.lux-sw:hover{transform:scale(1.12)}
+
+/* ------------------------------------------------------------- printer */
+.printer{position:relative;z-index:2;width:min(380px,72%);height:30px;margin:-4px auto 0;background:linear-gradient(#0b1118,#151f2b);border-radius:0 0 20px 20px;box-shadow:0 20px 40px -18px rgba(0,0,0,.8)}
+.printer .slot{position:absolute;left:14%;right:14%;top:11px;height:7px;border-radius:4px;background:#000;box-shadow:inset 0 2px 4px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.06)}
+.print-out{position:absolute;left:50%;top:15px;width:min(150px,36vw);transform:translateX(-50%);height:0;overflow:hidden;transition:height 2.6s cubic-bezier(.35,.6,.25,1)}
+.print-out img{display:block;width:100%;box-shadow:0 30px 50px -20px rgba(0,0,0,.7)}
+.printer.printing .print-out{height:var(--ph,420px)}
+.printer::after{content:"";position:absolute;right:16px;top:11px;width:6px;height:6px;border-radius:50%;background:#2a3a4c}
+.printer.printing::after{background:#8fc2df;box-shadow:0 0 10px #8fc2df;animation:recblink .5s steps(1) 5}
+
+@media (prefers-reduced-motion:reduce){
+  .device,.intro-deco span,#startCam,.vf,.rec::before,.tray .snap,.edit-preview img.dev{animation:none}
+  .print-out{transition:none}
+}

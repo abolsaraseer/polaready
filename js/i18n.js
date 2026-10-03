@@ -13,7 +13,8 @@ window.I18N = {
     f_cool: "Cool", f_crisp: "Crisp", f_instant: "Instant", f_mono: "Mono", f_pop: "Pop",
     m1: "Happy Birthday! 🎂", m2: "Best day ever ✨", m3: "Love you! ❤️", m4: "Squad goals 😎", m5: "Making memories 📸", m6: "Party time! 🎉",
     /* labels the custom cursor shows over [data-cursor] elements */
-    m_cur_try: "Try it", m_cur_book: "Book", m_cur_read: "Read"
+    m_cur_try: "Try it", m_cur_book: "Book", m_cur_read: "Read",
+    p_shoot: "Shoot", p_drag: "Drag", p_throw: "Throw", p_copy: "Copy"
   },
   ar: {
     page_title: "بولاريدي — صُنعنا من أجل الوهج الأبيض",
@@ -201,6 +202,14 @@ window.I18N = {
     m_lk_next_h: "دوركم التالي.",
     m_lk_next_p: "أرسلوا لنا ألوانكم وسنصمّم نموذج شريطكم قبل أي التزام.",
     m_sb_ring: "لماذا دبّ قطبي · اقرأ القصة · ",
-    m_cur_try: "جرّبه", m_cur_book: "احجز", m_cur_read: "اقرأ"
+    m_cur_try: "جرّبه", m_cur_book: "احجز", m_cur_read: "اقرأ",
+
+    /* story page toys */
+    p_shoot: "صوّر", p_drag: "اسحب", p_throw: "ارمِ", p_copy: "انسخ",
+    p_hint_card: "انقر للتصوير · اسحبها لترميها",
+    p_hint_lens: "اسحب العدسة",
+    p_shuffle: "اخلط البطاقات",
+    p_hint_says: "انقر أي بطاقة لنسخ عبارتها.",
+    p_hint_name: "هيا، ارمِ الحروف."
   }
 };

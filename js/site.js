@@ -208,6 +208,8 @@
     var sci = $('.sci');
     if (sci) secs.push({ el: sci, fn: function (el, r) {
       var fig = $('.sci-fig', el);
+      /* a visitor dragging the lens (play.js) owns it until they scroll away */
+      if (fig.dataset.user) return;
       /* starts as the figure settles, finishes as the last paragraph passes */
       var p = clamp((vh * 0.3 - r.top) / Math.max(1, r.height - vh * 0.55), 0, 1);
       fig.style.setProperty('--x', (smooth(p) * 100).toFixed(1) + '%');
@@ -654,6 +656,9 @@
   /* a small hook so the page can be driven and checked without a real scroll */
   window.PolaReady = {
     lenis: function () { return lenis; },
+    copy: function (text) { copy(text); },
+    toast: function (msg) { toast(msg); },
+    t: function (key) { return T(key); },
     update: function () { measure(); update(); },
     revealAll: function () { $$('.reveal,.pr').forEach(function (e) { e.classList.add('in'); }); $$('[data-count]').forEach(function (e) { e.textContent = e.getAttribute('data-count'); }); }
   };
