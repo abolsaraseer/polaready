@@ -267,44 +267,65 @@
      setupOnPaper already uses for the card's idle sway. Skipped entirely
      on touch/no-hover devices and under reduced-motion, in which case
      the native cursor is left completely alone. */
+  /* the bear's paw: four toe beans over a pad, drawn in the same rounded
+     language as the mark. Used for the cursor and the prints it leaves. */
+  var PAW = '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 30c-9.4 0-17.3 7.6-19.4 14.8-1.7 6 2.2 11.2 8.1 11.2 4.2 0 7.3-2.2 11.3-2.2s7.1 2.2 11.3 2.2c5.9 0 9.8-5.2 8.1-11.2C49.3 37.6 41.4 30 32 30z"/>' +
+    '<ellipse cx="13.5" cy="27" rx="5.2" ry="6.8" transform="rotate(-28 13.5 27)"/><ellipse cx="24.5" cy="15.5" rx="5.6" ry="7.4" transform="rotate(-9 24.5 15.5)"/>' +
+    '<ellipse cx="39.5" cy="15.5" rx="5.6" ry="7.4" transform="rotate(9 39.5 15.5)"/><ellipse cx="50.5" cy="27" rx="5.2" ry="6.8" transform="rotate(28 50.5 27)"/></svg>';
+
+  /* ------------------------------------------------------------- cursor
+     A bear paw replaces the pointer: it tracks the mouse exactly, leans into
+     sideways movement, turns glacier and grows over anything clickable, and
+     squishes on press - and every click leaves a paw print that fades. The
+     trailing disc only appears over [data-cursor] elements, carrying their
+     label beside the paw. Skipped entirely on touch/no-hover devices and
+     under reduced motion, where the native cursor is left alone. */
   function setupCursor() {
     if (reduced || !window.matchMedia || !window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
-    var dot = doc.createElement('div'); dot.className = 'cursor-dot'; doc.body.appendChild(dot);
+    var paw = doc.createElement('div'); paw.className = 'cursor-paw'; paw.innerHTML = PAW; doc.body.appendChild(paw);
     var ring = doc.createElement('div'); ring.className = 'cursor-ring'; doc.body.appendChild(ring);
     var label = doc.createElement('span'); label.className = 'cursor-label'; ring.appendChild(label);
     doc.body.classList.add('cursor-on');
-    var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, seen = false;
+    var mx = innerWidth / 2, my = innerHeight / 2, rx = mx, ry = my, lastX = mx, tilt = 0, seen = false;
     doc.addEventListener('mousemove', function (e) {
       mx = e.clientX; my = e.clientY;
-      dot.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%)';
-      if (!seen) { rx = mx; ry = my; seen = true; } /* snap the ring in on the very first move, don't let it swoop in from centre */
+      if (!seen) { rx = mx; ry = my; lastX = mx; seen = true; }
     });
     function loop() {
+      /* lean into horizontal movement, ease back upright when still */
+      tilt = lerp(tilt, clamp((mx - lastX) * 1.6, -28, 28), 0.18); lastX = mx;
+      paw.style.transform = 'translate3d(' + mx + 'px,' + my + 'px,0) translate(-50%,-50%) rotate(' + tilt.toFixed(1) + 'deg)';
       rx = lerp(rx, mx, 0.18); ry = lerp(ry, my, 0.18);
       ring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0) translate(-50%,-50%)';
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
-    /* [data-cursor] elements swap the ring for a filled disc carrying a
-       short label (an i18n key, so it follows the language); anything else
-       clickable just swells the ring */
-    var hoverables = 'a, button, .op-btn, .op-filter-btn, .op-color-btn, input, .swatch, .line';
+    var hoverables = 'a, button, .op-btn, .op-filter-btn, .op-color-btn, input, .swatch, .line, [role="button"]';
     doc.addEventListener('mouseover', function (e) {
       var lab = e.target.closest('[data-cursor]');
-      if (lab) { label.textContent = T(lab.getAttribute('data-cursor')); doc.body.classList.add('cursor-labeled'); doc.body.classList.remove('cursor-hover'); return; }
-      if (e.target.closest(hoverables)) doc.body.classList.add('cursor-hover');
+      if (lab) { label.textContent = T(lab.getAttribute('data-cursor')); doc.body.classList.add('cursor-labeled'); }
+      if (lab || e.target.closest(hoverables)) doc.body.classList.add('cursor-hover');
     });
     doc.addEventListener('mouseout', function (e) {
       var to = e.relatedTarget;
       var lab = e.target.closest('[data-cursor]');
       if (lab && !(to && lab.contains(to))) doc.body.classList.remove('cursor-labeled');
-      var h = e.target.closest(hoverables);
+      var h = e.target.closest(hoverables + ', [data-cursor]');
       if (h && !(to && h.contains(to))) doc.body.classList.remove('cursor-hover');
     });
-    doc.addEventListener('mousedown', function () { doc.body.classList.add('cursor-down'); });
+    /* each press stamps a print where the paw came down, which fades */
+    doc.addEventListener('mousedown', function (e) {
+      doc.body.classList.add('cursor-down');
+      var p = doc.createElement('span');
+      p.className = 'pawprint'; p.innerHTML = PAW; p.setAttribute('aria-hidden', 'true');
+      p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+      p.style.setProperty('--r', (tilt + (Math.random() * 16 - 8)).toFixed(1) + 'deg');
+      doc.body.appendChild(p);
+      setTimeout(function () { p.remove(); }, 1400);
+    });
     doc.addEventListener('mouseup', function () { doc.body.classList.remove('cursor-down'); });
-    doc.addEventListener('mouseleave', function () { dot.style.opacity = ring.style.opacity = '0'; });
-    doc.addEventListener('mouseenter', function () { dot.style.opacity = ring.style.opacity = ''; });
+    doc.addEventListener('mouseleave', function () { paw.style.opacity = ring.style.opacity = '0'; });
+    doc.addEventListener('mouseenter', function () { paw.style.opacity = ring.style.opacity = ''; });
   }
 
   /* --------------------------------------------------------- smooth scroll

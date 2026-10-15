@@ -57,35 +57,47 @@ h1,h2,h3,h4{margin:0;font-weight:400;text-wrap:balance}
 :focus-visible{outline:3px solid var(--glacier);outline-offset:3px;border-radius:6px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* ------------------------------------------------------- custom cursor
+/* ------------------------------------------------- custom cursor: a bear paw
    Fine-pointer devices only (touch/no-hover gets the native cursor
    untouched) and skipped entirely under prefers-reduced-motion - see
    setupCursor in site.js, which only runs the JS half when both of
    those hold. Position tracking has no CSS transition on either
-   element (the dot must track instantly; the ring's lag comes from a
-   JS rAF lerp, not CSS, so the two effects don't double up). Only
-   width/height/colour are allowed to transition. */
+   element (the paw must track instantly; the label disc's lag comes from
+   a JS rAF lerp, not CSS, so the two effects don't double up). */
 /* .cursor-on lives on <body> (set by script), so it is matched on body itself
    - never combined with .js, which is on <html> */
 @media (hover:hover) and (pointer:fine){
   body.cursor-on,body.cursor-on *{cursor:none!important}
   body.cursor-on input,body.cursor-on textarea{cursor:text!important}
 }
-.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:600;border-radius:50%;transform:translate(-50%,-50%);will-change:transform}
-.cursor-dot{width:8px;height:8px;background:var(--navy);transition:background .25s,width .25s var(--ease),height .25s var(--ease)}
-.cursor-ring{width:36px;height:36px;border:1.5px solid rgba(47,65,86,.3);display:grid;place-items:center;transition:width .4s var(--ease),height .4s var(--ease),border-color .3s,background .3s}
-.cursor-label{font:800 .8rem/1 var(--f-body);color:#fff;white-space:nowrap;opacity:0;transform:scale(.5);transition:opacity .2s,transform .4s var(--ease)}
-body.cursor-hover .cursor-dot{width:0;height:0}
-body.cursor-hover .cursor-ring{width:58px;height:58px;background:rgba(63,122,156,.12);border-color:var(--glacier)}
-body.cursor-labeled .cursor-dot{width:0;height:0}
-body.cursor-labeled .cursor-ring{width:96px;height:96px;background:var(--glacier);border-color:transparent}
-body.cursor-labeled .cursor-label{opacity:1;transform:none}
-body.cursor-down .cursor-ring{width:24px;height:24px}
-body.cursor-down.cursor-hover .cursor-ring{width:44px;height:44px}
-body.cursor-down.cursor-labeled .cursor-ring{width:80px;height:80px}
-body.on-dark .cursor-dot{background:var(--cream)}
-body.on-dark .cursor-ring{border-color:rgba(245,239,235,.4)}
-body.on-dark.cursor-hover .cursor-ring{background:rgba(245,239,235,.14);border-color:var(--cream)}
+/* the paw (see setupCursor): its wrapper is positioned and tilted by
+   script every frame, so every size/colour change lives on the svg inside,
+   never on the wrapper's transform */
+.cursor-paw,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:600;will-change:transform}
+.cursor-paw{width:34px;height:34px;color:var(--navy);--edge:var(--cream);transition:opacity .2s}
+/* a sticker edge in the opposite tone keeps the paw readable over photos,
+   navy panels and cream alike, wherever the pointer happens to be */
+.cursor-paw svg{display:block;width:100%;height:100%;fill:currentColor;stroke:var(--edge);stroke-width:5;paint-order:stroke;stroke-linejoin:round;
+  overflow:visible;transform-origin:50% 60%;filter:drop-shadow(0 3px 4px rgba(20,30,45,.3));transition:transform .35s cubic-bezier(.34,1.56,.64,1),color .25s}
+body.cursor-hover .cursor-paw{color:var(--glacier)}
+body.cursor-hover .cursor-paw svg{transform:scale(1.4)}
+body.cursor-down .cursor-paw svg{transform:scale(.78,.68);transition-duration:.12s}
+body.cursor-down.cursor-hover .cursor-paw svg{transform:scale(1.1,.95)}
+body.on-dark .cursor-paw{color:var(--cream);--edge:var(--navy)}
+body.on-dark.cursor-hover .cursor-paw{color:#8fc2df}
+body.on-dark .cursor-paw svg{filter:drop-shadow(0 3px 5px rgba(0,0,0,.45))}
+/* the label disc rides beside the paw, below-right, only over [data-cursor] */
+.cursor-ring{width:84px;height:84px;margin:46px 0 0 46px;border-radius:50%;background:var(--glacier);display:grid;place-items:center;
+  opacity:0;scale:.3;transition:opacity .25s,scale .4s cubic-bezier(.34,1.56,.64,1)}
+.cursor-label{font:800 .8rem/1 var(--f-body);color:#fff;white-space:nowrap}
+body.cursor-labeled .cursor-ring{opacity:1;scale:1}
+html[dir="rtl"] .cursor-ring{margin:46px 0 0 -46px}
+/* prints left where the paw came down */
+.pawprint{position:fixed;z-index:599;width:26px;height:26px;margin:-13px 0 0 -13px;pointer-events:none;color:var(--glacier);
+  transform:rotate(var(--r,0deg));animation:pawprint 1.4s ease-out forwards}
+.pawprint svg{display:block;width:100%;height:100%;fill:currentColor}
+body.on-dark .pawprint{color:#8fc2df}
+@keyframes pawprint{0%{opacity:0;scale:1.5}12%{opacity:.75;scale:1}70%{opacity:.45}100%{opacity:0;scale:.92}}
 
 /* ---------------------------------------------------------- film grain
    One fixed, tiled noise layer over everything (below the cursor), so the
