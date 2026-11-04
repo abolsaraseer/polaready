@@ -426,3 +426,6 @@ verify_jwt = false
 
 [functions.gallery]
 verify_jwt = false
+
+[functions.g]
+verify_jwt = false

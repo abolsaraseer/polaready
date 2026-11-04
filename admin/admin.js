@@ -37,7 +37,7 @@
   };
   const toLocalInput = (iso) => { if (!iso) return ''; const d = new Date(iso); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
   const fromLocalInput = (v) => (v ? new Date(v).toISOString() : null);
-  const guestURL = (code) => `https://polaready.com/p/#${code}`;
+  const guestURL = (code) => `https://polaready.com/g/#${code}`;
   const qrSVG = (text) => { const q = window.qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); };
   const icon = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
   const IC = {
