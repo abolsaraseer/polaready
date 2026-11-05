@@ -55,8 +55,28 @@
     { n: 'Mint', bg: '#CCF5DB', ink: '#1A734D' }, { n: 'Lavender', bg: '#E0D4FA', ink: '#6640A6' },
     { n: 'Noir', bg: '#1A1A1F', ink: '#FFFFFF' },
   ];
+  // Ready-made booth looks. Every value stays editable after picking one.
+  const THEMES = [
+    { k: 'polaready', n: 'PolaReady Light', c: { bg: '#F5EFEB', bg2: '#F0E9E4', card: '#FFFFFF', text: '#2F4156', muted: '#5B6777', line: '#D1D0D0', accent: '#3F7A9C', on_accent: '#F5EFEB' }, fd: 'fugaz', fb: 'nunito' },
+    { k: 'night', n: 'Polar Night', c: { bg: '#233345', card: '#2C3F55', text: '#F5EFEB', muted: '#B9C3CE', line: '#3E5470', accent: '#8FC2DF', on_accent: '#233345' }, fd: 'fugaz', fb: 'nunito' },
+    { k: 'gold', n: 'Black & Gold', c: { bg: '#111111', card: '#1C1C1C', text: '#F3EBDD', muted: '#A89F91', line: '#3A342B', accent: '#C9A66B', on_accent: '#111111' }, fd: 'didot', fb: 'avenir' },
+    { k: 'blush', n: 'Blush', c: { bg: '#FBEFEF', card: '#FFFFFF', text: '#5A2E3A', muted: '#8C6670', line: '#EED7DA', accent: '#C46A84', on_accent: '#FFFFFF' }, fd: 'snell', fb: 'avenir' },
+    { k: 'burgundy', n: 'Burgundy', c: { bg: '#4A0F1C', card: '#5C1626', text: '#F7E9E4', muted: '#D3B5B0', line: '#6E2434', accent: '#E3C08D', on_accent: '#4A0F1C' }, fd: 'bodoni', fb: 'optima' },
+    { k: 'sage', n: 'Sage', c: { bg: '#EEF2EA', card: '#FFFFFF', text: '#2F3B2C', muted: '#66705F', line: '#D5DDCF', accent: '#6E8B61', on_accent: '#FFFFFF' }, fd: 'baskerville', fb: 'avenir' },
+  ];
+  // Fonts every iPad already has (plus the two PolaReady faces). The iPad maps
+  // each key to its own font; the browser preview uses the closest match.
+  const FONTS = [
+    ['fugaz', 'Fugaz One (PolaReady)', "'Fugaz One',sans-serif"], ['nunito', 'Nunito Sans (PolaReady)', "'Nunito Sans',sans-serif"],
+    ['didot', 'Didot (elegant)', "Didot,'Bodoni 72','Bodoni Moda',serif"], ['bodoni', 'Bodoni (classic)', "'Bodoni 72',Didot,'Bodoni Moda',serif"],
+    ['snell', 'Snell Roundhand (script)', "'Snell Roundhand','Segoe Script',cursive"], ['baskerville', 'Baskerville', "Baskerville,'Libre Baskerville',Georgia,serif"],
+    ['georgia', 'Georgia', 'Georgia,serif'], ['futura', 'Futura', "Futura,'Century Gothic',sans-serif"], ['avenir', 'Avenir Next', "'Avenir Next',Avenir,'Segoe UI',sans-serif"],
+    ['optima', 'Optima', 'Optima,Candara,sans-serif'], ['typewriter', 'American Typewriter', "'American Typewriter','Courier New',serif"],
+    ['noteworthy', 'Noteworthy (handwritten)', "Noteworthy,'Comic Sans MS',cursive"], ['cairo', 'Cairo (Arabic)', "'Cairo',sans-serif"],
+  ];
+  const themeFrom = (p) => ({ preset: p.k, ...p.c, bg2: p.c.bg2 || p.c.bg, font_display: p.fd, font_body: p.fb, welcome_title: '', welcome_sub: '', welcome_bg: null, logo: null });
   const DEF = () => ({ title: '', date_text: '', message: 'Thank you for coming!', photo_count: 4, lock_count: true,
-    paper: { bg: '#F5EFEB', ink: '#233345' }, lock_paper: false, voice: true, countdown: 3, filters: FILTERS.slice(), overlay: null });
+    paper: { bg: '#F5EFEB', ink: '#233345' }, lock_paper: false, voice: true, countdown: 3, filters: FILTERS.slice(), overlay: null, theme: themeFrom(THEMES[0]) });
   const CHECK = ['Paper loaded and counted', 'Test print done', 'Camera battery charged + spare', 'System file loaded on the iPad',
     'Backdrop and lights set up', 'Internet: venue Wi-Fi or phone hotspot', 'Host briefed on the night'];
   const STATUS = [['design', 'Design'], ['ready', 'Ready'], ['live', 'Live'], ['done', 'Done']];
@@ -312,6 +332,7 @@
     if (error) return fail(error);
     if (!ev) { v.innerHTML = `<div class="card empty"><div class="mk"></div><b>Event not found</b><a href="#/events">Back to events</a></div>`; return; }
     ev.config = { ...DEF(), ...(ev.config || {}) };
+    ev.config.theme = { ...themeFrom(THEMES[0]), ...(ev.config.theme || {}) };
     const d = dOf(ev.starts_at);
     const headHTML = `<a class="crumb" href="#/events">${IC.back.replace('<svg', '<svg width="16" height="16"')}All events</a>
       <div class="top"><div><h1 data-a>${esc(ev.name)}</h1><div class="sub" data-a>${esc([dateLong(d), d && `${timeShort(d)}${ev.ends_at ? '–' + timeShort(dOf(ev.ends_at)) : ''}`, ev.venue, ev.host_name && 'Host: ' + ev.host_name].filter(Boolean).join(' · '))}</div></div>
@@ -502,6 +523,21 @@
     let overlayURL = null;
     if (c.overlay && pngs.some((f) => f.name === c.overlay)) overlayURL = (await sb.storage.from('event-files').createSignedUrl(`${ev.id}/${c.overlay}`, 3600)).data?.signedUrl;
     const assigned = (booths || []).filter((b) => b.active_event_id === ev.id);
+    const images = fileList.filter((f) => /\.(png|jpe?g)$/i.test(f.name));
+    const fontFiles = fileList.filter((f) => /\.(ttf|otf)$/i.test(f.name));
+    const urls = {};
+    if (images.length + fontFiles.length) {
+      const { data: su } = await sb.storage.from('event-files').createSignedUrls([...images, ...fontFiles].map((f) => `${ev.id}/${f.name}`), 3600);
+      (su || []).forEach((r) => { if (r.signedUrl) urls[r.path.split('/').pop()] = r.signedUrl; });
+    }
+    // Uploaded font files preview with the real face.
+    for (const f of fontFiles) {
+      try { const ff = new FontFace('evf-' + f.name.replace(/\W/g, ''), `url(${urls[f.name]})`); await ff.load(); document.fonts.add(ff); } catch { /* preview falls back */ }
+    }
+    const fontCSS = (k) => k?.startsWith('file:') ? `'evf-${k.slice(5).replace(/\W/g, '')}',sans-serif` : (FONTS.find((f) => f[0] === k)?.[2] || "'Nunito Sans',sans-serif");
+    const fontOpts = (sel) => FONTS.map(([k, l]) => `<option value="${k}" ${sel === k ? 'selected' : ''}>${l}</option>`).join('') + fontFiles.map((f) => `<option value="file:${esc(f.name)}" ${sel === 'file:' + f.name ? 'selected' : ''}>Uploaded: ${esc(f.name)}</option>`).join('');
+    const imgOpts = (sel) => `<option value="">None</option>` + images.map((f) => `<option value="${esc(f.name)}" ${sel === f.name ? 'selected' : ''}>${esc(f.name)}</option>`).join('');
+    const TC = [['bg', 'Background'], ['card', 'Cards'], ['text', 'Text'], ['muted', 'Soft text'], ['line', 'Lines'], ['accent', 'Buttons'], ['on_accent', 'Button text']];
 
     t.innerHTML = `<div class="setup"><div>
       <div class="card" data-a>
@@ -522,14 +558,32 @@
         <div class="line"><span>Countdown</span><div class="seg" id="cd">${[3, 5].map((n) => `<button data-n="${n}" class="${c.countdown === n ? 'on' : ''}">${n}s</button>`).join('')}</div></div>
         <div class="line" style="align-items:flex-start;flex-direction:column"><span>Filters guests can pick</span><div class="fl" id="fl">${FILTERS.map((f) => `<button data-f="${esc(f)}" class="${c.filters.includes(f) ? 'on' : ''}">${esc(f)}</button>`).join('')}</div></div>
       </div>
+      <div class="card" data-a style="margin-top:16px" id="look">
+        <h3>Booth look <span class="mono soft">every screen</span></h3>
+        <div class="soft" style="font-size:13.5px;margin:-6px 0 12px">The whole booth wears the event's theme: welcome screen, buttons, countdown, every screen. Only the look changes, never how it works.</div>
+        <div class="sec">Ready-made themes</div>
+        <div class="presets" id="pre">${THEMES.map((p, i) => `<button class="pre" data-p="${i}" style="background:${p.c.bg};color:${p.c.text}"><span class="pdots"><i style="background:${p.c.accent}"></i><i style="background:${p.c.card};box-shadow:inset 0 0 0 1px ${p.c.line}"></i></span><b style="font-family:${fontCSS(p.fd)}">${esc(p.n)}</b></button>`).join('')}</div>
+        <div class="sec">Colours</div>
+        <div class="tcols" id="tcols">${TC.map(([k, l]) => `<label class="colorin"><input type="color" data-tc="${k}"><small>${l}</small></label>`).join('')}</div>
+        <div class="sec">Fonts</div>
+        <div class="f2"><label class="field"><span>Headlines</span><select class="inp" id="fd">${fontOpts(c.theme.font_display)}</select></label>
+        <label class="field"><span>Text</span><select class="inp" id="fbd">${fontOpts(c.theme.font_body)}</select></label></div>
+        <div class="soft" style="font-size:12.5px;margin-top:-6px">Upload a .ttf or .otf in Files to use the event's own font.</div>
+        <div class="sec">Welcome screen</div>
+        <label class="field"><span>Welcome title</span><input class="inp" id="wt" value="${esc(c.theme.welcome_title)}" maxlength="50" placeholder="Welcome to ${esc(c.title || 'our night')}"></label>
+        <label class="field"><span>Line under it</span><input class="inp" id="ws" value="${esc(c.theme.welcome_sub)}" maxlength="50" placeholder="STEP UP — FLASH IN 3, 2, 1"></label>
+        <div class="f2"><label class="field"><span>Background picture</span><select class="inp" id="wb">${imgOpts(c.theme.welcome_bg)}</select></label>
+        <label class="field"><span>Logo (instead of the bear)</span><select class="inp" id="wl">${imgOpts(c.theme.logo)}</select></label></div>
+      </div>
       <div class="card" data-a style="margin-top:16px">
         <h3>Files <span class="mono soft">${fileList.length} file${fileList.length === 1 ? '' : 's'}</span></h3>
         <div class="files" id="files">${fileList.map((f) => `<div class="file"><span class="ic">${(f.name.split('.').pop() || '').toUpperCase()}</span><div class="t"><b>${esc(f.name)}</b><small>${f.metadata?.size ? Math.round(f.metadata.size / 1024) + ' KB' : ''}${c.overlay === f.name ? ' · on the paper' : ''}</small></div>
           ${/\.png$/i.test(f.name) ? `<button class="btn ghost sm" data-ov="${esc(f.name)}">${c.overlay === f.name ? 'Remove from paper' : 'Use on paper'}</button>` : ''}<button class="btn danger sm" data-del="${esc(f.name)}">Delete</button></div>`).join('')}</div>
-        <label class="drop" id="drop" style="margin-top:10px;display:block"><input type="file" id="fi" multiple hidden accept="image/png,image/jpeg,application/pdf">Drop a file here or tap to upload<br><small>A transparent PNG at 600 × 1800 px can be laid over the whole paper.</small></label>
+        <label class="drop" id="drop" style="margin-top:10px;display:block"><input type="file" id="fi" multiple hidden accept="image/png,image/jpeg,application/pdf,.ttf,.otf,font/ttf,font/otf">Drop a file here or tap to upload<br><small>Pictures for the welcome screen, a logo, a font (.ttf / .otf), or a transparent PNG at 600 × 1800 px to lay over the paper.</small></label>
       </div></div>
-      <div class="prev"><div class="card" data-a><h3>Preview <span class="mono soft">v${ev.config_version}</span></h3>
-        <div class="stage"><div class="paper" id="pp"></div></div>
+      <div class="prev"><div class="card" data-a><h3>Preview <div class="seg" id="pv"><button data-v="paper" class="on">Paper</button><button data-v="booth">Booth</button></div></h3>
+        <div class="stage" id="stp"><div class="paper" id="pp"></div></div>
+        <div class="stage bstage" id="stb" hidden><div class="ipad"><div class="scr" id="ip"></div></div><div class="uidemo" id="ud"></div><div class="soft" style="font-size:12px;text-align:center">Fonts look exact on a Mac, iPhone or iPad.</div></div>
         <div class="acts" style="margin-top:14px"><button class="btn gold" id="send">Send to booth</button><button class="btn ghost" id="sys">${IC.dl.replace('<svg', '<svg width="17" height="17"')}System file</button></div>
         <div class="soft" style="font-size:13px;margin-top:10px" id="assigned">${assigned.length ? 'On booth: ' + assigned.map((b) => esc(b.name)).join(', ') + '. The iPad picks up changes on its welcome screen within a minute.' : 'Not on a booth yet.'}</div>
         <div class="acts" style="margin-top:12px">${(tpls || []).length ? `<select class="inp" id="tsel" style="flex:1;min-width:150px"><option value="">Use a template…</option>${tpls.map((x) => `<option value="${x.id}">${esc(x.name)}</option>`).join('')}</select>` : ''}<button class="btn ghost sm" id="savet">Save as template</button></div>
@@ -549,7 +603,43 @@
       $('#sb', t).classList.toggle('show', JSON.stringify(c) !== saved);
     };
     const bump = () => { if (G && !reduce) G.fromTo(pp, { scale: 0.97 }, { scale: 1, duration: 0.5, ease: 'back.out(2.5)' }); };
-    draw();
+    const ip = $('#ip', t), ud = $('#ud', t);
+    const drawBooth = () => {
+      const th = c.theme; const D = fontCSS(th.font_display), B = fontCSS(th.font_body);
+      const titled = th.logo || th.welcome_title;
+      ip.style.background = th.bg; ip.style.color = th.text;
+      ip.innerHTML = `${th.welcome_bg && urls[th.welcome_bg] ? `<img class="wbg" src="${urls[th.welcome_bg]}" alt=""><span class="wveil" style="background:${th.bg}"></span>` : `<span class="glow" style="background:radial-gradient(closest-side,${th.accent}33,transparent)"></span>`}
+        <div class="wc">${th.logo && urls[th.logo] ? `<img class="wlogo" src="${urls[th.logo]}" alt="">` : `<i class="bear" style="background:${th.text}"></i>`}
+        <b style="font-family:${D}">${esc(titled ? (th.welcome_title || '') : 'PolaReady')}</b>${titled ? '' : `<small class="tag" style="font-family:${B}">MADE FOR THE WHITEOUT</small>`}
+        <i class="rl" style="background:${th.text}"></i><small style="font-family:${B};color:${th.muted}">${esc(th.welcome_sub || 'STEP UP — FLASH IN 3, 2, 1')}</small></div>`;
+      ud.style.background = th.bg; ud.style.color = th.text;
+      ud.innerHTML = `<div class="ucard" style="background:${th.card};box-shadow:inset 0 0 0 1px ${th.line}"><b style="font-family:${B}">Choose a filter</b><small style="color:${th.muted};font-family:${B}">10 looks</small></div>
+        <span class="ubtn" style="background:${th.accent};color:${th.on_accent};font-family:${B}">Print</span><span class="ubtn" style="background:${th.card};color:${th.text};box-shadow:inset 0 0 0 1px ${th.line};font-family:${B}">Retake</span><b class="ucd" style="font-family:${D};color:${th.accent}">3</b>`;
+      $$('[data-tc]', t).forEach((x) => (x.value = th[x.dataset.tc] || '#000000'));
+      $$('#pre .pre', t).forEach((x) => x.classList.toggle('on', THEMES[x.dataset.p].k === th.preset));
+    };
+    const draw0 = draw;
+    const drawAll = () => { draw0(); drawBooth(); };
+    drawAll();
+    const bumpBooth = () => { if (G && !reduce) { G.fromTo(ip, { scale: 0.98 }, { scale: 1, duration: 0.5, ease: 'back.out(2)' }); G.from($$('.wc > *', ip), { y: 10, opacity: 0, duration: 0.45, stagger: 0.05, ease: 'power3.out' }); } };
+    $$('#pv button', t).forEach((b) => (b.onclick = () => {
+      $$('#pv button', t).forEach((x) => x.classList.toggle('on', x === b));
+      const booth = b.dataset.v === 'booth'; $('#stp', t).hidden = booth; $('#stb', t).hidden = !booth;
+      if (booth) bumpBooth(); else bump();
+    }));
+    const showBooth = () => { if ($('#stb', t).hidden) $('#pv button[data-v="booth"]', t).click(); };
+    $$('#pre .pre', t).forEach((b) => (b.onclick = () => {
+      const p = THEMES[b.dataset.p]; const keep = { welcome_title: c.theme.welcome_title, welcome_sub: c.theme.welcome_sub, welcome_bg: c.theme.welcome_bg, logo: c.theme.logo };
+      c.theme = { ...themeFrom(p), ...keep }; $('#fd', t).value = c.theme.font_display; $('#fbd', t).value = c.theme.font_body;
+      drawAll(); showBooth(); bumpBooth();
+    }));
+    $$('[data-tc]', t).forEach((x) => (x.oninput = () => { c.theme[x.dataset.tc] = x.value; if (x.dataset.tc === 'bg') c.theme.bg2 = x.value; c.theme.preset = null; drawAll(); showBooth(); }));
+    $('#fd', t).onchange = (e) => { c.theme.font_display = e.target.value; drawAll(); showBooth(); bumpBooth(); };
+    $('#fbd', t).onchange = (e) => { c.theme.font_body = e.target.value; drawAll(); showBooth(); };
+    $('#wt', t).oninput = (e) => { c.theme.welcome_title = e.target.value; drawAll(); showBooth(); };
+    $('#ws', t).oninput = (e) => { c.theme.welcome_sub = e.target.value; drawAll(); showBooth(); };
+    $('#wb', t).onchange = (e) => { c.theme.welcome_bg = e.target.value || null; drawAll(); showBooth(); bumpBooth(); };
+    $('#wl', t).onchange = (e) => { c.theme.logo = e.target.value || null; drawAll(); showBooth(); bumpBooth(); };
     $$('#pc button', t).forEach((b) => (b.onclick = () => { c.photo_count = +b.dataset.n; $$('#pc button', t).forEach((x) => x.classList.toggle('on', x === b)); draw(); bump(); if (G && !reduce) G.from($$('.shots i', pp), { scaleY: 0, transformOrigin: 'top', duration: 0.4, stagger: 0.05, ease: 'power3.out' }); }));
     $$('#cd button', t).forEach((b) => (b.onclick = () => { c.countdown = +b.dataset.n; $$('#cd button', t).forEach((x) => x.classList.toggle('on', x === b)); draw(); }));
     const tog = (id, fn) => ($(id, t).onclick = (e) => { e.currentTarget.classList.toggle('on'); fn(e.currentTarget.classList.contains('on')); draw(); bump(); });
@@ -585,7 +675,7 @@
     $('#savet', t).onclick = async () => {
       const m = modal(`<h2>Save as template</h2><div class="sub">Reuse this setup for the next client in seconds.</div><form id="tf"><label class="field"><span>Template name</span><input class="inp" name="n" value="${esc(ev.name)}" required></label><div class="acts"><button type="button" class="btn ghost" data-close>Cancel</button><button class="btn">Save template</button></div></form>`);
       $('#tf', m.el).onsubmit = async (e) => {
-        e.preventDefault(); const cfg = { ...c, title: '', date_text: '', overlay: null };
+        e.preventDefault(); const cfg = { ...c, title: '', date_text: '', overlay: null, theme: { ...c.theme, welcome_title: '', welcome_bg: null, logo: null, font_display: c.theme.font_display?.startsWith('file:') ? 'fugaz' : c.theme.font_display, font_body: c.theme.font_body?.startsWith('file:') ? 'nunito' : c.theme.font_body } };
         const { error } = await sb.from('templates').insert({ name: new FormData(e.target).get('n'), config: cfg });
         if (error) return fail(error); m.close(); toast('Template saved');
       };
@@ -593,12 +683,14 @@
     $('#tsel', t)?.addEventListener('change', (e) => {
       const tp = (tpls || []).find((x) => x.id === e.target.value); if (!tp) return;
       c = { ...DEF(), ...tp.config, title: c.title, date_text: c.date_text, overlay: c.overlay };
+      c.theme = { ...themeFrom(THEMES[0]), ...(tp.config.theme || {}), welcome_title: c.theme?.welcome_title || '', welcome_bg: null, logo: null };
+      $('#fd', t).value = c.theme.font_display; $('#fbd', t).value = c.theme.font_body;
       t.querySelectorAll('.seg button,.tog,#fl button').forEach(() => {});
       $$('#pc button', t).forEach((x) => x.classList.toggle('on', +x.dataset.n === c.photo_count));
       $$('#cd button', t).forEach((x) => x.classList.toggle('on', +x.dataset.n === c.countdown));
       $('#lc', t).classList.toggle('on', !c.lock_count); $('#lp', t).classList.toggle('on', c.lock_paper); $('#vo', t).classList.toggle('on', c.voice);
       $$('#fl button', t).forEach((x) => x.classList.toggle('on', c.filters.includes(x.dataset.f)));
-      $('#ms', t).value = c.message; draw(); bump(); toast(`Template “${tp.name}” applied. Save to keep it.`);
+      $('#ms', t).value = c.message; drawAll(); bump(); toast(`Template “${tp.name}” applied. Save to keep it.`);
     });
     // files
     const upload = async (list) => {
@@ -606,7 +698,8 @@
         if (f.size > 15 * 1024 * 1024) { toast(`${f.name} is over 15 MB`); continue; }
         const name = f.name.replace(/[^\w.\- ]+/g, '_');
         toast(`Uploading ${name}…`);
-        const { error } = await sb.storage.from('event-files').upload(`${ev.id}/${name}`, f, { upsert: true, contentType: f.type || undefined });
+        const ct = f.type || (/\.otf$/i.test(name) ? 'font/otf' : /\.ttf$/i.test(name) ? 'font/ttf' : undefined);
+        const { error } = await sb.storage.from('event-files').upload(`${ev.id}/${name}`, f, { upsert: true, contentType: ct });
         if (error) return fail(error);
       }
       await sb.from('events').update({ config_version: ev.config_version + 1 }).eq('id', ev.id);
@@ -622,7 +715,9 @@
       const m = modal(`<h2>Delete ${esc(n)}?</h2><div class="sub">The booth will stop using it the next time it updates.</div><div class="acts"><button class="btn ghost" data-close>Keep it</button><button class="btn danger" id="yes">Delete</button></div>`);
       $('#yes', m.el).onclick = async () => {
         const { error } = await sb.storage.from('event-files').remove([`${ev.id}/${n}`]); if (error) return fail(error);
-        const patch = { config_version: ev.config_version + 1 }; if (c.overlay === n) patch.config = { ...ev.config, overlay: null };
+        const patch = { config_version: ev.config_version + 1 }; const th = { ...ev.config.theme };
+        ['welcome_bg', 'logo'].forEach((k) => { if (th[k] === n) th[k] = null; }); ['font_display', 'font_body'].forEach((k) => { if (th[k] === 'file:' + n) th[k] = k === 'font_display' ? 'fugaz' : 'nunito'; });
+        patch.config = { ...ev.config, overlay: c.overlay === n ? null : ev.config.overlay, theme: th };
         await sb.from('events').update(patch).eq('id', ev.id); m.close(); toast('Deleted'); viewEvent(ev.id, 'setup');
       };
     }));
