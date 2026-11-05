@@ -1,5 +1,5 @@
 /* The client's page: polaready.com/design/#<private token>.
- * One page, two tabs. Design: it starts as the PolaReady booth and the client
+ * One page, two tabs. Design: it starts as the default booth and the client
  * changes only what they want; every change goes to the booth straight away.
  * "I approve" locks it. Photos: their night's photos (coming in step 2). */
 (() => {
@@ -13,7 +13,6 @@
   const app = $('#app');
   const CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
   const CHEV = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
-  const POLA = { bg: '#233345', text: '#F5EFEB', accent: '#B8935A' }; // shown as "the PolaReady colours"
 
   let ev = null, files = {}, status = 'in_progress', hasBooth = false, tab = 'design', open = null, view = 'booth';
   let d = blank();
@@ -26,7 +25,6 @@
     };
   }
   const locked = () => status === 'approved';
-  const custom = () => d.booth.mode === 'custom';
 
   const call = async (body) => {
     const r = await fetch(`${C.url}/functions/v1/design`, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: C.key }, body: JSON.stringify({ token, ...body }) });
@@ -41,6 +39,7 @@
   function setSaved(txt, cls = '') { const s = $('#saved'); if (s) { s.textContent = txt; s.className = 'saved mono ' + cls; } }
   function save(now) {
     if (locked()) return Promise.resolve();
+    deriveMode();
     clearTimeout(saveT); setSaved('Saving…');
     const go = () => (chain = chain.then(async () => {
       try { await call({ action: 'save', design: d }); setSaved(savedText(), 'ok'); }
@@ -52,21 +51,24 @@
     if (now) return go();
     saveT = setTimeout(go, 600); return Promise.resolve();
   }
-  // Any booth-look change other than the Theme row switches to "my own theme".
-  const makeCustom = () => { if (!custom()) { d.booth.mode = 'custom'; heads(); } };
+  // There's no "default or my own" question: the booth uses the client's own
+  // theme as soon as anything in it differs from the default.
+  const deriveMode = () => {
+    const b = d.booth;
+    b.mode = b.logo || b.background || !isDefault('colours') || b.welcome_title || b.welcome_sub || b.font !== 'fugaz' ? 'custom' : 'default';
+  };
 
-  /* ---------- the five rows ---------- */
+  /* ---------- the four rows ---------- */
   const ROWS = [
-    ['theme', 'Theme', 'booth'], ['logo', 'Logo', 'booth'], ['colours', 'Colours', 'booth'],
+    ['logo', 'Logo', 'booth'], ['colours', 'Colours', 'booth'],
     ['words', 'Words & date', 'paper'], ['paper', 'Paper', 'paper'],
   ];
   const sw = (c) => `<i class="sw" style="background:${esc(c)}"></i>`;
   function summary(k) {
     const b = d.booth, p = d.paper, x = d.details;
     switch (k) {
-      case 'theme': return custom() ? 'My own theme' : 'PolaReady';
-      case 'logo': return custom() && b.logo ? (b.background ? 'Your logo + background' : 'Your logo') : 'The PolaReady bear';
-      case 'colours': return `<span class="sws">${(custom() ? [b.bg, b.text, b.accent] : [POLA.bg, POLA.text, POLA.accent]).map(sw).join('')}</span>${custom() ? '' : ' PolaReady'}`;
+      case 'logo': return b.logo ? (b.background ? 'Your logo + background' : 'Your logo') : b.background ? 'Default logo + your background' : 'Default';
+      case 'colours': return `<span class="sws">${[b.bg, b.text, b.accent].map(sw).join('')}</span>${isDefault('colours') ? ' Default' : ''}`;
       case 'words': return esc([x.names || 'Add your names', x.date_text || P.dateText(x.date)].filter(Boolean).join(' · '));
       case 'paper': return p.mode === 'template' && p.template && (p.windows || []).length >= 2
         ? `Your design · ${p.windows.length} photos` : `<span class="sws">${sw(p.bg)}</span> Colour · ${p.photo_count} photos`;
@@ -74,7 +76,6 @@
   }
   const isDefault = (k) => {
     const b = d.booth, p = d.paper;
-    if (k === 'theme') return !custom();
     if (k === 'logo') return !b.logo && !b.background;
     if (k === 'colours') return b.bg === P.DEFAULT.bg && b.text === P.DEFAULT.text && b.accent === P.DEFAULT.accent;
     if (k === 'words') return !b.welcome_title && !b.welcome_sub && b.font === 'fugaz' && !d.details.message;
@@ -82,32 +83,24 @@
   };
   function reset(k) {
     const z = blank();
-    if (k === 'theme') d.booth.mode = 'default';
     if (k === 'logo') { d.booth.logo = null; d.booth.background = null; }
     if (k === 'colours') Object.assign(d.booth, { bg: z.booth.bg, text: z.booth.text, accent: z.booth.accent });
     if (k === 'words') { Object.assign(d.booth, { welcome_title: '', welcome_sub: '', font: 'fugaz' }); d.details.message = ''; }
     if (k === 'paper') d.paper = z.paper;
   }
 
-  const choice = (v, cur, art, title, text) => `<button class="choice ${cur === v ? 'on' : ''}" data-mode="${v}"><span class="tick">${CHECK}</span><div class="art">${art}</div><b>${title}</b><span>${text}</span></button>`;
   const note = (t) => `<p class="hint">${t}</p>`;
   const EDIT = {
-    theme: () => `<div class="choices">
-      ${choice('default', d.booth.mode, `<div class="mini">${P.boothHTML({ booth: { mode: 'default' } }, {})}</div>`, 'PolaReady', 'Our signature look. Nothing to decide.')}
-      ${choice('custom', d.booth.mode, `<div style="display:flex;gap:6px">${['#111111', '#C9A66B', '#F3EBDD', '#4A0F1C', '#E3C08D'].map((c) => `<i style="width:26px;height:66px;border-radius:8px;background:${c}"></i>`).join('')}</div>`, 'Make my own', 'Your logo, colours, words and font.')}</div>`,
-    logo: () => `${custom() ? '' : note('Adding a logo switches the booth to your own theme.')}
-      <label class="upl" id="ul"><input type="file" accept="image/png,image/jpeg" hidden id="uf">${d.booth.logo && files[d.booth.logo] ? `<img src="${files[d.booth.logo]}" alt="Your logo"><b>Tap to change it</b>` : `<b>Upload your logo</b><small>PNG with a see-through background looks best · up to 15 MB</small>`}</label>
+    logo: () => `<label class="upl" id="ul"><input type="file" accept="image/png,image/jpeg" hidden id="uf">${d.booth.logo && files[d.booth.logo] ? `<img src="${files[d.booth.logo]}" alt="Your logo"><b>Tap to change it</b>` : `<b>Upload your logo</b><small>PNG with a see-through background looks best · up to 15 MB</small>`}</label>
       <label class="upl sm" id="ub"><input type="file" accept="image/png,image/jpeg" hidden id="bf">${d.booth.background && files[d.booth.background] ? `<img src="${files[d.booth.background]}" alt="Background"><small>Background picture · tap to change</small>` : `<b>Optional: a background picture</b><small>A photo or pattern behind the welcome screen</small>`}</label>
       <p class="hint" id="lmsg"></p>`,
-    colours: () => `${custom() ? '' : note('Changing a colour switches the booth to your own theme.')}
-      <div class="colors">${[['bg', 'Background'], ['text', 'Writing'], ['accent', 'Buttons']].map(([k, l]) => `<label class="color"><input type="color" data-c="${k}" value="${d.booth[k]}"><b>${l}</b><small data-h="${k}">${d.booth[k].toUpperCase()}</small></label>`).join('')}</div>
+    colours: () => `<div class="colors">${[['bg', 'Background'], ['text', 'Writing'], ['accent', 'Buttons']].map(([k, l]) => `<label class="color"><input type="color" data-c="${k}" value="${d.booth[k]}"><b>${l}</b><small data-h="${k}">${d.booth[k].toUpperCase()}</small></label>`).join('')}</div>
       ${note('Pick three. We work out the rest so everything stays easy to read.')}`,
     words: () => `<div class="grp mono soft">On the booth screen</div>
       <label class="field"><span>Welcome title</span><input class="inp" id="wt" maxlength="50" value="${esc(d.booth.welcome_title)}" placeholder="Welcome to ${esc(d.details.names || ev.name)}"></label>
       <label class="field"><span>The line under it</span><input class="inp" id="ws" maxlength="50" value="${esc(d.booth.welcome_sub)}" placeholder="Step up, flash in 3, 2, 1"></label>
       <div class="field"><span>Font</span></div>
       <div class="fonts">${Object.entries(P.FONTS).map(([k, [n, css]]) => `<button class="font ${d.booth.font === k ? 'on' : ''}" data-f="${k}"><b style="font-family:${css}">Aa</b><small>${n}</small></button>`).join('')}</div>
-      ${custom() ? '' : note('The welcome words and font are part of your own theme. Changing them switches it on.')}
       <div class="grp mono soft" style="margin-top:26px">On the paper</div>
       <label class="field"><span>Names or title</span><input class="inp" id="nm" maxlength="40" value="${esc(d.details.names)}" placeholder="Sara & Omar"></label>
       <label class="field"><span>Date</span><input class="inp" type="date" id="dt" value="${esc(d.details.date)}"></label>
@@ -157,14 +150,14 @@
     const L = locked();
     return `<div class="dz">
       <div class="rows">
-        <div class="bar2"><span class="soft">${L ? 'Your approved design' : 'It starts as PolaReady. Change only what you want.'}</span><span class="saved mono" id="saved"></span></div>
+        <div class="bar2"><span class="soft">${L ? 'Your approved design' : 'It starts with the default look. Change only what you want.'}</span><span class="saved mono" id="saved"></span></div>
         <div class="pvm" id="pvm"></div>
         ${ROWS.map(([k, t], i) => `<section class="rw ${L ? 'ro' : ''}" data-row="${k}">
           <button class="rh" ${L ? 'disabled' : ''} aria-expanded="false"><span class="n">${i + 1}</span><span class="tx"><b>${t}</b><small data-sum="${k}">${summary(k)}</small></span>${L ? '' : `<span class="ch">Change ${CHEV}</span>`}</button>
           <div class="rb" hidden></div></section>`).join('')}
         ${L ? `<div class="okcard"><span class="okic">${CHECK}</span><div><b>Approved and locked</b><span>This is what your booth uses on the night. To change anything now, message PolaReady.</span></div></div>`
           : `<div class="appr"><div><b>Happy with it?</b><span>Approving locks your design so nothing changes by accident on the night.</span></div><button class="btn gold" id="approve">I approve, lock my design</button></div>
-          <p class="hint" style="text-align:center"><button class="lnk" id="resetall">Put everything back to PolaReady</button></p>`}
+          <p class="hint" style="text-align:center"><button class="lnk" id="resetall">Put everything back to default</button></p>`}
       </div>
       <aside class="pvs"><div class="pvcard"><div class="seg" id="pvt"><button data-v="booth">Booth</button><button data-v="paper">Paper</button></div><div id="pv"></div>
         <p class="hint" style="text-align:center">${L ? 'Locked for your night.' : hasBooth ? 'Every change goes to your booth within seconds.' : 'PolaReady connects a booth to your event before the night.'}</p></div></aside>
@@ -188,13 +181,14 @@
     if (pop && anim) $$('#pv > *, #pvm .pvin > *').forEach((n) => G.fromTo(n, { scale: 0.97, opacity: 0.6 }, { scale: 1, opacity: 1, duration: 0.45, ease: 'back.out(2)', clearProps: 'transform,opacity' }));
   }
   function heads() {
+    deriveMode();
     ROWS.forEach(([k]) => { const s = $(`[data-sum="${k}"]`); if (s) s.innerHTML = summary(k); });
     $$('.rw').forEach((r) => { const rs = $('.rs', r); if (rs) rs.hidden = isDefault(r.dataset.row); });
   }
   const changed = (pv) => { heads(); preview(pv); save(); };
 
   /* ---------- rows open in place ---------- */
-  const bodyHTML = (k) => EDIT[k]() + `<p class="rs" ${isDefault(k) ? 'hidden' : ''}><button class="lnk" data-reset="${k}">Back to PolaReady</button></p>`;
+  const bodyHTML = (k) => EDIT[k]() + `<p class="rs" ${isDefault(k) ? 'hidden' : ''}><button class="lnk" data-reset="${k}">Back to default</button></p>`;
   function toggle(k) {
     const was = open; open = open === k ? null : k;
     $$('.rw').forEach((r) => {
@@ -230,7 +224,7 @@
     $$('.rh').forEach((h) => (h.onclick = () => toggle(h.closest('.rw').dataset.row)));
     $('#approve').onclick = approveDialog;
     $('#resetall').onclick = () => {
-      dialog('Back to PolaReady?', 'Your theme, logo, colours, words and paper go back to the PolaReady look. Your names and date stay.', 'Put it back', () => {
+      dialog('Back to default?', 'Your logo, colours, words and paper go back to the default look. Your names and date stay.', 'Put it back', () => {
         const keep = d.details; d = blank(); d.details = { ...keep, message: '' }; open = null; panel(false); preview(null, true); return save(true);
       });
     };
@@ -260,15 +254,10 @@
   const segPick = (wrap, sel, cb) => $$(sel, wrap).forEach((b) => (b.onclick = () => { $$(sel, wrap).forEach((x) => x.classList.toggle('on', x === b)); cb(b); }));
 
   const WIRE = {
-    theme: (r) => $$('[data-mode]', r).forEach((b) => (b.onclick = () => {
-      d.booth.mode = b.dataset.mode; $$('[data-mode]', r).forEach((x) => x.classList.toggle('on', x === b));
-      changed('booth'); preview(null, true);
-      if (anim) G.fromTo(b, { scale: 0.98 }, { scale: 1, duration: 0.5, ease: 'back.out(3)', clearProps: 'transform' });
-    })),
     logo: (r) => {
       const handle = (kind, key, input) => async (f) => {
         const name = await upload(f, kind, input.closest('.upl'), $('#lmsg', r));
-        if (name) { d.booth[key] = name; makeCustom(); refill('logo'); heads(); preview('booth', true); save(true); }
+        if (name) { d.booth[key] = name; refill('logo'); heads(); preview('booth', true); save(true); }
       };
       $('#uf', r).onchange = (e) => handle('logo', 'logo', e.target)(e.target.files[0]);
       $('#bf', r).onchange = (e) => handle('background', 'background', e.target)(e.target.files[0]);
@@ -276,12 +265,12 @@
     },
     colours: (r) => $$('[data-c]', r).forEach((i) => (i.oninput = () => {
       d.booth[i.dataset.c] = i.value.toUpperCase(); $(`[data-h="${i.dataset.c}"]`, r).textContent = i.value.toUpperCase();
-      makeCustom(); changed('booth');
+      changed('booth');
     })),
     words: (r) => {
-      $('#wt', r).oninput = (e) => { d.booth.welcome_title = e.target.value; makeCustom(); changed('booth'); };
-      $('#ws', r).oninput = (e) => { d.booth.welcome_sub = e.target.value; makeCustom(); changed('booth'); };
-      segPick(r, '[data-f]', (b) => { d.booth.font = b.dataset.f; makeCustom(); changed('booth'); preview(null, true); });
+      $('#wt', r).oninput = (e) => { d.booth.welcome_title = e.target.value; changed('booth'); };
+      $('#ws', r).oninput = (e) => { d.booth.welcome_sub = e.target.value; changed('booth'); };
+      segPick(r, '[data-f]', (b) => { d.booth.font = b.dataset.f; changed('booth'); preview(null, true); });
       $('#nm', r).oninput = (e) => { d.details.names = e.target.value; changed('paper'); };
       $('#dt', r).oninput = (e) => { d.details.date = e.target.value; d.details.date_text = P.dateText(e.target.value); changed('paper'); };
       $('#ms', r).oninput = (e) => { d.details.message = e.target.value; changed('paper'); };
@@ -346,7 +335,9 @@
       ev = r.event; files = r.files || {}; status = r.status; hasBooth = !!r.booth;
       const s = r.design || {}, z = blank();
       d = { booth: { ...z.booth, ...(s.booth || {}) }, details: { ...z.details, ...(s.details || {}) }, paper: { ...z.paper, ...(s.paper || {}) } };
-      d.booth.mode = d.booth.mode === 'custom' ? 'custom' : 'default';
+      // A saved design that used the default look only kept leftover values
+      // (the booth never used them), so start those from the default again.
+      if (d.booth.mode !== 'custom') d.booth = z.booth;
       d.paper.mode = d.paper.mode === 'template' ? 'template' : 'color';
       d.paper.windows = d.paper.windows || [];
       if (!d.details.date && ev.starts_at) { d.details.date = ev.starts_at.slice(0, 10); d.details.date_text = P.dateText(d.details.date); }

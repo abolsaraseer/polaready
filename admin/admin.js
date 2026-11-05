@@ -498,7 +498,7 @@
     }
     const st = DSTATUS[ev.design_status] || DSTATUS.not_sent;
     const c = ev.config;
-    const live = c.paper_template || c.theme ? 'The client’s design' : 'PolaReady default';
+    const live = c.paper_template || c.theme ? 'The client’s design' : 'Default';
     const x = d.details || {}, b = d.booth || {}, p = d.paper || {};
     const wa = ev.client_phone ? `https://wa.me/${String(ev.client_phone).replace(/\D/g, '')}?text=${encodeURIComponent(`Hi${ev.client_name ? ' ' + ev.client_name : ''}! Design your PolaReady booth for ${ev.name} here: ${designURL(ev.design_token || '')}`)}` : null;
 
@@ -512,15 +512,15 @@
       </div>
       <div class="card" data-a style="margin-top:16px"><h3>What they chose ${ev.design_updated_at ? `<span class="mono soft">${ago(ev.design_updated_at)}</span>` : ''}</h3>
         ${has ? `<div class="rows">
-          <div class="row"><div class="l"><small>Booth</small><b>${b.mode === 'custom' ? 'Their own style' : 'PolaReady classic'}</b></div>${b.mode === 'custom' ? `<span class="sws">${[b.bg, b.text, b.accent].map((v) => `<i class="sw" style="background:${esc(v)};width:24px;height:24px;display:inline-block"></i>`).join('')}</span>` : ''}</div>
-          ${b.mode === 'custom' ? `<div class="row"><div class="l"><small>Logo · font</small><b>${b.logo ? 'Uploaded' : 'PolaReady bear'} · ${esc(D.FONTS[b.font || 'fugaz'][0])}</b></div></div>
+          <div class="row"><div class="l"><small>Booth</small><b>${b.mode === 'custom' ? 'Their own style' : 'Default'}</b></div>${b.mode === 'custom' ? `<span class="sws">${[b.bg, b.text, b.accent].map((v) => `<i class="sw" style="background:${esc(v)};width:24px;height:24px;display:inline-block"></i>`).join('')}</span>` : ''}</div>
+          ${b.mode === 'custom' ? `<div class="row"><div class="l"><small>Logo · font</small><b>${b.logo ? 'Uploaded' : 'Default'} · ${esc(D.FONTS[b.font || 'fugaz'][0])}</b></div></div>
           <div class="row"><div class="l"><small>Welcome screen</small><b>${esc(b.welcome_title || '—')}</b></div></div>` : ''}
           <div class="row"><div class="l"><small>Names · date</small><b>${esc(x.names || '—')} · ${esc(x.date_text || '—')}</b></div></div>
           <div class="row"><div class="l"><small>Message</small><b>${esc(x.message || '—')}</b></div></div>
           <div class="row"><div class="l"><small>Paper</small><b>${p.mode === 'template' ? `Their design · ${(p.windows || []).length} photos` : `Colour · ${p.photo_count || 4} photos`}</b></div></div></div>
           ${ev.design_status === 'approved' ? `<div class="acts" style="margin-top:16px"><button class="btn ghost" id="reopen">Unlock: let them edit again</button></div>` : ''}`
         : `<div class="soft" style="font-size:14px">Nothing yet. When the client starts, their choices show up here.</div>`}
-        <div class="soft" style="font-size:13px;margin-top:12px">Booth is using: <b style="color:var(--navy)">${live}</b>${live === 'PolaReady default' ? '' : ` <button class="lnk" id="def">Switch back to PolaReady default</button>`}</div>
+        <div class="soft" style="font-size:13px;margin-top:12px">Booth is using: <b style="color:var(--navy)">${live}</b>${live === 'Default' ? '' : ` <button class="lnk" id="def">Switch back to default</button>`}</div>
       </div>
       <div class="card" data-a style="margin-top:16px"><h3>Booth settings <span class="mono soft">only you</span></h3>
         <div class="line"><span>Voice says “Smile!”</span><button class="tog ${c.voice ? 'on' : ''}" id="vo" aria-label="Voice"></button></div>
@@ -561,8 +561,8 @@
     };
     $('#reopen', t)?.addEventListener('click', async () => { const { error } = await sb.from('events').update({ design_status: 'in_progress' }).eq('id', ev.id); if (error) return fail(error); toast('Unlocked. The client can edit again'); route(); });
     $('#def', t)?.addEventListener('click', () => {
-      const m = modal(`<h2>Use the PolaReady default?</h2><div class="sub">The booth goes back to PolaReady's classic look and paper. The client's design stays saved, and their next change on their page goes to the booth again.</div><div class="acts"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="yes">Use default</button></div>`);
-      $('#yes', m.el).onclick = () => { m.close(); push(() => ({ theme: null, paper_template: null, paper_windows: null, paper: { bg: '#F5EFEB', ink: '#233345' }, overlay: null }), {}, 'Back to PolaReady default'); };
+      const m = modal(`<h2>Use the default?</h2><div class="sub">The booth goes back to the default look and paper. The client's design stays saved, and their next change on their page goes to the booth again.</div><div class="acts"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="yes">Use default</button></div>`);
+      $('#yes', m.el).onclick = () => { m.close(); push(() => ({ theme: null, paper_template: null, paper_windows: null, paper: { bg: '#F5EFEB', ink: '#233345' }, overlay: null }), {}, 'Back to default'); };
     });
     // booth settings save straight away
     $('#vo', t).onclick = (e) => { e.currentTarget.classList.toggle('on'); const on = e.currentTarget.classList.contains('on'); push(() => ({ voice: on })); };

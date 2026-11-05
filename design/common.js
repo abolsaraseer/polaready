@@ -6,7 +6,7 @@
 
   // Headline fonts every iPad has. key -> [friendly name, browser preview stack, matching text font]
   const FONTS = {
-    fugaz: ['PolaReady', "'Fugaz One',sans-serif", 'nunito'],
+    fugaz: ['Default', "'Fugaz One',sans-serif", 'nunito'],
     didot: ['Elegant', "Didot,'Bodoni 72','Bodoni Moda',serif", 'avenir'],
     baskerville: ['Classic', "Baskerville,'Libre Baskerville',Georgia,serif", 'avenir'],
     snell: ['Script', "'Snell Roundhand','Segoe Script','Brush Script MT',cursive", 'avenir'],
