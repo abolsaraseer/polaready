@@ -423,3 +423,6 @@ enabled = true
 
 [functions.booth]
 verify_jwt = false
+
+[functions.design]
+verify_jwt = false

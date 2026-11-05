@@ -38,7 +38,7 @@ textarea.inp{min-height:84px;resize:vertical}
 .err{color:var(--bad);font-size:13.5px;min-height:20px;margin-top:6px}
 
 /* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:var(--navy);color:var(--cream);font-weight:800;font-size:14px;transition:transform .15s var(--ease),background .2s,box-shadow .2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.btn{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 18px;border-radius:999px;background:var(--navy);color:var(--cream);font-weight:800;font-size:14px;transition:transform .15s var(--ease),background .2s,box-shadow .2s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
 .btn:hover{background:var(--navy-2);box-shadow:0 6px 18px rgba(35,51,69,.18)}
 .btn:active{transform:scale(.97)}
 .btn.full{width:100%}
@@ -324,3 +324,9 @@ textarea.inp{min-height:84px;resize:vertical}
   .kpi b{font-size:26px}
 }
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* design tab */
+.linkbox{margin:14px 0 12px;background:var(--cream);border-radius:12px;padding:12px 14px;font-family:var(--fm);font-size:12.5px;word-break:break-all;color:var(--navy)}
+.lnk{color:var(--glacier);font-weight:800;text-decoration:underline;font-size:13px}
+.prev .stage{min-height:0}
+.dwait{font-style:normal;color:var(--gold);font-weight:800}
