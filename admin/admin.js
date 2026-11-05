@@ -217,7 +217,7 @@
         const d = dOf(e.starts_at);
         return `<a class="ev" href="#/event/${e.id}/overview" data-a>
           <div class="date">${d ? `<b>${d.getDate()}</b><small>${MONTHS[d.getMonth()]}</small>` : '<small>TBD</small>'}</div>
-          <div class="nm"><b>${esc(e.name)}</b><span>${e.design_status === 'submitted' ? '<em class="dwait">Design waiting for you · </em>' : ''}${esc([e.venue, d && timeShort(d), e.client_name].filter(Boolean).join(' · ') || 'Add the details')}</span></div>
+          <div class="nm"><b>${esc(e.name)}</b><span>${e.design_status === 'approved' ? '<em class="dwait">Client approved · </em>' : ''}${esc([e.venue, d && timeShort(d), e.client_name].filter(Boolean).join(' · ') || 'Add the details')}</span></div>
           <div><span class="st ${e.status}">${STATUS.find((s) => s[0] === e.status)?.[1]}</span></div>
           <div class="n"><b>${fmt(e.stats.guests)}</b><small>Guests</small></div>
           <div class="n"><b>${fmt(e.stats.photos)}</b><small>Photos</small></div>
@@ -481,7 +481,7 @@
 
   /* ---- setup & files ---- */
   /* ---- design: the client's journey, approval, booth settings ---- */
-  const DSTATUS = { not_sent: ['Not sent yet', 'design'], in_progress: ['Client is designing', 'ready'], submitted: ['Sent to you: ready to approve', 'live'], approved: ['Approved', 'done'] };
+  const DSTATUS = { not_sent: ['Not opened yet', 'design'], in_progress: ['Client is designing', 'ready'], submitted: ['Client is designing', 'ready'], approved: ['Client approved · locked', 'done'] };
   const newToken = () => [...crypto.getRandomValues(new Uint8Array(32))].map((x) => 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789'[x % 56]).join('');
   const designURL = (tok) => `https://polaready.com/design/#${tok}`;
 
@@ -505,10 +505,10 @@
     t.innerHTML = `<div class="setup"><div>
       <div class="card" data-a>
         <h3>Client's design <span class="st ${st[1]}">${st[0]}</span></h3>
-        ${ev.design_token ? `<div class="soft" style="font-size:14px">Send this private link to your client. They choose everything step by step: PolaReady's classic look or their own (logo, colours, words, font), their names and date, and a paper colour or their own paper design.</div>
+        ${ev.design_token ? `<div class="soft" style="font-size:14px">Send this private link to your client. It starts as the PolaReady booth and they change only what they want: theme, logo, colours, words &amp; date, and paper. Every change goes to the booth on its own. Their "I approve" locks it.</div>
           <div class="linkbox"><span>${designURL(ev.design_token)}</span></div>
           <div class="acts"><button class="btn sm" id="cpy">Copy link</button>${wa ? `<a class="btn ghost sm" target="_blank" rel="noopener" href="${wa}">Send on WhatsApp</a>` : ''}<a class="btn ghost sm" target="_blank" rel="noopener" href="${designURL(ev.design_token)}">Open it myself</a><button class="btn ghost sm" id="newl">New link</button></div>`
-        : `<div class="soft" style="font-size:14px">Create a private link and send it to your client. They design their own booth and paper, and you approve it here.</div><div class="acts" style="margin-top:12px"><button class="btn" id="mk">Create the client's link</button></div>`}
+        : `<div class="soft" style="font-size:14px">Create a private link and send it to your client. They design their own booth and paper, and each change goes to the booth straight away.</div><div class="acts" style="margin-top:12px"><button class="btn" id="mk">Create the client's link</button></div>`}
       </div>
       <div class="card" data-a style="margin-top:16px"><h3>What they chose ${ev.design_updated_at ? `<span class="mono soft">${ago(ev.design_updated_at)}</span>` : ''}</h3>
         ${has ? `<div class="rows">
@@ -518,7 +518,7 @@
           <div class="row"><div class="l"><small>Names · date</small><b>${esc(x.names || '—')} · ${esc(x.date_text || '—')}</b></div></div>
           <div class="row"><div class="l"><small>Message</small><b>${esc(x.message || '—')}</b></div></div>
           <div class="row"><div class="l"><small>Paper</small><b>${p.mode === 'template' ? `Their design · ${(p.windows || []).length} photos` : `Colour · ${p.photo_count || 4} photos`}</b></div></div></div>
-          <div class="acts" style="margin-top:16px">${ev.design_status === 'approved' ? `<button class="btn ghost" id="reopen">Let them edit again</button>` : `<button class="btn gold" id="approve">Approve & send to booth</button>`}</div>`
+          ${ev.design_status === 'approved' ? `<div class="acts" style="margin-top:16px"><button class="btn ghost" id="reopen">Unlock: let them edit again</button></div>` : ''}`
         : `<div class="soft" style="font-size:14px">Nothing yet. When the client starts, their choices show up here.</div>`}
         <div class="soft" style="font-size:13px;margin-top:12px">Booth is using: <b style="color:var(--navy)">${live}</b>${live === 'PolaReady default' ? '' : ` <button class="lnk" id="def">Switch back to PolaReady default</button>`}</div>
       </div>
@@ -530,7 +530,7 @@
       <div class="prev"><div class="card" data-a><h3>${has ? 'Their design' : 'Preview'} <div class="seg" id="pv"><button data-v="booth" class="on">Booth</button><button data-v="paper">Paper</button></div></h3>
         <div class="stage" id="pvs" style="padding:22px 14px"></div>
         <div class="acts" style="margin-top:14px"><button class="btn ghost" id="sys">${IC.dl.replace('<svg', '<svg width="17" height="17"')}System file</button></div>
-        <div class="soft" style="font-size:12.5px;margin-top:8px">The booth only changes after you approve, on its welcome screen.</div>
+        <div class="soft" style="font-size:12.5px;margin-top:8px">The booth picks up every change within seconds, on its welcome screen.</div>
       </div></div></div>`;
     enter(t);
 
@@ -551,31 +551,26 @@
     });
     $('#cpy', t)?.addEventListener('click', () => { navigator.clipboard?.writeText(designURL(ev.design_token)); toast('Link copied'); });
 
-    const push = async (config, extra = {}, msg = 'Saved') => {
-      const { error } = await sb.from('events').update({ config, config_version: ev.config_version + 1, ...extra }).eq('id', ev.id);
+    // Always change the latest saved file: the client may have changed it since this page opened.
+    const push = async (change, extra = {}, msg = 'Saved') => {
+      const { data: now, error: e1 } = await sb.from('events').select('config,config_version').eq('id', ev.id).single();
+      if (e1) return fail(e1);
+      const base = { ...DEF(), ...(now.config || {}) };
+      const { error } = await sb.from('events').update({ config: { ...base, ...change(base) }, config_version: now.config_version + 1, ...extra }).eq('id', ev.id);
       if (error) return fail(error); toast(msg); route();
     };
-    $('#approve', t)?.addEventListener('click', () => {
-      const m = modal(`<h2>Approve this design?</h2><div class="sub">The booth${ev.client_name ? ` for ${esc(ev.client_name)}` : ''} switches to it on its welcome screen within a minute. The client can't change it after this unless you let them.</div><div class="acts"><button class="btn ghost" data-close>Not yet</button><button class="btn gold" id="yes">Approve</button></div>`);
-      $('#yes', m.el).onclick = async () => {
-        m.close();
-        const patch = { design_status: 'approved' }; if (ev.status === 'design') patch.status = 'ready';
-        await push(D.compile(d, c), patch, 'Approved. The booth updates on its welcome screen.');
-        if (G && !reduce) G.fromTo('#bbox', { boxShadow: '0 0 0 0 rgba(184,147,90,.6)' }, { boxShadow: '0 0 0 14px rgba(184,147,90,0)', duration: 1.2 });
-      };
-    });
-    $('#reopen', t)?.addEventListener('click', async () => { const { error } = await sb.from('events').update({ design_status: 'in_progress' }).eq('id', ev.id); if (error) return fail(error); toast('The client can edit again'); route(); });
+    $('#reopen', t)?.addEventListener('click', async () => { const { error } = await sb.from('events').update({ design_status: 'in_progress' }).eq('id', ev.id); if (error) return fail(error); toast('Unlocked. The client can edit again'); route(); });
     $('#def', t)?.addEventListener('click', () => {
-      const m = modal(`<h2>Use the PolaReady default?</h2><div class="sub">The booth goes back to PolaReady's classic look and paper. The client's design stays saved here.</div><div class="acts"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="yes">Use default</button></div>`);
-      $('#yes', m.el).onclick = () => { m.close(); push({ ...c, theme: null, paper_template: null, paper_windows: null, paper: { bg: '#F5EFEB', ink: '#233345' }, overlay: null }, {}, 'Back to PolaReady default'); };
+      const m = modal(`<h2>Use the PolaReady default?</h2><div class="sub">The booth goes back to PolaReady's classic look and paper. The client's design stays saved, and their next change on their page goes to the booth again.</div><div class="acts"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="yes">Use default</button></div>`);
+      $('#yes', m.el).onclick = () => { m.close(); push(() => ({ theme: null, paper_template: null, paper_windows: null, paper: { bg: '#F5EFEB', ink: '#233345' }, overlay: null }), {}, 'Back to PolaReady default'); };
     });
     // booth settings save straight away
-    $('#vo', t).onclick = (e) => { e.currentTarget.classList.toggle('on'); push({ ...c, voice: e.currentTarget.classList.contains('on') }); };
-    $$('#cd button', t).forEach((bt) => (bt.onclick = () => push({ ...c, countdown: +bt.dataset.n })));
+    $('#vo', t).onclick = (e) => { e.currentTarget.classList.toggle('on'); const on = e.currentTarget.classList.contains('on'); push(() => ({ voice: on })); };
+    $$('#cd button', t).forEach((bt) => (bt.onclick = () => push(() => ({ countdown: +bt.dataset.n }))));
     $$('#fl button', t).forEach((bt) => (bt.onclick = () => {
       const f = bt.dataset.f; const on = c.filters.includes(f);
       if (on && c.filters.length === 1) return toast('Keep at least one filter');
-      push({ ...c, filters: on ? c.filters.filter((y) => y !== f) : FILTERS.filter((y) => c.filters.includes(y) || y === f) });
+      push((b) => ({ filters: on ? b.filters.filter((y) => y !== f) : FILTERS.filter((y) => b.filters.includes(y) || y === f) }));
     }));
     $('#sys', t).onclick = () => {
       const file = { polaready: 'system-file', version: ev.config_version, event: { id: ev.id, name: ev.name, starts_at: ev.starts_at }, config: c };
