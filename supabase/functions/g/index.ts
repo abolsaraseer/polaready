@@ -1,9 +1,10 @@
 // What a guest's phone opens when it scans the QR code on a printed paper:
 // GET /functions/v1/g/<CODE>
 //
-// No page at all. The phone is sent straight to the paper image, full screen,
-// so the guest just presses and holds it -> Save to Photos. If the paper hasn't
-// finished uploading, a small "on its way" image says to scan again shortly.
+// No page at all: the phone is sent straight to the paper image as a download
+// (Android saves it at once; iPhone asks "Download?" once and keeps it in
+// Files > Downloads). If the paper hasn't finished uploading, a small "on its
+// way" image says to scan again shortly.
 import { createClient } from "jsr:@supabase/supabase-js@2";
 
 const db = createClient(
@@ -40,8 +41,16 @@ Deno.serve(async (req) => {
   const { data: strip } = await db.from("photos").select("path").eq("visit_id", visit.id).eq("kind", "strip").maybeSingle();
   if (!strip) return card("On its way…", "Scan again in a minute.");
 
-  await db.from("scans").insert({ event_id: visit.event_id, visit_id: visit.id, kind: "open" });
-  const { data: s } = await db.storage.from("photos").createSignedUrl(strip.path, 3600);
+  // Counted as a scan and a download: scanning now starts the download.
+  await db.from("scans").insert([
+    { event_id: visit.event_id, visit_id: visit.id, kind: "open" },
+    { event_id: visit.event_id, visit_id: visit.id, kind: "download" },
+  ]);
+  // `download` makes storage answer with Content-Disposition: attachment, so the
+  // phone saves the file straight away instead of showing it.
+  const { data: s } = await db.storage.from("photos").createSignedUrl(strip.path, 3600, {
+    download: `PolaReady-${code}.jpg`,
+  });
   if (!s) return card("On its way…", "Scan again in a minute.");
   return new Response(null, { status: 302, headers: { Location: s.signedUrl, "Cache-Control": "no-store" } });
 });
