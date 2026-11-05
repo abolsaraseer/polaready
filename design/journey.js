@@ -80,8 +80,12 @@
     (WIRE[key] || (() => {}))();
     validate();
     if (G && !reduce) {
-      G.fromTo(box, { x: 30 * dir, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out' });
-      G.from($$('[data-a]', box), { y: 16, opacity: 0, duration: 0.55, stagger: 0.05, ease: 'power3.out', delay: 0.05 });
+      // CSS transitions on these elements fight the tween in Safari and can
+      // leave them stuck invisible, so they're off until the entrance ends.
+      box.classList.add('animating');
+      G.fromTo(box, { x: 30 * dir, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: 'power3.out', clearProps: 'transform,opacity' });
+      G.fromTo($$('[data-a]', box), { y: 16, opacity: 0 }, { y: 0, opacity: 1, duration: 0.55, stagger: 0.05, ease: 'power3.out', delay: 0.05, clearProps: 'transform,opacity',
+        onComplete: () => box.classList.toggle('animating', false) });
     }
     window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
   }
@@ -238,7 +242,11 @@
     box.innerHTML = `<div class="done"><div class="bearbig" data-a></div><div class="hello" data-a>Thank you${ev.client_name ? ', ' + esc(ev.client_name) : ''}.</div>
       <h1 data-a>Your booth is in our hands.</h1><p class="lead" data-a style="margin:12px auto 0">We'll prepare everything and send you a confirmation on WhatsApp. Want to change something? Open this link again.</p>
       <button class="btn ghost big" id="again" data-a>See my design again</button></div>`;
-    if (G && !reduce) { G.from($$('[data-a]', box), { y: 20, opacity: 0, duration: 0.7, stagger: 0.08, ease: 'power3.out' }); G.from('.bearbig', { scale: 0.3, rotate: -20, duration: 1, ease: 'back.out(2)' }); }
+    if (G && !reduce) {
+      box.classList.add('animating');
+      G.fromTo($$('[data-a]', box), { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out', clearProps: 'transform,opacity', onComplete: () => box.classList.toggle('animating', false) });
+      G.fromTo('.bearbig', { scale: 0.3, rotate: -20 }, { scale: 1, rotate: 0, duration: 1, ease: 'back.out(2)', clearProps: 'transform' });
+    }
     $('#again').onclick = () => { at = flow().length - 1; render(-1); };
   }
 
