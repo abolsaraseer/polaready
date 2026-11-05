@@ -37,8 +37,6 @@
   };
   const toLocalInput = (iso) => { if (!iso) return ''; const d = new Date(iso); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().slice(0, 16); };
   const fromLocalInput = (v) => (v ? new Date(v).toISOString() : null);
-  const guestURL = (code) => `https://polaready.com/g/#${code}`;
-  const qrSVG = (text) => { const q = window.qrcode(0, 'M'); q.addData(text); q.make(); return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); };
   const icon = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
   const IC = {
     events: icon('<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/>'),
@@ -58,9 +56,9 @@
     { n: 'Noir', bg: '#1A1A1F', ink: '#FFFFFF' },
   ];
   const DEF = () => ({ title: '', date_text: '', message: 'Thank you for coming!', photo_count: 4, lock_count: true,
-    paper: { bg: '#F5EFEB', ink: '#233345' }, lock_paper: false, qr: true, voice: true, countdown: 3, filters: FILTERS.slice(), overlay: null });
+    paper: { bg: '#F5EFEB', ink: '#233345' }, lock_paper: false, voice: true, countdown: 3, filters: FILTERS.slice(), overlay: null });
   const CHECK = ['Paper loaded and counted', 'Test print done', 'Camera battery charged + spare', 'System file loaded on the iPad',
-    'QR code scanned on a test print', 'Backdrop and lights set up', 'Internet: venue Wi-Fi or phone hotspot', 'Host briefed on the night'];
+    'Backdrop and lights set up', 'Internet: venue Wi-Fi or phone hotspot', 'Host briefed on the night'];
   const STATUS = [['design', 'Design'], ['ready', 'Ready'], ['live', 'Live'], ['done', 'Done']];
 
   /* ---------------- motion ---------------- */
@@ -217,7 +215,7 @@
       <div class="kpi dark" data-a><span class="flash"></span><small>Events in ${MONTHS[now.getMonth()]}</small><b data-n="${month.length}">0</b><em>${upcoming} upcoming</em></div>
       <div class="kpi" data-a><span class="flash"></span><small>Guests this month</small><b data-n="${sum('guests')}">0</b><em>booth visits</em></div>
       <div class="kpi" data-a><span class="flash"></span><small>Photos this month</small><b data-n="${sum('photos')}">0</b><em>${month.length ? `avg ${fmt(Math.round(sum('photos') / month.length))} per event` : '&nbsp;'}</em></div>
-      <div class="kpi" data-a><span class="flash"></span><small>Papers this month</small><b data-n="${sum('papers')}">0</b><em>${fmt(sum('qr_scans'))} QR scans</em></div></div>`;
+      <div class="kpi" data-a><span class="flash"></span><small>Papers this month</small><b data-n="${sum('papers')}">0</b><em>${fmt(sum('reprints'))} reprints</em></div></div>`;
     const counts = { all: events.length }; STATUS.forEach(([k]) => (counts[k] = events.filter((e) => e.status === k).length));
     const list = () => {
       const rows = events.filter((e) => evFilter === 'all' || e.status === evFilter);
@@ -304,7 +302,7 @@
   }
 
   /* ---------------- one event ---------------- */
-  const TABS = [['overview', 'Overview'], ['photos', 'Photos'], ['setup', 'Setup & files'], ['qr', 'Guest QR'], ['client', 'Client & payment'], ['checklist', 'Checklist']];
+  const TABS = [['overview', 'Overview'], ['photos', 'Photos'], ['setup', 'Setup & files'], ['client', 'Client & payment'], ['checklist', 'Checklist']];
   async function viewEvent(id, tab = 'overview') {
     const v = shell('event');
     const sameEvent = v.dataset.event === id;
@@ -335,7 +333,7 @@
     cleanup();
     const t = $('#tab', v);
     if (G && !reduce && sameEvent) G.fromTo(t, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' });
-    const fn = { overview: tabOverview, photos: tabPhotos, setup: tabSetup, qr: tabQR, client: tabClient, checklist: tabChecklist }[tab] || tabOverview;
+    const fn = { overview: tabOverview, photos: tabPhotos, setup: tabSetup, client: tabClient, checklist: tabChecklist }[tab] || tabOverview;
     try { await fn(t, ev); } catch (e) { fail(e); }
   }
 
@@ -347,7 +345,7 @@
       <div class="card" data-a style="margin-bottom:16px"><h3>Latest papers <a class="btn ghost sm" href="#/event/${ev.id}/photos">See all</a></h3><div class="latest" id="lat"></div></div>
       <div class="card" data-a><h3>Problems</h3><div class="rows" id="probs"></div></div>`;
     const tiles = [
-      ['guests', 'Guests', 'booth visits'], ['photos', 'Photos taken', ''], ['papers', 'Papers printed', ''], ['qr_scans', 'QR scans', ''],
+      ['guests', 'Guests', 'booth visits'], ['photos', 'Photos taken', ''], ['papers', 'Papers printed', ''],
       ['paper_left', 'Paper left', ''], ['avg', 'Avg. visit', ''], ['problems', 'Problems', ''], ['last', 'Last visit', ''],
     ];
     $('#k', t).innerHTML = tiles.map(([k, l]) => `<div class="kpi" data-k="${k}" data-a><span class="flash"></span><small>${l}</small><b>–</b><em>&nbsp;</em></div>`).join('');
@@ -371,7 +369,6 @@
       set('guests', Number(s.guests || 0), 'booth visits');
       set('photos', Number(s.photos || 0), s.guests ? `${(s.photos / s.guests).toFixed(1)} per visit` : '');
       set('papers', Number(s.papers || 0), `${fmt(s.reprints || 0)} reprints${s.failed_prints ? ` · ${s.failed_prints} failed` : ''}`);
-      set('qr_scans', Number(s.qr_scans || 0), `${fmt(s.downloads || 0)} downloads`);
       // Pace of the last hour decides how long the paper lasts.
       const hourAgo = Date.now() - 3600e3; const lastHour = (visits || []).filter((x) => new Date(x.started_at) > hourAgo).length;
       if (s.paper_left == null) set('paper_left', '–', 'enter the start count in Client');
@@ -444,7 +441,7 @@
     if (error) throw error;
     const total = (visits || []).reduce((a, x) => a + x.photos_uploaded + (x.has_strip ? 1 : 0), 0);
     t.innerHTML = `<div class="card" data-a style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
-        <div><b>${fmt(visits.length)} visits · ${fmt(total)} files online</b><div class="soft" style="font-size:13.5px">Tap a paper to see its photos and its guest link.</div></div>
+        <div><b>${fmt(visits.length)} visits · ${fmt(total)} files online</b><div class="soft" style="font-size:13.5px">Tap a paper to see its photos.</div></div>
         <button class="btn" id="zip" ${total ? '' : 'disabled'}>${IC.dl.replace('<svg', '<svg width="18" height="18"')}Download all (.zip)</button></div>
       ${visits.length ? `<div class="strips">${visits.map((x) => `<button class="sp" data-v="${x.id}" data-a><div class="ph">${x.has_strip ? '…' : 'Paper not<br>uploaded yet'}</div><span class="tag"><span>${timeShort(new Date(x.started_at))}</span><span>${x.photos_uploaded}/${x.photo_count}</span></span></button>`).join('')}</div>`
         : `<div class="card empty" data-a><div class="mk"></div><b>No photos yet</b>They arrive here while the event is running.</div>`}`;
@@ -461,14 +458,11 @@
     const { data: urls } = await sb.storage.from('photos').createSignedUrls((rows || []).map((r) => r.path), 3600);
     const strip = (rows || []).findIndex((r) => r.kind === 'strip');
     const ph = (rows || []).map((r, i) => ({ ...r, url: urls?.[i]?.signedUrl })).filter((r) => r.kind === 'photo');
-    modal(`<h2>Visit at ${timeShort(new Date(x.started_at))}</h2><div class="sub">Code <span class="mono">${esc(x.code)}</span> · ${x.photo_count} photos${x.secs ? ` · ${Math.round(x.secs)}s` : ''}</div>
+    modal(`<h2>Visit at ${timeShort(new Date(x.started_at))}</h2><div class="sub">${x.photo_count} photos${x.secs ? ` · ${Math.round(x.secs)}s` : ''}</div>
       <div class="lb">${strip >= 0 && urls?.[strip]?.signedUrl ? `<img class="big" src="${urls[strip].signedUrl}" alt="Printed paper">` : '<div class="big skel" style="height:420px"></div>'}
       <div><div class="ph4">${ph.map((p) => `<a href="${p.url}" target="_blank" rel="noopener"><img src="${p.url}" alt="Photo ${p.idx + 1}" loading="lazy"></a>`).join('') || '<div class="soft">Photos are still uploading.</div>'}</div>
-      <div style="display:flex;gap:16px;align-items:center;margin-top:18px;flex-wrap:wrap"><div class="qrbox">${qrSVG(guestURL(x.code))}</div>
-      <div><div class="mono soft">Guest link</div><div style="font-weight:800;word-break:break-all;margin:4px 0 10px">${guestURL(x.code)}</div>
-      <div class="acts"><a class="btn sm" href="${guestURL(x.code)}" target="_blank" rel="noopener">Open guest page</a><button class="btn ghost sm" id="cp">Copy link</button></div></div></div></div></div>
+      </div></div>
       <div class="acts"><button class="btn ghost" data-close>Close</button></div>`, { wide: true });
-    $('#cp').onclick = () => { navigator.clipboard?.writeText(guestURL(x.code)); toast('Link copied'); };
   }
 
   async function zipAll(btn, ev, visits) {
@@ -524,7 +518,6 @@
         <div class="f2"><label class="field"><span>Date on paper</span><input class="inp" id="dt" value="${esc(c.date_text)}" maxlength="24" placeholder="07 · 11 · 2026"></label>
         <label class="field"><span>Message</span><input class="inp" id="ms" value="${esc(c.message)}" maxlength="60"></label></div>
         <div class="sec">The booth</div>
-        <div class="line"><span>QR code on every paper<small>Guests scan it to get their photos.</small></span><button class="tog ${c.qr ? 'on' : ''}" id="qr" aria-label="QR code"></button></div>
         <div class="line"><span>Voice says “Smile!”</span><button class="tog ${c.voice ? 'on' : ''}" id="vo" aria-label="Voice"></button></div>
         <div class="line"><span>Countdown</span><div class="seg" id="cd">${[3, 5].map((n) => `<button data-n="${n}" class="${c.countdown === n ? 'on' : ''}">${n}s</button>`).join('')}</div></div>
         <div class="line" style="align-items:flex-start;flex-direction:column"><span>Filters guests can pick</span><div class="fl" id="fl">${FILTERS.map((f) => `<button data-f="${esc(f)}" class="${c.filters.includes(f) ? 'on' : ''}">${esc(f)}</button>`).join('')}</div></div>
@@ -548,7 +541,7 @@
     const draw = () => {
       pp.style.background = c.paper.bg; pp.style.color = c.paper.ink;
       pp.innerHTML = `<div class="shots">${'<i></i>'.repeat(c.photo_count)}</div>
-        <div class="ft"><div class="t">${c.message ? `<em>${esc(c.message)}</em>` : ''}<b>${esc(c.title || 'PolaReady')}</b><small>${esc(c.date_text)}</small></div>${c.qr ? `<div class="qr">${qrSVG('https://polaready.com/p/#SAMPLE2345')}</div>` : ''}</div>
+        <div class="ft"><div class="t">${c.message ? `<em>${esc(c.message)}</em>` : ''}<b>${esc(c.title || 'PolaReady')}</b><small>${esc(c.date_text)}</small></div></div>
         ${overlayURL ? `<img class="ov" src="${overlayURL}" alt="">` : ''}`;
       $('#cbg', t).value = c.paper.bg; $('#tbg', t).value = c.paper.bg.toUpperCase();
       $('#cink', t).value = c.paper.ink; $('#tink', t).value = c.paper.ink.toUpperCase();
@@ -560,7 +553,7 @@
     $$('#pc button', t).forEach((b) => (b.onclick = () => { c.photo_count = +b.dataset.n; $$('#pc button', t).forEach((x) => x.classList.toggle('on', x === b)); draw(); bump(); if (G && !reduce) G.from($$('.shots i', pp), { scaleY: 0, transformOrigin: 'top', duration: 0.4, stagger: 0.05, ease: 'power3.out' }); }));
     $$('#cd button', t).forEach((b) => (b.onclick = () => { c.countdown = +b.dataset.n; $$('#cd button', t).forEach((x) => x.classList.toggle('on', x === b)); draw(); }));
     const tog = (id, fn) => ($(id, t).onclick = (e) => { e.currentTarget.classList.toggle('on'); fn(e.currentTarget.classList.contains('on')); draw(); bump(); });
-    tog('#lc', (on) => (c.lock_count = !on)); tog('#lp', (on) => (c.lock_paper = on)); tog('#qr', (on) => (c.qr = on)); tog('#vo', (on) => (c.voice = on));
+    tog('#lc', (on) => (c.lock_count = !on)); tog('#lp', (on) => (c.lock_paper = on)); tog('#vo', (on) => (c.voice = on));
     $$('#sws .sw', t).forEach((s) => (s.onclick = () => { const p = PAPERS[s.dataset.i]; c.paper = { bg: p.bg, ink: p.ink }; draw(); bump(); }));
     const hex = (v) => /^#[0-9a-f]{6}$/i.test(v);
     $('#cbg', t).oninput = (e) => { c.paper.bg = e.target.value; draw(); };
@@ -603,7 +596,7 @@
       t.querySelectorAll('.seg button,.tog,#fl button').forEach(() => {});
       $$('#pc button', t).forEach((x) => x.classList.toggle('on', +x.dataset.n === c.photo_count));
       $$('#cd button', t).forEach((x) => x.classList.toggle('on', +x.dataset.n === c.countdown));
-      $('#lc', t).classList.toggle('on', !c.lock_count); $('#lp', t).classList.toggle('on', c.lock_paper); $('#qr', t).classList.toggle('on', c.qr); $('#vo', t).classList.toggle('on', c.voice);
+      $('#lc', t).classList.toggle('on', !c.lock_count); $('#lp', t).classList.toggle('on', c.lock_paper); $('#vo', t).classList.toggle('on', c.voice);
       $$('#fl button', t).forEach((x) => x.classList.toggle('on', c.filters.includes(x.dataset.f)));
       $('#ms', t).value = c.message; draw(); bump(); toast(`Template “${tp.name}” applied. Save to keep it.`);
     });
@@ -687,31 +680,6 @@
       if (!off && ev.status !== 'live' && ev.status !== 'done') await sb.from('events').update({ status: 'ready' }).eq('id', ev.id);
       m.close(); toast(off ? `${booth.name} is free` : `Sent to ${booth.name}`); route();
     }));
-  }
-
-  /* ---- guest QR ---- */
-  async function tabQR(t, ev) {
-    const [{ data: st }, { data: visits }] = await Promise.all([
-      sb.from('event_stats').select('*').eq('event_id', ev.id).maybeSingle(),
-      sb.from('visits').select('id,code,started_at,photos_uploaded,photo_count,has_strip').eq('event_id', ev.id).order('started_at', { ascending: false }).limit(30),
-    ]);
-    const s = st || {};
-    const sample = visits?.[0]?.code;
-    t.innerHTML = `<div class="kpis">
-        <div class="kpi" data-a><span class="flash"></span><small>Papers scanned</small><b data-n="${s.qr_scans || 0}">0</b><em>${s.guests ? Math.round(((s.qr_scans || 0) / s.guests) * 100) + '% of visits' : '&nbsp;'}</em></div>
-        <div class="kpi" data-a><span class="flash"></span><small>Photos downloaded</small><b data-n="${s.downloads || 0}">0</b><em>&nbsp;</em></div>
-        <div class="kpi" data-a><span class="flash"></span><small>Waiting to upload</small><b data-n="${(visits || []).filter((x) => !x.has_strip).length}">0</b><em>of the last 30 visits</em></div></div>
-      <div class="grid2"><div class="card" data-a><h3>QR on the paper <button class="tog ${ev.config.qr ? 'on' : ''}" id="qrt" aria-label="QR on paper"></button></h3>
-        <p class="soft" style="font-size:14px">Every printed paper gets its own code. Guests open their phone camera, scan it, and get that paper's photos, and only those. No app and no sign-up.</p>
-        <div style="display:flex;gap:16px;align-items:center;margin-top:16px;flex-wrap:wrap"><div class="qrbox">${qrSVG(guestURL(sample || 'SAMPLE2345'))}</div>
-        <div class="soft" style="font-size:13.5px;max-width:260px">${sample ? `Latest guest's page:<br><a href="${guestURL(sample)}" target="_blank" rel="noopener" style="font-weight:800;color:var(--navy);word-break:break-all">${guestURL(sample)}</a>` : 'Codes appear here once guests start using the booth.'}</div></div></div>
-      <div class="card" data-a><h3>Latest visits</h3><div class="rows">${(visits || []).slice(0, 8).map((x) => `<div class="row"><div class="l"><b class="mono" style="font-size:13px;letter-spacing:.08em">${esc(x.code)}</b><small>${timeShort(new Date(x.started_at))} · ${x.photos_uploaded}/${x.photo_count} photos online${x.has_strip ? ' + paper' : ''}</small></div><a class="btn ghost sm" href="${guestURL(x.code)}" target="_blank" rel="noopener">Open</a></div>`).join('') || '<div class="soft">No visits yet.</div>'}</div></div></div>`;
-    enter(t); $$('[data-n]', t).forEach((b) => countUp(b, Number(b.dataset.n)));
-    $('#qrt', t).onclick = async (e) => {
-      const on = !e.currentTarget.classList.contains('on'); e.currentTarget.classList.toggle('on', on);
-      const { error } = await sb.from('events').update({ config: { ...ev.config, qr: on }, config_version: ev.config_version + 1 }).eq('id', ev.id);
-      if (error) return fail(error); ev.config.qr = on; ev.config_version++; toast(on ? 'QR codes on' : 'QR codes off');
-    };
   }
 
   /* ---- client & payment ---- */
@@ -826,7 +794,7 @@
     v.innerHTML = `<div class="top"><div><h1 data-a>Templates</h1><div class="sub" data-a>Save a setup from any event and start the next one from it.</div></div></div>
       ${(tpls || []).length ? `<div class="strips" style="grid-template-columns:repeat(auto-fill,minmax(190px,1fr))">${tpls.map((x) => { const c = { ...DEF(), ...x.config }; return `<div class="card" data-a style="padding:14px">
         <div class="stage" style="min-height:0;padding:16px"><div class="paper" style="width:70px;height:210px;padding:4px 4px 0;gap:3px;background:${esc(c.paper.bg)};color:${esc(c.paper.ink)}"><div class="shots" style="gap:3px">${'<i></i>'.repeat(c.photo_count)}</div><div class="ft" style="height:30px"><b style="font-size:7px">Names</b></div></div></div>
-        <b style="display:block;margin-top:10px">${esc(x.name)}</b><small class="soft">${c.photo_count} photos · QR ${c.qr ? 'on' : 'off'}</small>
+        <b style="display:block;margin-top:10px">${esc(x.name)}</b><small class="soft">${c.photo_count} photos per paper</small>
         <div class="acts" style="margin-top:8px"><button class="btn danger sm" data-rm="${x.id}">Delete</button></div></div>`; }).join('')}</div>`
         : `<div class="card empty" data-a><div class="mk"></div><b>No templates yet</b>Open an event's Setup &amp; files and tap “Save as template”.</div>`}`;
     enter(v);

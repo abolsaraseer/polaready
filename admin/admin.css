@@ -204,8 +204,6 @@ textarea.inp{min-height:84px;resize:vertical}
 .paper .ft b{display:block;font-family:var(--fd);font-weight:400;font-size:12px;line-height:1.1}
 .paper .ft em{display:block;font-style:normal;font-weight:700;font-size:8.5px;line-height:1.2}
 .paper .ft small{display:block;font-size:6.5px;opacity:.6;margin-top:1px}
-.paper .qr{width:30px;height:30px;background:#fff;padding:2px;flex:none;border-radius:2px}
-.paper .qr svg,.paper .qr img{width:100%;height:100%}
 .paper .ov{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none}
 .files{display:flex;flex-direction:column;gap:8px}
 .file{display:flex;align-items:center;gap:11px;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:9px 11px}
@@ -259,8 +257,6 @@ textarea.inp{min-height:84px;resize:vertical}
 .lb .ph4{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
 .lb .ph4 a{border-radius:8px;overflow:hidden;display:block;background:var(--cream);aspect-ratio:3/2}
 .lb .ph4 img{width:100%;height:100%;object-fit:cover}
-.qrbox{width:140px;height:140px;background:#fff;padding:8px;border-radius:12px;box-shadow:var(--sh)}
-.qrbox svg,.qrbox img{width:100%;height:100%}
 
 .skel{background:linear-gradient(90deg,#efe9e4 0%,#f8f4f1 50%,#efe9e4 100%);background-size:200% 100%;animation:sk 1.3s infinite;border-radius:10px}
 @keyframes sk{to{background-position:-200% 0}}
